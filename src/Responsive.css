@@ -1,0 +1,42 @@
+
+@media only screen and (max-width: 767px) {
+    .Logocontainer{
+        display: none;
+    }
+
+    .loginpagemaindiv .MuiPaper-root{
+        max-width: 100%;
+        margin-top: 50px;
+    }
+
+    .defaultdialog .MuiBackdrop-root {
+        width: 100%;
+        margin-left: auto;
+    }
+
+    .defaultdialog .MuiDialog-container {
+        width: 90%;
+        margin-right: 5%;
+        height: 40%;
+        margin-top: 40%;
+        margin-left: 5%;
+    }
+
+    .formviewmaindiv{
+        max-width: 100%;
+    flex-basis: 100%;
+    }
+
+    .thematictab .MuiTabs-flexContainer,
+    .thematictabbody .MuiTabs-flexContainer{
+        width: 90%;
+        overflow: scroll;
+    }
+
+    .thematictabbody{
+        overflow-x: auto;
+    width: 80%;
+    
+    padding-left:  0px !important;
+    }
+}

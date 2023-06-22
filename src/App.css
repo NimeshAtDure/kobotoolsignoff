@@ -2,6 +2,68 @@
   text-align: center;
 }
 
+@font-face {
+
+  font-family: "UNFPA-Bold";
+
+  src: url("Fonts/UNFWBDRM.ttf") format("truetype");
+
+  font-weight: normal;
+
+  font-style: normal;
+
+  -webkit-font-smoothing: antialiased;
+
+  -moz-osx-font-smoothing: grayscale;
+
+}
+
+
+
+
+@font-face {
+
+  font-family: "UNFPA-Light";
+
+  src: url("Fonts/UNFWLTRM.ttf") format("truetype");
+
+  font-weight: normal;
+
+  font-style: normal;
+
+  -webkit-font-smoothing: antialiased;
+
+  -moz-osx-font-smoothing: grayscale;
+
+}
+
+
+
+
+@font-face {
+
+  font-family: "UNFPA-Regular";
+
+  src: url("Fonts/UNFWTXRM.ttf") format("truetype");
+
+  font-weight: normal;
+
+  font-style: normal;
+
+  -webkit-font-smoothing: antialiased;
+
+  -moz-osx-font-smoothing: grayscale;
+
+}
+
+body, *{
+  font-family: "UNFPA-Regular" !important;
+}
+
+.MuiAppBar-root .MuiTypography-root.MuiTypography-h6{
+  font-family: "UNFPA-Bold" !important;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -62,6 +124,181 @@ table th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
-  background-color: #4CAF50;
+  background-color: #ed8b00;
   color: white;
 }
+
+.text-left{
+  text-align: left;
+}
+
+.Logodiv{
+  background-image: url("./Assets/logo.svg");
+  height: 300px;
+  width: 300px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 0 auto;
+}
+
+.Statedrop{
+  text-align: right;
+  padding-right: 16px;
+  margin-top: 30px;
+}
+
+.DialogDdrop{
+  text-align: center;
+  padding-right: 16px;
+  margin-top: 30px;
+}
+
+.MuiInputBase-root{
+    min-width: 200px;
+    text-align: left;
+}
+
+.Logocontainer{
+    height: calc(100vh - 50px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+}
+
+.Themetabs{
+  padding: 0 40px 0 40px;
+  margin-top: 40px;
+}
+
+.Themetabs .MuiBox-root{
+  border: 1px solid #eff1f3;
+  -webkit-box-shadow: 0px 1px 7px rgba(0,0,0,0.1);
+  box-shadow: 0px 1px 7px rgba(0,0,0,0.1);
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 10px 20px;
+}
+
+.MainContainer{
+  background-color: #faf8f8;
+}
+
+.MainContainer .demo-simple-select , .Statedrop .MuiSelect-select{
+  background-color: #fff !important;
+}
+
+.MuiAppBar-root{
+  background-color: #ed8b00 !important;
+}
+
+.viewbtn{
+  margin-top: 30px !important;
+  background: #fff !important;
+  color: #ed8b00 !important;
+  border-color: #ed8b00 !important;
+}
+
+.Mui-selected{
+  color: #ed8b00 !important;
+} 
+
+.MuiTabs-indicator{
+  background-color: #ed8b00 !important;
+}
+
+
+.defaultdialog .MuiBackdrop-root{
+  width: 75%;
+  margin-left: auto;
+}
+
+.defaultdialog .MuiDialog-container{
+    width: 50%;
+    margin-right: 12%;
+    height: 40%;
+    margin-top: 15%;
+    margin-left: auto;
+}
+
+.dialogtitle{
+  padding-left: 40px;
+}
+
+.mt-0{
+  margin-top: 0px !important;
+}
+
+.vert-center{
+  display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.formdiv{
+  border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.formdiv:last-child{
+  border-bottom: none !important;
+}
+
+a:-webkit-any-link {
+  color: #ed8b00 !important;
+  text-decoration: none !important;
+}
+
+.dbbutton{
+  background-color: transparent !important;
+}
+
+.dbbutton a{
+  color: #fff !important;
+}
+
+.formtitle{
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
+  background-color: #ed8b00!important;
+  margin: 0px 0px 0px 0px;
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    letter-spacing: 0.0075em;
+    font-family: "UNFPA-Bold" !important;
+    color: #fff;
+    text-align: left;
+    padding: 15px;
+  }
+
+  .formsubtitle{
+    text-align: left;
+    margin-bottom: 40px;
+  }
+
+  .loginfielddiv{
+    margin-bottom: 25px;
+  }
+
+  .loginfielddiv .MuiTextField-root{
+    width: 80%;
+  }
+
+  .mt-10px{
+    margin-top: 10px !important;
+  }
+
+  .loginpagemaindiv{
+    align-items: center;
+    justify-content: center;
+  }
+
+  .thematictab{
+    margin-top: 65px !important;
+  }
+
+  .loader{
+    display: block !important;
+  }
