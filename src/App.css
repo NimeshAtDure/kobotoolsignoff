@@ -124,7 +124,7 @@ table th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
-  background-color: #ed8b00;
+  background-color: #333847;
   color: white;
 }
 
@@ -134,12 +134,12 @@ table th {
 
 .Logodiv{
   background-image: url("./Assets/logo.svg");
-  height: 300px;
+  height: 30px;
   width: 300px;
-  background-position: center;
+  background-position: left;
   background-size: contain;
   background-repeat: no-repeat;
-  margin: 0 auto;
+  /* margin: 0 auto; */
 }
 
 .Statedrop{
@@ -190,36 +190,36 @@ table th {
 }
 
 .MuiAppBar-root{
-  background-color: #ed8b00 !important;
+  background-color: #333847 !important;
 }
 
 .viewbtn{
   margin-top: 30px !important;
   background: #fff !important;
-  color: #ed8b00 !important;
-  border-color: #ed8b00 !important;
+  color: #333847 !important;
+  border-color: #333847 !important;
 }
 
 .Mui-selected{
-  color: #ed8b00 !important;
+  color: #333847 !important;
 } 
 
 .MuiTabs-indicator{
-  background-color: #ed8b00 !important;
+  background-color: #333847 !important;
 }
 
 
 .defaultdialog .MuiBackdrop-root{
-  width: 75%;
+  width: 100%;
   margin-left: auto;
 }
 
 .defaultdialog .MuiDialog-container{
     width: 50%;
-    margin-right: 12%;
     height: 40%;
     margin-top: 15%;
-    margin-left: auto;
+    margin-right: 350px;
+    margin-left: 350px;
 }
 
 .dialogtitle{
@@ -247,12 +247,13 @@ table th {
 }
 
 a:-webkit-any-link {
-  color: #ed8b00 !important;
+  color: #333847 !important;
   text-decoration: none !important;
 }
 
 .dbbutton{
   background-color: transparent !important;
+  color: #fff !important;
 }
 
 .dbbutton a{
@@ -261,7 +262,7 @@ a:-webkit-any-link {
 
 .formtitle{
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
-  background-color: #ed8b00!important;
+  background-color: #333847!important;
   margin: 0px 0px 0px 0px;
     font-weight: 500;
     font-size: 1.25rem;
@@ -293,6 +294,7 @@ a:-webkit-any-link {
   .loginpagemaindiv{
     align-items: center;
     justify-content: center;
+    padding: 75px
   }
 
   .thematictab{
@@ -304,7 +306,7 @@ a:-webkit-any-link {
   }
 
   .leftdrawer button{
-    background-color: #ed8b00!important;
+    background-color: #333847!important;
     width: 90%;
     margin: 10px auto;
     margin-left: 5%;

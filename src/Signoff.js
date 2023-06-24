@@ -26,6 +26,7 @@ function Signoff() {
     const [activestate, setactivestate] = useState('')
     const [activetable, setactivetable] = useState(null)
     const [loading, setloading] = useState(false)
+    const [token, settoken] = useState(localStorage.getItem("token"))
 
     const navigate = useNavigate();
 
@@ -36,7 +37,7 @@ function Signoff() {
             maxBodyLength: Infinity,
             url: 'https://kf.rbmgateway.org/api/v2/assets.json',
             headers: {
-                'Authorization': 'Token ' + localStorage.getItem("token")
+                'Authorization': 'Token ' + token
             }
         };
 
@@ -72,7 +73,7 @@ function Signoff() {
                     maxBodyLength: Infinity,
                     url: element.data,
                     headers: {
-                        'Authorization': 'Token ' + localStorage.getItem("token")
+                        'Authorization': 'Token ' + token
                     }
                 };
 
@@ -100,7 +101,7 @@ function Signoff() {
                                     maxBodyLength: Infinity,
                                     url: element.url,
                                     headers: {
-                                        'Authorization': 'Token ' + localStorage.getItem("token")
+                                        'Authorization': 'Token ' + token
                                     }
                                 };
 
@@ -191,7 +192,7 @@ function Signoff() {
     const navItems = (
         <List>
             <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"https://ee.rbmgateway.org/x/QCgXLb2v"} target="_blank">Supervision Checklist</a></Button>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"http://dashboard.rbmgateway.org:8088/login/"} target="_blank">View Dashboard</a></Button>
+            <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>navigate("/dashboard")}>View Dashboard</Button>
         </List>
     );
 

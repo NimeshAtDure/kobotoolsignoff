@@ -4,6 +4,7 @@ import {Route, Routes, Navigate } from "react-router-dom";
 import Signoff from "./Signoff"
 import Formview from "./Formview"
 import Loginpg from "./Loginpg"
+import Dashboardview from './Dashboardview';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/home" element={<Formview />} />
         <Route path="/signoff" element={<Signoff />} />
         <Route path="/login" element={<Loginpg />} />
+        <Route path="/dashboard" element={<Dashboardview />} />
       </Routes>
     </div>
   );

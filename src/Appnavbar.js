@@ -5,10 +5,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
+import { Grid } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 
 const drawerWidth = 240;
@@ -53,8 +52,7 @@ export default function Appnavbar(props){
                         component="div"
                         sx={{ flexGrow: 1, textAlign: 'left', display: { xs: 'none', sm: 'block' } }}
                     >
-                        M & E - RBM Gateway
-                    </Typography>
+                        <div className='Logodiv'></div>                    </Typography>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         {props.navItems}
                     </Box>

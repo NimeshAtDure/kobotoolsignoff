@@ -24,7 +24,7 @@ export default function Formview(props) {
     const [statedata, setstatedata] = React.useState([])
     const [ofcindc, setofcindc] = React.useState([])
     const [activestate, setactivestate] = React.useState('')
-    const [token, settoken] = React.useState([])
+    const [token, settoken] = React.useState(localStorage.getItem("token"))
     const [open, setopen] = React.useState(true)
     const [links, setlinks] = React.useState([])
     const [oilinks,setoilinks] = React.useState([])
@@ -33,25 +33,13 @@ export default function Formview(props) {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        const username = 'super_admin',
-            password = 'idsiysC0VS8Yrm0i9T2o'
-        axios({
-            method: "get",
-            url: "https://kf.rbmgateway.org/token/?format=json",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": 'Basic ' + btoa(username + ':' + password)
-            }
-        })
-            .then((response) => {
-                settoken(response.data.token)
-                localStorage.setItem("token",response.data.token)
+        
                 let config = {
                     method: 'get',
                     maxBodyLength: Infinity,
                     url: 'https://kf.rbmgateway.org/api/v2/assets.json',
                     headers: {
-                        'Authorization': 'Token ' + response.data.token
+                        'Authorization': 'Token ' + token
                     }
                 };
 
@@ -78,10 +66,7 @@ export default function Formview(props) {
                     .catch((error) => {
                         console.log(error);
                     });
-            })
-            .catch((error) => {
-                console.log("getRequest err>>", error);
-            });
+            
     }, [token])
 
     const handleChange = (event) => {
@@ -161,7 +146,7 @@ export default function Formview(props) {
     const navItems = (
         <List>
             <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"https://ee.rbmgateway.org/x/QCgXLb2v"} target="_blank">Supervision Checklist</a></Button>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"http://dashboard.rbmgateway.org:8088/login/"} target="_blank">View Dashboard</a></Button>
+            <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>navigate("/dashboard")}>View Dashboard</Button>
         </List>
     );
 
@@ -172,10 +157,8 @@ export default function Formview(props) {
             <Box component="main" className='MainContainer' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
                 <Grid container spacing={2}>
-                    <Grid item xs={3} className='Logocontainer'>
-                        <div className='Logodiv'></div>
-                    </Grid>
-                    <Grid item xs={9} className='formviewmaindiv'>
+                    
+                    <Grid item xs={12} className='formviewmaindiv'>
                         <p className='Statedrop'>
                             <FormControl >
                                 <InputLabel id="demo-simple-select-label">State</InputLabel>
