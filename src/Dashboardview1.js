@@ -18,8 +18,8 @@ function Dashboardview() {
 
     useEffect(() => {
         authToken && embedDashboard({
-        id: "c37c7eee-c816-47ac-8cc2-40ecd3f2cb18",  // given by the Superset embedding UI
-        supersetDomain: "http://dashboard.rbmgateway.org:8088",
+        id: "5ee5fc80-6b83-46df-9947-2fd23ee76f92",  // given by the Superset embedding UI
+        supersetDomain: "http://52.167.160.109:8088",
         mountPoint: document.getElementById("superset-container"), // html element in which iframe render
         fetchGuestToken: () => authToken,
         dashboardUiConfig: { hideTitle: true }
@@ -29,7 +29,7 @@ function Dashboardview() {
     const fetchGuestAuthToken = async () => {
         axios({
           method: 'post',
-          url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/guest_token/',
+          url: 'http://52.167.160.109:8088/api/v1/security/guest_token/',
           headers: {},
           data: {
             "user": {
@@ -40,7 +40,7 @@ function Dashboardview() {
             "resources": [
               {
                 "type": "dashboard",
-                "id": "11"
+                "id": "24"
               }
             ],
             "rls": []

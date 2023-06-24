@@ -315,3 +315,9 @@ a:-webkit-any-link {
   .leftdrawer h6{
     text-align: center;
   }
+
+  #superset-container iframe {
+    width: 100%;
+    height: calc(100vh);
+    margin-top: 60px;
+}
