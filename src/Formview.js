@@ -1,10 +1,6 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -14,14 +10,11 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import MenuIcon from '@mui/icons-material/Menu';
 import Dialog from '@mui/material/Dialog';
 import { useNavigate } from "react-router-dom";
 import { Oval } from "react-loader-spinner"
 import axios from "axios";
-
-
-const drawerWidth = 240;
+import Appnavbar from './Appnavbar';
 
 export default function Formview(props) {
     const { window } = props;
@@ -41,7 +34,7 @@ export default function Formview(props) {
 
     React.useEffect(() => {
         const username = 'super_admin',
-            password = '9mfH84HgBc0RYVeCZ1Sb'
+            password = 'idsiysC0VS8Yrm0i9T2o'
         axios({
             method: "get",
             url: "https://kf.rbmgateway.org/token/?format=json",
@@ -52,7 +45,7 @@ export default function Formview(props) {
         })
             .then((response) => {
                 settoken(response.data.token)
-
+                localStorage.setItem("token",response.data.token)
                 let config = {
                     method: 'get',
                     maxBodyLength: Infinity,
@@ -76,7 +69,7 @@ export default function Formview(props) {
                             } else if (surname.includes("Office Indicators")) {
                                 ofcindc.push(element)
                             }
-                            console.log("names", element.name, surname.includes("SIS"), thematicdata, statedata, ofcindc)
+                            // console.log("names", element.name, surname.includes("SIS"), thematicdata, statedata, ofcindc)
                         });
                         setthematic(thematicdata.filter((value, index, array) => array.indexOf(value) === index))
                         setstatedata(statedata.filter((value, index, array) => array.indexOf(value) === index))
@@ -138,7 +131,7 @@ export default function Formview(props) {
                         name: response.data.name.split("-")[1],
                         formlink: response.data.deployment__links.offline_url
                     }
-                    setloading(true)
+                    // setloading(true)
                     oilinkarr.push(linkobj)
                 })
                 .catch((error) => {
@@ -146,7 +139,7 @@ export default function Formview(props) {
                 });
         })
         }
-        console.log("links", linkarr,oilinkarr)
+        // console.log("links", linkarr,oilinkarr)
 
         setTimeout(() => {
             setlinks(linkarr)
@@ -160,81 +153,22 @@ export default function Formview(props) {
         setopen(false)
     };
 
-    const handleDrawerToggle = () => {
-        setMobileOpen((prevState) => !prevState);
-    };
 
     const handleClose = () => {
         setopen(true);
     };
 
-    const OpenSignoff = () => {
-        navigate("/signoff")
-    }
-
     const navItems = (
         <List>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"https://ee.rbmgateway.org/x/rNQMbCTN"} target="_blank">Supervision Checklist</a></Button>
+            <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"https://ee.rbmgateway.org/x/QCgXLb2v"} target="_blank">Supervision Checklist</a></Button>
             <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"http://dashboard.rbmgateway.org:8088/login/"} target="_blank">View Dashboard</a></Button>
         </List>
     );
 
 
-    const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'left' }}>
-            <Typography variant="h6" sx={{ my: 2, textAlign: 'left' }}>
-                M & E - RBM Gateway
-            </Typography>
-            <Divider />
-                {navItems}
-        </Box>
-    );
-
-    const container = window !== undefined ? () => window().document.body : undefined;
-
     return (
         <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar component="nav">
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ flexGrow: 1, textAlign: 'left', display: { xs: 'none', sm: 'block' } }}
-                    >
-                        M & E - RBM Gateway
-                    </Typography>
-                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        {navItems}
-                    </Box>
-                </Toolbar>
-            </AppBar>
-            <Box component="nav">
-                <Drawer
-                    container={container}
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                    sx={{
-                        display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                >
-                    {drawer}
-                </Drawer>
-            </Box>
+            <Appnavbar navItems={navItems}/>
             <Box component="main" className='MainContainer' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
                 <Grid container spacing={2}>

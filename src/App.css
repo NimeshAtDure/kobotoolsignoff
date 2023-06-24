@@ -302,3 +302,14 @@ a:-webkit-any-link {
   .loader{
     display: block !important;
   }
+
+  .leftdrawer button{
+    background-color: #ed8b00!important;
+    width: 90%;
+    margin: 10px auto;
+    margin-left: 5%;
+  }
+
+  .leftdrawer h6{
+    text-align: center;
+  }
