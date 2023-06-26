@@ -36,7 +36,13 @@ export default function Appnavbar(props) {
     return (
         <>
             <CssBaseline />
+            <div>hi</div>
             <AppBar component="nav">
+                 <div className='logobar'>
+                     <div className='Logodiv'></div>
+                     <div>
+                        <p className='logo-name'>India</p></div> 
+                 </div>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -52,7 +58,8 @@ export default function Appnavbar(props) {
                         component="div"
                         sx={{ flexGrow: 1, textAlign: 'left', display: { xs: 'none', sm: 'block' } }}
                     >
-                        <div className='Logodiv'></div>                    </Typography>
+                       <p>10<sup>th</sup> Country Programme</p>
+                                           </Typography>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         {props.navItems}
                     </Box>
