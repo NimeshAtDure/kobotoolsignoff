@@ -403,6 +403,9 @@ input:-webkit-autofill:active{
   margin-left: 15px;
     color: #9f9e9b;
     font-size: 1.07em;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 10px;
 }
 
 .applicationtitle{
@@ -478,4 +481,8 @@ input:-webkit-autofill:active{
 
 .footerbg a svg{
   color: #fff !important;
+}
+
+input:-webkit-autofill{
+  -webkit-text-fill-color: transparent !important;
 }
