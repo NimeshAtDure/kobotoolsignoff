@@ -34,9 +34,9 @@ export default function Formview(props) {
     const [dense, setDense] = React.useState(false);
     const [loading, setloading] = React.useState(false)
     const [formlink, setformlink] = React.useState("")
-    const [menuopen,setmenuopen] = React.useState(false)
+    const [menuopen, setmenuopen] = React.useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [user,setuser] = React.useState(JSON.parse(sessionStorage.getItem("user")))
+    const [user, setuser] = React.useState(null)
     const dispatch = useDispatch()
 
     const navigate = useNavigate();
@@ -103,7 +103,9 @@ export default function Formview(props) {
             .catch((error) => {
                 console.log(error);
             });
-
+        setTimeout(() => {
+            setuser(JSON.parse(sessionStorage.getItem("user")))
+        }, 2000);
     }, [])
 
     // const handleChange = (event) => {
@@ -184,28 +186,29 @@ export default function Formview(props) {
         setopen(false);
     };
 
-    const openMenu = (event) =>{
+    const openMenu = (event) => {
         setAnchorEl(event.currentTarget);
         setmenuopen(true)
     }
 
-    const closeMenu = ()=>{
+    const closeMenu = () => {
         setmenuopen(false)
         setAnchorEl(null);
     }
 
-    const Logout = () =>{
-        sessionStorage.setItem('token',"")
-        sessionStorage.setItem('user',"")
-        dispatch(settoken(""))
+    const Logout = () => {
+        sessionStorage.setItem('token', "")
+        sessionStorage.setItem('user', "")
+        // dispatch(settoken(""))
         navigate("/login")
     }
 
     const navItems = (
         <List>
+            <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={() => navigate("/")}>Home</Button>
             <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"https://ee.rbmgateway.org/x/QCgXLb2v"} target="_blank">Supervision Checklist</a></Button>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={() => navigate("/dashboard")}>View Dashboard</Button>
-            <Button
+            <Button variant="outlined" className='viewbtn mt-0 dbbutton' ><a href={"http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF"} target="_blank">Dashboard</a></Button>
+            {user && <><Button
                 id="basic-button"
                 className='profilebtn'
                 aria-controls={menuopen ? 'basic-menu' : undefined}
@@ -215,37 +218,40 @@ export default function Formview(props) {
             >
                 {user?.username[0]}
             </Button>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={menuopen}
-                onClose={closeMenu}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-                className='profmenu'
-            >   
-            <Grid container className='profilecontainer'>
-                <Grid item xs={3}>
-                    <div className='proficondiv'>
-                    <p  className='proficon'>
-                        <span>{user?.username[0]}</span>
-                    </p>
-                    </div>
-                </Grid>
-                <Grid item xs={9}>
-                <p className='profusrname'> 
-                    {user?.username}
-                </p>
-                <p className='profusremail'>
-                    {user?.email}
-                </p>
-                </Grid>
-            </Grid>
-                <MenuItem className='profmenubtn' ><a href={"https://kf.rbmgateway.org/#/forms"} target="_blank">Admin Panel</a></MenuItem>
-                <MenuItem className='profmenubtn' onClick={()=>navigate("/signoff")}>Sign Off</MenuItem>
-                <MenuItem className='profmenubtn' onClick={Logout}>Logout</MenuItem>
-            </Menu>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={menuopen}
+                    onClose={closeMenu}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                    className='profmenu'
+                >
+                    <Grid container className='profilecontainer'>
+                        <Grid item xs={3}>
+                            <div className='proficondiv'>
+                                <p className='proficon'>
+                                    <span>{user?.username[0]}</span>
+                                </p>
+                            </div>
+                        </Grid>
+                        <Grid item xs={9}>
+                            <p className='profusrname'>
+                                {user?.username}
+                            </p>
+                            <p className='profusremail'>
+                                {user?.email}
+                            </p>
+                        </Grid>
+                    </Grid>
+
+                    <MenuItem className='profmenubtn' ><a href={"https://kf.rbmgateway.org/#/forms"} target="_blank">Admin Panel</a></MenuItem>
+                    <MenuItem className='profmenubtn' onClick={() => navigate("/signoff")}>Sign Off</MenuItem>
+                    <MenuItem className='profmenubtn' >Logout</MenuItem>
+                </Menu>
+            </>
+            }
         </List>
     );
 
@@ -302,7 +308,7 @@ export default function Formview(props) {
                                                             </p>
                                                         </Grid>
                                                         <Grid item xs={3} className='vert-center'>
-                                                            <Button variant="outlined" className='viewbtn mt-0' onClick={() => openForm(l.formlink)}>View Form</Button>
+                                                            <Button variant="outlined" className='viewbtn mt-0' onClick={() => openForm(l.formlink)}>Open</Button>
                                                         </Grid>
 
                                                     </Grid>}
@@ -324,7 +330,7 @@ export default function Formview(props) {
                                                             </Grid>
                                                             <Grid item xs={3} className='vert-center'>
                                                                 {/* <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button> */}
-                                                                <Button variant="outlined" className='viewbtn mt-0' onClick={() => openForm(l.formlink)}>View Form</Button>
+                                                                <Button variant="outlined" className='viewbtn mt-0' onClick={() => openForm(l.formlink)}>Open</Button>
                                                             </Grid>
 
                                                         </Grid>}

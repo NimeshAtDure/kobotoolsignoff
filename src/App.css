@@ -211,6 +211,14 @@ table th {
   border-color: #333847 !important;
 }
 
+.signoffbtn{
+  margin-top: 30px !important;
+  background: #fff !important;
+  color: #333847 !important;
+  border-color: #333847 !important;
+  margin-bottom: 40px !important;
+}
+
 .submitbtn {
   margin-top: 30px !important;
   background: #259af4 !important;
@@ -372,11 +380,16 @@ input:-webkit-autofill:active {
 }
 
 .thematictab {
-  margin-top: 140px !important;
+  margin-top: 160px !important;
 }
 
 .loader {
   display: block !important;
+}
+
+.signoffloader{
+  display: block !important;
+  height: calc(100vh - 150px);
 }
 
 .leftdrawer button {
@@ -576,4 +589,8 @@ input:-webkit-autofill:active {
 .proficon span{
   display: inline-block;
     margin-top: -8px;
+}
+
+.thematictabbody{
+  min-height: calc(100vh - 200px) !important;
 }

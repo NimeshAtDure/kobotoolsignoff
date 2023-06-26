@@ -56,8 +56,8 @@ function Dashboardview() {
 
     const navItems = (
         <List>
+            <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>navigate("/")}>Home</Button>
             <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"https://ee.rbmgateway.org/x/QCgXLb2v"} target="_blank">Supervision Checklist</a></Button>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>navigate("/home")}>View Forms</Button>
         </List>
     );
 

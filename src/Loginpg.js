@@ -10,7 +10,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Appnavbar from './Appnavbar';
 import { useSelector, useDispatch } from 'react-redux'
-import { settoken } from './Reducers/appReducer';
+import { settoken,setdata } from './Reducers/appReducer';
 import Footer from './Footer';
 
 export default function Loginpg(props) {
@@ -18,7 +18,7 @@ export default function Loginpg(props) {
     const [name, setname] = React.useState('');
     const [pass, setpass] = React.useState('')
     const [errortxt,seterrortxt] = React.useState('')
-    const count = useSelector((state) => state.token.value)
+
     const dispatch = useDispatch()
 
     const navigate = useNavigate();
@@ -51,7 +51,7 @@ export default function Loginpg(props) {
                         .then((response) => {
                             console.log("me",response.data)
                             sessionStorage.setItem("user",JSON.stringify(response.data))
-                            navigate('/home')
+                                navigate('/home')
 
                         })
                         .catch((error) => {

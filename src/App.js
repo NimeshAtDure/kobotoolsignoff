@@ -10,7 +10,7 @@ import Dashboardview from './Dashboardview';
 
 function App() {
 
-  let token = useSelector((state) => state.token.value)
+  let token = useSelector((state) => state.user.token)
 
   function getElement(e) {
       if (token) {
