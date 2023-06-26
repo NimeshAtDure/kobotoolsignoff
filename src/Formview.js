@@ -15,6 +15,9 @@ import { useNavigate } from "react-router-dom";
 import { Oval } from "react-loader-spinner"
 import axios from "axios";
 import Appnavbar from './Appnavbar';
+import Footer from './Footer';
+import Menu from '@mui/material/Menu';
+import { useSelector, useDispatch } from 'react-redux'
 
 export default function Formview(props) {
     const { window } = props;
@@ -27,75 +30,80 @@ export default function Formview(props) {
     const [token, settoken] = React.useState(sessionStorage.getItem("token"))
     const [open, setopen] = React.useState(false)
     const [links, setlinks] = React.useState([])
-    const [oilinks,setoilinks] = React.useState([])
+    const [oilinks, setoilinks] = React.useState([])
     const [dense, setDense] = React.useState(false);
     const [loading, setloading] = React.useState(false)
-    const [formlink,setformlink] =  React.useState("")
+    const [formlink, setformlink] = React.useState("")
+    const [menuopen,setmenuopen] = React.useState(false)
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [user,setuser] = React.useState(JSON.parse(sessionStorage.getItem("user")))
+    const dispatch = useDispatch()
+
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        
-                let config = {
-                    method: 'get',
-                    maxBodyLength: Infinity,
-                    url: 'https://kf.rbmgateway.org/api/v2/assets.json',
-                    headers: {
-                        'Authorization': 'Token ' + token
-                    }
-                };
 
-                axios.request(config)
-                    .then((response) => {
-                        let thematicdata = []
-                        let statedata = []
-                        let ofcindc = []
-                        setassets(response.data.results)
-                        // response.data.results.forEach(element => {
-                        //     var surname = element.name
-                        //     if (surname.includes("SIS") && surname.split("-").length == 3) {
-                        //         thematicdata.push(surname.split("-")[1])
-                        //         statedata.push(surname.split("-")[2])
-                        //     } else if (surname.toLowerCase().includes("office indicators")) {
-                        //         ofcindc.push(element)
-                        //     }
-                        //     console.log("names", element.name, surname.includes("SIS"), thematicdata, statedata, ofcindc)
-                        // });
-                        // setthematic(thematicdata.filter((value, index, array) => array.indexOf(value) === index))
-                        // setstatedata(statedata.filter((value, index, array) => array.indexOf(value) === index))
-                        // setofcindc(ofcindc)
-                        setloading(true)
-                        let linkarr = []
-                        response.data.results.forEach(f => {
-                            let config2 = {
-                                method: 'get',
-                                maxBodyLength: Infinity,
-                                url: f.url,
-                                headers: {
-                                    'Authorization': 'Token ' + token
-                                }
-                            };
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: 'https://kf.rbmgateway.org/api/v2/assets.json',
+            headers: {
+                'Authorization': 'Token ' + token
+            }
+        };
 
-                            axios.request(config2)
-                                .then((response) => {
-                                    let linkobj = {
-                                        name: response.data.name,
-                                        formlink: response.data.deployment__links.offline_url
-                                    }
-                                    linkarr.push(linkobj)
-                                    setlinks(linkarr)
-                                })
-                                .catch((error) => {
-                                    console.log(error);
-                                });
-                        }) 
-                        setTimeout(() => {
-                            setloading(false)
-                        }, 2000);        
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-            
+        axios.request(config)
+            .then((response) => {
+                let thematicdata = []
+                let statedata = []
+                let ofcindc = []
+                setassets(response.data.results)
+                // response.data.results.forEach(element => {
+                //     var surname = element.name
+                //     if (surname.includes("SIS") && surname.split("-").length == 3) {
+                //         thematicdata.push(surname.split("-")[1])
+                //         statedata.push(surname.split("-")[2])
+                //     } else if (surname.toLowerCase().includes("office indicators")) {
+                //         ofcindc.push(element)
+                //     }
+                //     console.log("names", element.name, surname.includes("SIS"), thematicdata, statedata, ofcindc)
+                // });
+                // setthematic(thematicdata.filter((value, index, array) => array.indexOf(value) === index))
+                // setstatedata(statedata.filter((value, index, array) => array.indexOf(value) === index))
+                // setofcindc(ofcindc)
+                setloading(true)
+                let linkarr = []
+                response.data.results.forEach(f => {
+                    let config2 = {
+                        method: 'get',
+                        maxBodyLength: Infinity,
+                        url: f.url,
+                        headers: {
+                            'Authorization': 'Token ' + token
+                        }
+                    };
+
+                    axios.request(config2)
+                        .then((response) => {
+                            let linkobj = {
+                                name: response.data.name,
+                                formlink: response.data.deployment__links.offline_url
+                            }
+                            linkarr.push(linkobj)
+                            setlinks(linkarr)
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                })
+                setTimeout(() => {
+                    setloading(false)
+                }, 2000);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
     }, [])
 
     // const handleChange = (event) => {
@@ -128,7 +136,7 @@ export default function Formview(props) {
     //     })
 
     //     if(event.target.value == "DELHI"){
-            
+
     //     ofcindc.forEach(f => {
     //         let config2 = {
     //             method: 'get',
@@ -167,7 +175,7 @@ export default function Formview(props) {
     //     setopen(false)
     // };
 
-    const openForm = (link) =>{
+    const openForm = (link) => {
         setopen(true)
         setformlink(link)
     }
@@ -176,21 +184,79 @@ export default function Formview(props) {
         setopen(false);
     };
 
+    const openMenu = (event) =>{
+        setAnchorEl(event.currentTarget);
+        setmenuopen(true)
+    }
+
+    const closeMenu = ()=>{
+        setmenuopen(false)
+        setAnchorEl(null);
+    }
+
+    const Logout = () =>{
+        sessionStorage.setItem('token',"")
+        sessionStorage.setItem('user',"")
+        dispatch(settoken(""))
+        navigate("/login")
+    }
+
     const navItems = (
         <List>
             <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"https://ee.rbmgateway.org/x/QCgXLb2v"} target="_blank">Supervision Checklist</a></Button>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>navigate("/dashboard")}>View Dashboard</Button>
+            <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={() => navigate("/dashboard")}>View Dashboard</Button>
+            <Button
+                id="basic-button"
+                className='profilebtn'
+                aria-controls={menuopen ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={menuopen ? 'true' : undefined}
+                onClick={openMenu}
+            >
+                {user?.username[0]}
+            </Button>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={menuopen}
+                onClose={closeMenu}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+                className='profmenu'
+            >   
+            <Grid container className='profilecontainer'>
+                <Grid item xs={3}>
+                    <div className='proficondiv'>
+                    <p  className='proficon'>
+                        <span>{user?.username[0]}</span>
+                    </p>
+                    </div>
+                </Grid>
+                <Grid item xs={9}>
+                <p className='profusrname'> 
+                    {user?.username}
+                </p>
+                <p className='profusremail'>
+                    {user?.email}
+                </p>
+                </Grid>
+            </Grid>
+                <MenuItem className='profmenubtn' ><a href={"https://kf.rbmgateway.org/#/forms"} target="_blank">Admin Panel</a></MenuItem>
+                <MenuItem className='profmenubtn' onClick={()=>navigate("/signoff")}>Sign Off</MenuItem>
+                <MenuItem className='profmenubtn' onClick={Logout}>Logout</MenuItem>
+            </Menu>
         </List>
     );
 
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <Appnavbar navItems={navItems}/>
+            <Appnavbar navItems={navItems} />
             <Box component="main" className='MainContainer' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
                 <Grid container spacing={2}>
-                    
+
                     <Grid item xs={12} className='formviewmaindiv'>
                         {/* <p className='Statedrop'>
                             <FormControl >
@@ -236,7 +302,7 @@ export default function Formview(props) {
                                                             </p>
                                                         </Grid>
                                                         <Grid item xs={3} className='vert-center'>
-                                                            <Button variant="outlined" className='viewbtn mt-0' onClick={()=>openForm(l.formlink)}>View Form</Button>
+                                                            <Button variant="outlined" className='viewbtn mt-0' onClick={() => openForm(l.formlink)}>View Form</Button>
                                                         </Grid>
 
                                                     </Grid>}
@@ -244,28 +310,28 @@ export default function Formview(props) {
                                             })
                                         }
                                         {
-                                        oilinks.length>0 && <>                                       
-                                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                                            Office Indicators
-                                        </Typography>
-                                        {oilinks?.map(l => {
-                                                return <>
-                                                    {l.name && l.formlink && <Grid container spacing={0} className='formdiv'>
-                                                        <Grid item xs={9}>
-                                                            <p className='text-left'>
-                                                                {l.name}
-                                                            </p>
-                                                        </Grid>
-                                                        <Grid item xs={3} className='vert-center'>
-                                                            {/* <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button> */}
-                                                            <Button variant="outlined" className='viewbtn mt-0' onClick={()=>openForm(l.formlink)}>View Form</Button>
-                                                        </Grid>
+                                            oilinks.length > 0 && <>
+                                                <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                                                    Office Indicators
+                                                </Typography>
+                                                {oilinks?.map(l => {
+                                                    return <>
+                                                        {l.name && l.formlink && <Grid container spacing={0} className='formdiv'>
+                                                            <Grid item xs={9}>
+                                                                <p className='text-left'>
+                                                                    {l.name}
+                                                                </p>
+                                                            </Grid>
+                                                            <Grid item xs={3} className='vert-center'>
+                                                                {/* <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button> */}
+                                                                <Button variant="outlined" className='viewbtn mt-0' onClick={() => openForm(l.formlink)}>View Form</Button>
+                                                            </Grid>
 
-                                                    </Grid>}
-                                                </>
-                                            })
-                                        }
-                                        </>
+                                                        </Grid>}
+                                                    </>
+                                                })
+                                                }
+                                            </>
                                         }
 
                                     </List>}
@@ -273,6 +339,7 @@ export default function Formview(props) {
                         </div>
                     </Grid>
                 </Grid>
+                <Footer />
             </Box>
             {/* <Dialog
                 fullScreen
@@ -318,7 +385,7 @@ export default function Formview(props) {
                 className="Formviewdialog"
                 disableEscapeKeyDown
             >
-                <iframe src={formlink} width="100%" height="100%"/>
+                <iframe src={formlink} width="100%" height="100%" />
             </Dialog>
         </Box>
     );
