@@ -25,11 +25,12 @@ export default function Formview(props) {
     const [ofcindc, setofcindc] = React.useState([])
     const [activestate, setactivestate] = React.useState('')
     const [token, settoken] = React.useState(sessionStorage.getItem("token"))
-    const [open, setopen] = React.useState(true)
+    const [open, setopen] = React.useState(false)
     const [links, setlinks] = React.useState([])
     const [oilinks,setoilinks] = React.useState([])
     const [dense, setDense] = React.useState(false);
     const [loading, setloading] = React.useState(false)
+    const [formlink,setformlink] =  React.useState("")
     const navigate = useNavigate();
 
     React.useEffect(() => {
@@ -49,98 +50,130 @@ export default function Formview(props) {
                         let statedata = []
                         let ofcindc = []
                         setassets(response.data.results)
-                        response.data.results.forEach(element => {
-                            var surname = element.name
-                            if (surname.includes("SIS") && surname.split("-").length == 3) {
-                                thematicdata.push(surname.split("-")[1])
-                                statedata.push(surname.split("-")[2])
-                            } else if (surname.toLowerCase().includes("office indicators")) {
-                                ofcindc.push(element)
-                            }
-                            // console.log("names", element.name, surname.includes("SIS"), thematicdata, statedata, ofcindc)
-                        });
-                        setthematic(thematicdata.filter((value, index, array) => array.indexOf(value) === index))
-                        setstatedata(statedata.filter((value, index, array) => array.indexOf(value) === index))
-                        setofcindc(ofcindc)
+                        // response.data.results.forEach(element => {
+                        //     var surname = element.name
+                        //     if (surname.includes("SIS") && surname.split("-").length == 3) {
+                        //         thematicdata.push(surname.split("-")[1])
+                        //         statedata.push(surname.split("-")[2])
+                        //     } else if (surname.toLowerCase().includes("office indicators")) {
+                        //         ofcindc.push(element)
+                        //     }
+                        //     console.log("names", element.name, surname.includes("SIS"), thematicdata, statedata, ofcindc)
+                        // });
+                        // setthematic(thematicdata.filter((value, index, array) => array.indexOf(value) === index))
+                        // setstatedata(statedata.filter((value, index, array) => array.indexOf(value) === index))
+                        // setofcindc(ofcindc)
+                        setloading(true)
+                        let linkarr = []
+                        response.data.results.forEach(f => {
+                            let config2 = {
+                                method: 'get',
+                                maxBodyLength: Infinity,
+                                url: f.url,
+                                headers: {
+                                    'Authorization': 'Token ' + token
+                                }
+                            };
+
+                            axios.request(config2)
+                                .then((response) => {
+                                    let linkobj = {
+                                        name: response.data.name,
+                                        formlink: response.data.deployment__links.offline_url
+                                    }
+                                    linkarr.push(linkobj)
+                                    setlinks(linkarr)
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        }) 
+                        setTimeout(() => {
+                            setloading(false)
+                        }, 2000);        
                     })
                     .catch((error) => {
                         console.log(error);
                     });
             
-    }, [token])
+    }, [])
 
-    const handleChange = (event) => {
-        setactivestate(event.target.value)
-        let filterassets = assets.filter(a => a.name.includes(event.target.value))
-        let linkarr = []
-        let oilinkarr = []
-        filterassets.forEach(f => {
-            let config2 = {
-                method: 'get',
-                maxBodyLength: Infinity,
-                url: f.url,
-                headers: {
-                    'Authorization': 'Token ' + token
-                }
-            };
+    // const handleChange = (event) => {
+    //     setactivestate(event.target.value)
+    //     let filterassets = assets.filter(a => a.name.includes(event.target.value))
+    //     let linkarr = []
+    //     let oilinkarr = []
+    //     assets.forEach(f => {
+    //         let config2 = {
+    //             method: 'get',
+    //             maxBodyLength: Infinity,
+    //             url: f.url,
+    //             headers: {
+    //                 'Authorization': 'Token ' + token
+    //             }
+    //         };
 
-            axios.request(config2)
-                .then((response) => {
-                    let linkobj = {
-                        name: response.data.name.split("-")[1],
-                        formlink: response.data.deployment__links.offline_url
-                    }
-                    setloading(true)
-                    linkarr.push(linkobj)
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        })
+    //         axios.request(config2)
+    //             .then((response) => {
+    //                 let linkobj = {
+    //                     name: response.data.name.split("-")[1],
+    //                     formlink: response.data.deployment__links.offline_url
+    //                 }
+    //                 setloading(true)
+    //                 linkarr.push(linkobj)
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //             });
+    //     })
 
-        if(event.target.value == "DELHI"){
+    //     if(event.target.value == "DELHI"){
             
-        ofcindc.forEach(f => {
-            let config2 = {
-                method: 'get',
-                maxBodyLength: Infinity,
-                url: f.url,
-                headers: {
-                    'Authorization': 'Token ' + token
-                }
-            };
+    //     ofcindc.forEach(f => {
+    //         let config2 = {
+    //             method: 'get',
+    //             maxBodyLength: Infinity,
+    //             url: f.url,
+    //             headers: {
+    //                 'Authorization': 'Token ' + token
+    //             }
+    //         };
 
-            axios.request(config2)
-                .then((response) => {
-                    let linkobj = {
-                        name: response.data.name.split("-")[1],
-                        formlink: response.data.deployment__links.offline_url
-                    }
-                    // setloading(true)
-                    oilinkarr.push(linkobj)
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        })
-        }
-        // console.log("links", linkarr,oilinkarr)
+    //         axios.request(config2)
+    //             .then((response) => {
+    //                 let linkobj = {
+    //                     name: response.data.name.split("-")[1],
+    //                     formlink: response.data.deployment__links.offline_url
+    //                 }
+    //                 // setloading(true)
+    //                 oilinkarr.push(linkobj)
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //             });
+    //     })
+    //     }
+    //     console.log("links", linkarr,oilinkarr)
 
-        setTimeout(() => {
-            setlinks(linkarr)
-            setloading(false)
-        }, 2000);
+    //     setTimeout(() => {
+    //         setlinks(linkarr)
+    //         setloading(false)
+    //     }, 2000);
 
-        setTimeout(() => {
-            setoilinks(oilinkarr)
-            setloading(false)
-        }, 2000);
-        setopen(false)
-    };
+    //     setTimeout(() => {
+    //         setoilinks(oilinkarr)
+    //         setloading(false)
+    //     }, 2000);
+    //     setopen(false)
+    // };
 
+    const openForm = (link) =>{
+        setopen(true)
+        setformlink(link)
+    }
 
     const handleClose = () => {
-        setopen(true);
+        setopen(false);
     };
 
     const navItems = (
@@ -159,7 +192,7 @@ export default function Formview(props) {
                 <Grid container spacing={2}>
                     
                     <Grid item xs={12} className='formviewmaindiv'>
-                        <p className='Statedrop'>
+                        {/* <p className='Statedrop'>
                             <FormControl >
                                 <InputLabel id="demo-simple-select-label">State</InputLabel>
                                 <Select
@@ -176,7 +209,7 @@ export default function Formview(props) {
                                     }
                                 </Select>
                             </FormControl>
-                        </p>
+                        </p> */}
                         <div className='Themetabs'>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 
@@ -203,7 +236,7 @@ export default function Formview(props) {
                                                             </p>
                                                         </Grid>
                                                         <Grid item xs={3} className='vert-center'>
-                                                            <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button>
+                                                            <Button variant="outlined" className='viewbtn mt-0' onClick={()=>openForm(l.formlink)}>View Form</Button>
                                                         </Grid>
 
                                                     </Grid>}
@@ -224,7 +257,8 @@ export default function Formview(props) {
                                                             </p>
                                                         </Grid>
                                                         <Grid item xs={3} className='vert-center'>
-                                                            <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button>
+                                                            {/* <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button> */}
+                                                            <Button variant="outlined" className='viewbtn mt-0' onClick={()=>openForm(l.formlink)}>View Form</Button>
                                                         </Grid>
 
                                                     </Grid>}
@@ -240,7 +274,7 @@ export default function Formview(props) {
                     </Grid>
                 </Grid>
             </Box>
-            <Dialog
+            {/* <Dialog
                 fullScreen
                 open={open}
                 onClose={handleClose}
@@ -275,6 +309,16 @@ export default function Formview(props) {
                         </Select>
                     </FormControl>
                 </p>
+            </Dialog> */}
+
+            <Dialog
+                fullScreen
+                open={open}
+                onClose={handleClose}
+                className="Formviewdialog"
+                disableEscapeKeyDown
+            >
+                <iframe src={formlink} width="100%" height="100%"/>
             </Dialog>
         </Box>
     );

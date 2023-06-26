@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const appReducer = createSlice({
   name: 'token',
   initialState: {
-    value: '',
+    value: sessionStorage.getItem("token") || '',
   },
   reducers: {
     settoken: (state, action) => {

@@ -47,7 +47,7 @@ export default function Loginpg(props) {
                     seterrortxt("Please enter valid credentials")
                 });
         }else{
-            seterrortxt("Please enter complete credentials")
+            seterrortxt("Please enter valid credentials")
         }
         }
 
@@ -65,19 +65,21 @@ export default function Loginpg(props) {
                     <Grid item xs={12}>
                     <p className='applicationtitle'>Welcome to the RBM Gateway of UNFPA's India Country Office</p>
                         <Card sx={{ maxWidth:"50%", margin:"0 auto", marginTop:"0px" }}>
-                        <p className='formtitle '>Login</p>
+                        {/* <p className='formtitle '>Login</p> */}
                             <CardContent>
                            
-                            <p className='formsubtitle text-left'>Fill your details to log in</p>
+                            {/* <p className='formsubtitle text-left'>Fill your details to log in</p> */}
                     <p className='loginfielddiv'> 
-                            <TextField id="outlined-basic" label="Username" variant="outlined" type='text' value={name} onChange={e=>setname(e.target.value)}/>
+                            <p className='formsubtitle text-left'>Username</p>
+                            <TextField id="outlined-basic" variant="outlined" type='text' value={name} onChange={e=>setname(e.target.value)}/>
                     </p>
                     <p className='loginfielddiv'>
-                            <TextField id="outlined-basic" label="Password" variant="outlined" type='password' value={pass}onChange={e=>setpass(e.target.value)}  helperText={errortxt}
+                            <p className='formsubtitle text-left'>Password</p>
+                            <TextField id="outlined-basic" variant="outlined" type='password' value={pass}onChange={e=>setpass(e.target.value)}  helperText={errortxt}
 />
                             </p>
                             <p>
-                            <Button variant="outlined" className='viewbtn mt-10px' onClick={Login}>Submit</Button>
+                            <Button variant="outlined" className='submitbtn mt-10px' onClick={Login}>Submit</Button>
                             </p>
                             </CardContent>
                            

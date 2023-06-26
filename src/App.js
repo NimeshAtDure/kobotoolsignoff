@@ -18,11 +18,11 @@ function App() {
           case "home": 
             return <Formview />
           case "login": 
-            return<Loginpg />
+            return <Navigate to="/home" replace={true} />
           case "signoff": 
-            return<Signoff />
+            return <Signoff />
           case "dashboard": 
-            return<Dashboardview />
+            return <Dashboardview />
         }
       } else {
         return <Loginpg />
@@ -33,8 +33,8 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={token ? <Navigate to="/home" replace={true} /> : <Navigate to="/login" replace={true} />} />
-        <Route path="/login" element={getElement("login")} />
-        <Route path="/home" element={getElement("home")} />
+        <Route path="/login" element={token ? <Navigate to="/home" replace={true} /> : getElement("login")}/>
+        <Route path="/home" element={!token ? <Navigate to="/login" replace={true} /> : getElement("home")} />
         <Route path="/signoff" element={getElement("signoff")} />
         <Route path="/dashboard" element={getElement("dashboard")} />
       </Routes>
