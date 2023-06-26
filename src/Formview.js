@@ -24,7 +24,7 @@ export default function Formview(props) {
     const [statedata, setstatedata] = React.useState([])
     const [ofcindc, setofcindc] = React.useState([])
     const [activestate, setactivestate] = React.useState('')
-    const [token, settoken] = React.useState(localStorage.getItem("token"))
+    const [token, settoken] = React.useState(sessionStorage.getItem("token"))
     const [open, setopen] = React.useState(true)
     const [links, setlinks] = React.useState([])
     const [oilinks,setoilinks] = React.useState([])
@@ -54,7 +54,7 @@ export default function Formview(props) {
                             if (surname.includes("SIS") && surname.split("-").length == 3) {
                                 thematicdata.push(surname.split("-")[1])
                                 statedata.push(surname.split("-")[2])
-                            } else if (surname.includes("Office Indicators")) {
+                            } else if (surname.toLowerCase().includes("office indicators")) {
                                 ofcindc.push(element)
                             }
                             // console.log("names", element.name, surname.includes("SIS"), thematicdata, statedata, ofcindc)

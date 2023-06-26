@@ -26,7 +26,7 @@ function Signoff() {
     const [activestate, setactivestate] = useState('')
     const [activetable, setactivetable] = useState(null)
     const [loading, setloading] = useState(false)
-    const [token, settoken] = useState(localStorage.getItem("token"))
+    const [token, settoken] = useState(sessionStorage.getItem("token"))
 
     const navigate = useNavigate();
 

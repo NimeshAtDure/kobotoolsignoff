@@ -12,7 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const drawerWidth = 240;
 
-export default function Appnavbar(props){
+export default function Appnavbar(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -24,10 +24,10 @@ export default function Appnavbar(props){
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'left' }}>
             <Typography variant="h6" sx={{ my: 2, textAlign: 'left' }}>
-                M & E - RBM Gateway
+                <div className='Logodiv'></div>
             </Typography>
             <Divider />
-                {props.navItems}
+            {props.navItems}
         </Box>
     );
 
@@ -35,8 +35,8 @@ export default function Appnavbar(props){
 
     return (
         <>
-                    <CssBaseline />
-        <AppBar component="nav">
+            <CssBaseline />
+            <AppBar component="nav">
                 <Toolbar>
                     <IconButton
                         color="inherit"

@@ -320,4 +320,10 @@ a:-webkit-any-link {
     width: 100%;
     height: calc(100vh);
     margin-top: 60px;
-}
+  }
+
+  .MuiFormHelperText-root{
+    color: #ff0000 !important;
+    font-weight:700 !important;
+    font-size: 1rem !important;
+  }

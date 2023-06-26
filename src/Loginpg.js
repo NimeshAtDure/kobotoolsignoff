@@ -9,36 +9,42 @@ import CardContent from '@mui/material/CardContent';
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Appnavbar from './Appnavbar';
-
-
-const drawerWidth = 240;
-const navItems = [''];
+import { useSelector, useDispatch } from 'react-redux'
+import { settoken } from './Reducers/appReducer';
 
 export default function Loginpg(props) {
     const { window } = props;
     const [name, setname] = React.useState('');
     const [pass, setpass] = React.useState('')
-    
+    const [errortxt,seterrortxt] = React.useState('')
+    const count = useSelector((state) => state.token.value)
+    const dispatch = useDispatch()
 
     const navigate = useNavigate();
 
     function Login(){
-        
-        axios({
-            method: "get",
-            url: "https://kf.rbmgateway.org/token/?format=json",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": 'Basic ' + btoa(name + ':' + pass)
-            }
-        })
-            .then((response) => {
-                localStorage.setItem('token',response.data.token)
-                
+        if(name.length>0 && pass.length>0){
+            axios({
+                method: "get",
+                url: "https://kf.rbmgateway.org/token/?format=json",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": 'Basic ' + btoa(name + ':' + pass)
+                }
             })
-            .catch((error) => {
-                console.log("getRequest err>>", error);
-            });
+                .then((response) => {
+                    seterrortxt("")
+                    sessionStorage.setItem('token',response.data.token)
+                    dispatch(settoken(response.data.token))
+                    navigate('/home')
+                })
+                .catch((error) => {
+                    console.log("getRequest err>>", error);
+                    seterrortxt("Please enter valid credentials")
+                });
+        }else{
+            seterrortxt("Please enter complete credentials")
+        }
         }
 
 
@@ -61,7 +67,8 @@ export default function Loginpg(props) {
                             <TextField id="outlined-basic" label="Username" variant="outlined" type='text' value={name} onChange={e=>setname(e.target.value)}/>
                     </p>
                     <p className='loginfielddiv'>
-                            <TextField id="outlined-basic" label="Password" variant="outlined" type='password' value={pass}onChange={e=>setpass(e.target.value)}/>
+                            <TextField id="outlined-basic" label="Password" variant="outlined" type='password' value={pass}onChange={e=>setpass(e.target.value)}  helperText={errortxt}
+/>
                             </p>
                             <p>
                             <Button variant="outlined" className='viewbtn mt-10px' onClick={Login}>Submit</Button>
