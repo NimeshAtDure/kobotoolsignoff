@@ -24,10 +24,45 @@ function Dashboardview() {
         supersetDomain: "http://dashboard.rbmgateway.org:8088",
         mountPoint: document.getElementById("superset-container"), // html element in which iframe render
         fetchGuestToken: () => authToken,
-        dashboardUiConfig: { hideTitle: true }
+        dashboardUiConfig: { 
+          hideTitle: true,
+          filters: {
+              expanded: false,
+          }
+        }
         });
     }, [authToken]);
     
+
+
+    const fetchGuestAuthToken1 = async () => {
+      axios({
+        method: 'post',
+        url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/guest_token/',
+        headers: {},
+        data: {
+          "user": {
+            "username": "guestuser",
+            "first_name": "guestuser",
+            "last_name": "guestuser"
+          },
+          "resources": [
+            {
+              "type": "dashboard",
+              "id": "11"
+            }
+          ],
+          "rls": []
+        }
+      })
+      .then(
+          response => {
+            setAuthToken(response.data.token)
+            console.log(response.data.token)
+          }
+      ).catch((err) => {console.log(err)});
+  }
+
     const fetchGuestAuthToken = async (token) => {
         axios({
           method: 'post',
@@ -38,9 +73,9 @@ function Dashboardview() {
           },
           data: {
             "user": {
-              "username": "saswatidas",
-              "first_name": "Saswati",
-              "last_name": "Das"
+              "username": "guestuser",
+              "first_name": "guestuser",
+              "last_name": "guestuser"
             },
             "resources": [
               {
@@ -65,10 +100,10 @@ function Dashboardview() {
         url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/login',
         headers: {},
         data: {
+          "username": "admin",
           "password": "w56gT5PBblJgt5", 
           "provider": "db",
           "refresh": true,
-          "username": "admin"
         }
       })
       .then(
