@@ -11,14 +11,16 @@ function Dashboardview() {
 
     const navigate = useNavigate();
     const [authToken, setAuthToken] = useState(undefined);
+    const [userAuthToken, setUserAuthToken] = useState(undefined);
 
     useEffect(()=> {
-        fetchGuestAuthToken()
+        fetchUserAuthToken()
+        //fetchGuestAuthToken()
     },[])
 
     useEffect(() => {
         authToken && embedDashboard({
-        id: "c37c7eee-c816-47ac-8cc2-40ecd3f2cb18",  // given by the Superset embedding UI
+        id: "292f1292-faae-428a-a202-db1612d513e7",  // given by the Superset embedding UI
         supersetDomain: "http://dashboard.rbmgateway.org:8088",
         mountPoint: document.getElementById("superset-container"), // html element in which iframe render
         fetchGuestToken: () => authToken,
@@ -26,16 +28,19 @@ function Dashboardview() {
         });
     }, [authToken]);
     
-    const fetchGuestAuthToken = async () => {
+    const fetchGuestAuthToken = async (token) => {
         axios({
           method: 'post',
           url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/guest_token/',
-          headers: {},
+          headers: {
+            'Authorization': `Bearer ${token}`
+
+          },
           data: {
             "user": {
-              "username": "RBM_User",
-              "first_name": "Superset",
-              "last_name": "Admin"
+              "username": "saswatidas",
+              "first_name": "Saswati",
+              "last_name": "Das"
             },
             "resources": [
               {
@@ -51,8 +56,29 @@ function Dashboardview() {
               setAuthToken(response.data.token)
               console.log(response.data.token)
             }
-        )
+        ).catch((err) => {console.log(err)});
     }
+
+    const fetchUserAuthToken = async () => {
+      axios({
+        method: 'post',
+        url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/login',
+        headers: {},
+        data: {
+          "password": "w56gT5PBblJgt5", 
+          "provider": "db",
+          "refresh": true,
+          "username": "admin"
+        }
+      })
+      .then(
+          response => {
+            setUserAuthToken(response.data.access_token)
+            console.log(response)
+            fetchGuestAuthToken(response.data.access_token)
+          }
+      ).catch((err) => {console.log(err)});
+  }
 
     const navItems = (
         <List>
