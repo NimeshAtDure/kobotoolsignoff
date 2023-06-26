@@ -169,7 +169,11 @@ table th {
 
 .Themetabs{
   padding: 0 40px 0 40px;
+  
+  max-width: 80%;
+  margin: 0 auto;
   margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 .Themetabs .MuiBox-root{
@@ -407,6 +411,9 @@ input:-webkit-autofill:active{
   margin-left: 15px;
     color: #9f9e9b;
     font-size: 1.07em;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 10px;
 }
 
 .applicationtitle{
@@ -494,5 +501,8 @@ input:-webkit-autofill:active{
   width: 80vw;
   margin: 0 auto;
   margin-top: 5vh;
+}
 
+input:-webkit-autofill{
+  -webkit-text-fill-color: transparent !important;
 }
