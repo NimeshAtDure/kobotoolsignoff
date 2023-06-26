@@ -188,6 +188,7 @@ table th {
 .MainContainer{
   background-color: #faf8f8;
   padding-top: 100px !important;
+  min-height: 100vh;
 }
 
 .MainContainer .demo-simple-select , .Statedrop .MuiSelect-select{
