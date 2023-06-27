@@ -605,6 +605,12 @@ input:-webkit-autofill:active {
   justify-content: center !important;
 }
 
-.navbardiv button.active a{
+.navbardiv button.active a , .navbardiv button.active span{
   border-bottom: 1px solid #fff;
+}
+
+.navbardiv button.active a span.MuiTouchRipple-root, .navbardiv button.active span.MuiTouchRipple-root,
+.navbardiv button.active .MuiTouchRipple-root, .navbardiv button.active a span{
+
+  border-bottom: none;
 }
