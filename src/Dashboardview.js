@@ -100,8 +100,8 @@ function Dashboardview() {
         url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/login',
         headers: {},
         data: {
-          "username": "admin",
-          "password": "w56gT5PBblJgt5", 
+          "username": "super_tester",
+          "password": "dure@123", 
           "provider": "db",
           "refresh": true,
         }
