@@ -605,6 +605,6 @@ input:-webkit-autofill:active {
   justify-content: center !important;
 }
 
-.navbardiv button.active span{
+.navbardiv button.active a{
   border-bottom: 1px solid #fff;
 }
