@@ -57,8 +57,9 @@ function Dashboardview() {
       })
       .then(
           response => {
-            setAuthToken(response.data.token)
             console.log(response.data.token)
+            setAuthToken(response.data.token)
+            
           }
       ).catch((err) => {console.log(err)});
   }
@@ -69,13 +70,12 @@ function Dashboardview() {
           url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/guest_token/',
           headers: {
             'Authorization': `Bearer ${token}`
-
           },
           data: {
             "user": {
-              "username": "guestuser",
-              "first_name": "guestuser",
-              "last_name": "guestuser"
+              "username": "super_tester",
+              "first_name": "Super",
+              "last_name": "Tester"
             },
             "resources": [
               {
@@ -100,8 +100,8 @@ function Dashboardview() {
         url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/login',
         headers: {},
         data: {
-          "username": "admin",
-          "password": "w56gT5PBblJgt5", 
+          "username": "super_tester",
+          "password": "dure@123", 
           "provider": "db",
           "refresh": true,
         }
@@ -109,7 +109,7 @@ function Dashboardview() {
       .then(
           response => {
             setUserAuthToken(response.data.access_token)
-            console.log(response)
+            //console.log(response)
             fetchGuestAuthToken(response.data.access_token)
           }
       ).catch((err) => {console.log(err)});
