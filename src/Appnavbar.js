@@ -70,9 +70,9 @@ export default function Appnavbar(props) {
 
     const navItems = (
         <List>
-            {props.navItems.home && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={() => navigate("/")}>Home</Button>}
-            {props.navItems.supchck && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>setformlink("https://ee.rbmgateway.org/x/QCgXLb2v")}>Supervision Checklist</Button>}
-            {props.navItems.dashb && <Button variant="outlined" className='viewbtn mt-0 dbbutton' ><a href={"http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF"} target="_blank">Dashboard</a></Button>}
+            {props.navItems.home && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={() => navigate("/")}><span>Home</span></Button>}
+            {props.navItems.supchck && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>setformlink("https://ee.rbmgateway.org/x/QCgXLb2v")}><span>Supervision Checklist</span></Button>}
+            {props.navItems.dashb && <Button variant="outlined" className='viewbtn mt-0 dbbutton' ><a href={"http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF"} target="_blank"><span>Dashboard</span></a></Button>}
         </List>
     );
 
