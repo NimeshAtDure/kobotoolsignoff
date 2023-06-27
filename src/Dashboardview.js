@@ -117,7 +117,7 @@ function Dashboardview() {
 
     return (
         <div className="App">
-            <Appnavbar navItems={{"home":true,"supchck":true,"dashb":false}} />
+            <Appnavbar navItems={{"forms":true,"supchck":true,"dashboard":true}} />
             <div id="superset-container"></div>
         </div>
     );

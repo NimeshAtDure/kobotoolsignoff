@@ -21,7 +21,8 @@ import { settoken,setdata } from './Reducers/appReducer';
 const drawerWidth = 240;
 
 export default function Appnavbar(props) {
-    const { window } = props;
+    console.log("window",window)
+
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [user, setuser] = React.useState(null)
     const [btnvisible,setbtnvisible] = React.useState(false)
@@ -70,9 +71,9 @@ export default function Appnavbar(props) {
 
     const navItems = (
         <List>
-            {props.navItems.home && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={() => navigate("/")}><span>Home</span></Button>}
+            {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname.includes("dashboard")?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}><a href={"http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF"} target="_blank"><span>Dashboard</span></a></Button>}
+            {props.navItems.forms && <Button variant="outlined" className={window.location.pathname.includes("forms")?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}onClick={() => navigate("/forms")}><span>Forms</span></Button>}
             {props.navItems.supchck && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>setformlink("https://ee.rbmgateway.org/x/QCgXLb2v")}><span>Supervision Checklist</span></Button>}
-            {props.navItems.dashb && <Button variant="outlined" className='viewbtn mt-0 dbbutton' ><a href={"http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF"} target="_blank"><span>Dashboard</span></a></Button>}
         </List>
     );
 
@@ -138,7 +139,6 @@ export default function Appnavbar(props) {
         </Box>
     );
 
-    const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
         <>
@@ -146,7 +146,7 @@ export default function Appnavbar(props) {
             <div>hi</div>
             <AppBar component="nav">
                  <div className='logobar'>
-                     <div className='Logodiv'></div>
+                     <div className='Logodiv' onClick={()=>navigate("/home")}><a></a></div>
                      <div>
                         <p className='logo-name'>India</p></div> 
                  </div>
@@ -175,7 +175,6 @@ export default function Appnavbar(props) {
             </AppBar>
             <Box component="nav">
                 <Drawer
-                    container={container}
                     variant="temporary"
                     className='leftdrawer'
                     open={mobileOpen}

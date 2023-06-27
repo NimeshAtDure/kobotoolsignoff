@@ -194,7 +194,7 @@ function Signoff() {
     return (
         <>      
         <div className="App">
-            <Appnavbar navItems={{"home":true,"supchck":true,"dashb":true}} />
+            <Appnavbar navItems={{"forms":true,"supchck":true,"dashboard":true}} />
             <TabContext value={activetheme} >
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="thematictab">
                     <TabList onChange={handlethemeChange} >

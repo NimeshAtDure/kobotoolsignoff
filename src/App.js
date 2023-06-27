@@ -15,7 +15,7 @@ function App() {
   function getElement(e) {
       if (token) {
         switch (e) {
-          case "home": 
+          case "forms": 
             return <Formview />
           case "login": 
             return <Navigate to="/home" replace={true} />
@@ -32,11 +32,11 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={token ? <Navigate to="/home" replace={true} /> : <Navigate to="/login" replace={true} />} />
-        <Route path="/login" element={token ? <Navigate to="/home" replace={true} /> : getElement("login")}/>
-        <Route path="/home" element={!token ? <Navigate to="/login" replace={true} /> : getElement("home")} />
+        <Route path="/" element={token ? <Navigate to="/dashboard" replace={true} /> : <Navigate to="/login" replace={true} />} />
+        <Route path="/login" element={token ? <Navigate to="/dashboard" replace={true} /> : getElement("login")}/>
+        <Route path="/dashboard" element={!token ? <Navigate to="/login" replace={true} /> : getElement("dashboard")} />
         <Route path="/signoff" element={getElement("signoff")} />
-        <Route path="/dashboard" element={getElement("dashboard")} />
+        <Route path="/forms" element={getElement("forms")} />
       </Routes>
     </div>
   );

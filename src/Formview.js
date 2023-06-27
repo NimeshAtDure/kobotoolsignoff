@@ -18,7 +18,6 @@ import Footer from './Footer';
 
 
 export default function Formview(props) {
-    const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [assets, setassets] = React.useState([])
     const [thematic, setthematic] = React.useState([])
@@ -180,7 +179,7 @@ export default function Formview(props) {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <Appnavbar navItems={{"home":true,"supchck":true,"dashb":true}} />
+            <Appnavbar navItems={{"forms":true,"supchck":true,"dashboard":true}} />
             <Box component="main" className='MainContainer' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
                 <Grid container spacing={2}>

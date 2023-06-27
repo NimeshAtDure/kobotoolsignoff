@@ -51,7 +51,7 @@ export default function Loginpg(props) {
                         .then((response) => {
                             console.log("me",response.data)
                             sessionStorage.setItem("user",JSON.stringify(response.data))
-                                navigate('/home')
+                                navigate('/dashboard')
 
                         })
                         .catch((error) => {
@@ -70,7 +70,7 @@ export default function Loginpg(props) {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <Appnavbar navItems={{"home":false,"supchck":false,"dashb":false}} />
+            <Appnavbar navItems={{"form":false,"supchck":false,"dashboard":false}} />
             <Box component="main" className='MainContainer loginpage' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
                 <Grid container spacing={2} className='loginpagemaindiv'>
