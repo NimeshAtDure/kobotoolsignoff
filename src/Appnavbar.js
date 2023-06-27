@@ -21,7 +21,6 @@ import { settoken,setdata } from './Reducers/appReducer';
 const drawerWidth = 240;
 
 export default function Appnavbar(props) {
-    console.log("window",window)
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [user, setuser] = React.useState(null)
@@ -71,8 +70,8 @@ export default function Appnavbar(props) {
 
     const navItems = (
         <List>
-            {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname.includes("dashboard")?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}><a href={"http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF"} target="_blank"><span>Dashboard</span></a></Button>}
-            {props.navItems.forms && <Button variant="outlined" className={window.location.pathname.includes("forms")?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}onClick={() => navigate("/forms")}><span>Forms</span></Button>}
+            {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname == "/dashboard"?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}><a href={"http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF"} target="_blank"><span>Dashboard</span></a></Button>}
+            {props.navItems.forms && <Button variant="outlined" className={window.location.pathname == "/forms" ?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}onClick={() => navigate("/forms")}><span>Forms</span></Button>}
             {props.navItems.supchck && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>setformlink("https://ee.rbmgateway.org/x/QCgXLb2v")}><span>Supervision Checklist</span></Button>}
         </List>
     );
@@ -118,7 +117,7 @@ export default function Appnavbar(props) {
                 </Grid>
 
                 {btnvisible && <MenuItem className='profmenubtn' ><a href={"https://kf.rbmgateway.org/#/forms"} target="_blank">Admin Panel</a></MenuItem>}
-                {btnvisible && <MenuItem className='profmenubtn' onClick={() => navigate("/signoff")}>Sign Off</MenuItem>}
+                {btnvisible && <MenuItem className='profmenubtn' onClick={() => navigate("/signoff")}>Data Sign Off</MenuItem>}
                 <MenuItem className='profmenubtn' onClick={Logout}>Logout</MenuItem>
             </Menu>
         </>

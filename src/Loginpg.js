@@ -49,9 +49,9 @@ export default function Loginpg(props) {
 
                     axios.request(config)
                         .then((response) => {
-                            console.log("me",response.data)
+                            // console.log("me",response.data)
                             sessionStorage.setItem("user",JSON.stringify(response.data))
-                                navigate('/dashboard')
+                                navigate('/forms')
 
                         })
                         .catch((error) => {

@@ -94,7 +94,7 @@ function Signoff() {
                                 let queslabel = ques.map((q) => {
                                     return q.split("/").slice(0, 4).join("/")
                                 }).filter((value, index, array) => array.indexOf(value) === index)
-                                console.log("response1", ques, filterques, queslabel)
+                                // console.log("response1", ques, filterques, queslabel)
 
 
                                 let config2 = {
@@ -127,7 +127,7 @@ function Signoff() {
                                                 }
                                             })
                                             themedata[statename].push(obj)
-                                            console.log(indcdata, themedata);
+                                            // console.log(indcdata, themedata);
                                         })
 
                                     })
