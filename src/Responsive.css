@@ -44,4 +44,8 @@
         max-width: 100% !important;
         flex-basis: 100% !important;
     }
+
+    .navbardiv{
+        display: none !important
+    }
 }

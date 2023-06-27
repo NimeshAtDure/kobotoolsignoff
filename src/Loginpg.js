@@ -70,7 +70,7 @@ export default function Loginpg(props) {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <Appnavbar/>
+            <Appnavbar navItems={{"home":false,"supchck":false,"dashb":false}} />
             <Box component="main" className='MainContainer loginpage' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
                 <Grid container spacing={2} className='loginpagemaindiv'>

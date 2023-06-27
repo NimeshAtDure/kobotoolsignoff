@@ -54,16 +54,9 @@ function Dashboardview() {
         )
     }
 
-    const navItems = (
-        <List>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>navigate("/")}>Home</Button>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"https://ee.rbmgateway.org/x/QCgXLb2v"} target="_blank">Supervision Checklist</a></Button>
-        </List>
-    );
-
     return (
         <div className="App">
-            <Appnavbar navItems={navItems} />
+            <Appnavbar navItems={{"home":true,"supchck":true,"dashb":false}} />
             <div id="superset-container"></div>
         </div>
     );

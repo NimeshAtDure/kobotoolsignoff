@@ -190,17 +190,11 @@ function Signoff() {
         }
     ];
 
-    const navItems = (
-        <List>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>navigate("/")}>Home</Button>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton'><a href={"https://ee.rbmgateway.org/x/QCgXLb2v"} target="_blank">Supervision Checklist</a></Button>
-            <Button variant="outlined" className='viewbtn mt-0 dbbutton' ><a href={"http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF"} target="_blank">Dashboard</a></Button>        </List>
-    );
-
+    
     return (
         <>      
         <div className="App">
-            <Appnavbar navItems={navItems} />
+            <Appnavbar navItems={{"home":true,"supchck":true,"dashb":true}} />
             <TabContext value={activetheme} >
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="thematictab">
                     <TabList onChange={handlethemeChange} >
