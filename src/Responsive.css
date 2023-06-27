@@ -48,4 +48,13 @@
     .navbardiv{
         display: none !important
     }
+    
+    .loginpagemaindiv{
+        padding: 40px 20px;
+    }
+
+    .Themetabs{
+        max-width: 100%;
+        padding-left: 24px;
+    }
 }
