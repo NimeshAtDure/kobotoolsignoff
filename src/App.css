@@ -614,3 +614,24 @@ input:-webkit-autofill:active {
 
   border-bottom: none;
 }
+
+#superset-container{
+    height: calc(100vh - 78px);
+    overflow-y: auto;
+    margin-bottom: 30px;
+}
+
+.tablebtn{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.modalsbmbtn{
+  margin-top: 30px !important;
+  background: #282c34 !important;
+  color: #fff !important;
+  width: 20%;
+  margin: auto !important;
+}

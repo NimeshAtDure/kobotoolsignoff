@@ -6,6 +6,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { embedDashboard } from "@superset-ui/embedded-sdk"
 import Appnavbar from "./Appnavbar";
 import './App.css';
+import Footer from "./Footer";
 
 function Dashboardview() {
 
@@ -119,6 +120,7 @@ function Dashboardview() {
         <div className="App">
             <Appnavbar navItems={{"forms":true,"supchck":true,"dashboard":true}} />
             <div id="superset-container"></div>
+            <Footer/>
         </div>
     );
 }

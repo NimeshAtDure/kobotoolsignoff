@@ -37,6 +37,12 @@ function App() {
         <Route path="/forms" element={!token ? <Navigate to="/login" replace={true} /> : getElement("forms")} />
         <Route path="/signoff" element={getElement("signoff")} />
         <Route path="/dashboard" element={getElement("dashboard")} />
+
+        {/* <Route path="/" element={token ? <Navigate to="/dashboard" replace={true} /> : <Navigate to="/login" replace={true} />} />
+        <Route path="/login" element={token ? <Navigate to="/dashboard" replace={true} /> : getElement("login")}/>
+        <Route path="/dashboard" element={!token ? <Navigate to="/login" replace={true} /> : getElement("dashboard")} />
+        <Route path="/signoff" element={getElement("signoff")} />
+        <Route path="/forms" element={getElement("forms")} /> */}
       </Routes>
     </div>
   );
