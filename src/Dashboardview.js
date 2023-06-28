@@ -21,8 +21,8 @@ function Dashboardview() {
 
     useEffect(() => {
         authToken && embedDashboard({
-        id: "292f1292-faae-428a-a202-db1612d513e7",  // given by the Superset embedding UI
-        supersetDomain: "https://dashboard.rbmgateway.org:8088",
+        id: "631bd270-0ed5-4c44-9d5b-5d243944b46f",  // given by the Superset embedding UI
+        supersetDomain: "https://data.rbmgateway.org",
         mountPoint: document.getElementById("superset-container"), // html element in which iframe render
         fetchGuestToken: () => authToken,
         dashboardUiConfig: { 
@@ -68,20 +68,20 @@ function Dashboardview() {
     const fetchGuestAuthToken = async (token) => {
         axios({
           method: 'post',
-          url: 'https://dashboard.rbmgateway.org:8088/api/v1/security/guest_token/',
+          url: 'https://data.rbmgateway.org/api/v1/security/guest_token/',
           headers: {
             'Authorization': `Bearer ${token}`
           },
           data: {
             "user": {
-              "username": "super_tester",
-              "first_name": "Super",
-              "last_name": "Tester"
+              "username": "embed_dashboard",
+              "first_name": "embed",
+              "last_name": "dashboard"
             },
             "resources": [
               {
                 "type": "dashboard",
-                "id": "11"
+                "id": "23"
               }
             ],
             "rls": []
@@ -98,11 +98,11 @@ function Dashboardview() {
     const fetchUserAuthToken = async () => {
       axios({
         method: 'post',
-        url: 'https://dashboard.rbmgateway.org:8088/api/v1/security/login',
+        url: 'https://data.rbmgateway.org/api/v1/security/login',
         headers: {},
         data: {
           "username": "admin",
-          "password": "w56gT5PBblJgt5", 
+          "password": "c41z$#D$^GFMO]E)", 
           "provider": "db",
           "refresh": true,
         }
