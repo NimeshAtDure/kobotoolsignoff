@@ -21,7 +21,7 @@ function Dashboardview() {
     useEffect(() => {
         authToken && embedDashboard({
         id: "292f1292-faae-428a-a202-db1612d513e7",  // given by the Superset embedding UI
-        supersetDomain: "http://dashboard.rbmgateway.org:8088",
+        supersetDomain: "https://dashboard.rbmgateway.org:8088",
         mountPoint: document.getElementById("superset-container"), // html element in which iframe render
         fetchGuestToken: () => authToken,
         dashboardUiConfig: { 
@@ -38,7 +38,7 @@ function Dashboardview() {
     const fetchGuestAuthToken1 = async () => {
       axios({
         method: 'post',
-        url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/guest_token/',
+        url: 'https://dashboard.rbmgateway.org:8088/api/v1/security/guest_token/',
         headers: {},
         data: {
           "user": {
@@ -67,7 +67,7 @@ function Dashboardview() {
     const fetchGuestAuthToken = async (token) => {
         axios({
           method: 'post',
-          url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/guest_token/',
+          url: 'https://dashboard.rbmgateway.org:8088/api/v1/security/guest_token/',
           headers: {
             'Authorization': `Bearer ${token}`
           },
@@ -97,7 +97,7 @@ function Dashboardview() {
     const fetchUserAuthToken = async () => {
       axios({
         method: 'post',
-        url: 'http://dashboard.rbmgateway.org:8088/api/v1/security/login',
+        url: 'https://dashboard.rbmgateway.org:8088/api/v1/security/login',
         headers: {},
         data: {
           "username": "admin",
