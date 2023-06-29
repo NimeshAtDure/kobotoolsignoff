@@ -148,14 +148,14 @@ export default function Appnavbar(props) {
     return (
         <>
             <CssBaseline />
-            <div>hi</div>
-            <AppBar component="nav">
+            
+            <AppBar component="nav" >
                  <div className='logobar'>
                      <div className='Logodiv' onClick={()=>navigate("/home")}><a></a></div>
                      <div>
                         <p className='logo-name'>India</p></div> 
                  </div>
-                <Toolbar>
+                <Toolbar className='secondarynavbar'>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
