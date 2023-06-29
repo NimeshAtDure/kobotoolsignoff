@@ -51,7 +51,7 @@ export default function Loginpg(props) {
                         .then((response) => {
                             // console.log("me",response.data)
                             sessionStorage.setItem("user",JSON.stringify(response.data))
-                                navigate('/forms')
+                                navigate('/dashboard')
 
                         })
                         .catch((error) => {

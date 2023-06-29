@@ -15,23 +15,19 @@ import './App.css';
 import { useEffect, useState } from "react";
 import Footer from "./Footer";
 
-const navItems = ['Home'];
-
 
 function Signoff() {
-
-    const [thematic, setthematic] = useState(["SRH", "GENDER", "A&Y", "PD"])
+    // ["SRH", "GENDER", "A&Y", "PD"]
+    const [thematic, setthematic] = useState([])
     const [states, setstates] = useState([])
     const [statetables, setstatetables] = useState({})
     const [thematicdata, setthematicdata] = useState([])
-    const [activetheme, setactivetheme] = useState(thematic[0])
+    const [activetheme, setactivetheme] = useState('')
     const [activestate, setactivestate] = useState('')
     const [activetable, setactivetable] = useState(null)
-    const [formlinks,setformlinks] = useState({})
-    const [activelink,setactivelink] = useState('')
     const [loading, setloading] = useState(false)
     const [token, settoken] = useState(sessionStorage.getItem("token"))
-
+    const [useremail,setuseremail] = useState(JSON.parse(sessionStorage.getItem("user")).email)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,8 +44,20 @@ function Signoff() {
         axios.request(config)
             .then((response) => {
                 setloading(true)
+                let thm = []
                 let arr = []
-                thematic?.map((t) => {
+
+                response.data.results.forEach(element => {
+                    var surname = element.name
+                    if (surname.includes("SIS") && surname.split("-").length == 3) {
+                        thm.push(surname.split("-")[1])
+                    } 
+                });
+                var filterthm = thm.filter((value, index, array) => array.indexOf(value) === index)
+                console.log("themes",thm,filterthm)
+                setthematic(filterthm)
+                setactivetheme(filterthm[0])
+                filterthm?.map((t) => {
                     arr.push(response.data.results.filter((r) =>
                         r.name.split("-")[1] == t))
                 })
@@ -63,16 +71,14 @@ function Signoff() {
                 console.log(error);
             });
 
-    }, [thematic])
+    }, [token])
 
     function Configtabledata(arr) {
         let themedata = {}
-        let formlinks = {}
         arr.forEach(element => {
             if (element.name.split("-").length == 3) {
                 let statename = element.name.split("-")[2]
                 themedata[statename] = []
-                formlinks[statename] = {}
                 let config1 = {
                     method: 'get',
                     maxBodyLength: Infinity,
@@ -85,7 +91,6 @@ function Signoff() {
                 axios.request(config1)
                     .then((response) => {
                         if (response.data.results.length > 0) {
-                            let linkid={}
                             let indvresult = response.data.results[response.data.results.length - 1]
                             console.log("indvresult", indvresult)
                             let resultarr = indvresult
@@ -98,7 +103,6 @@ function Signoff() {
                                 return q.split("/").slice(0, 4).join("/")
                             }).filter((value, index, array) => array.indexOf(value) === index)
                             console.log("response1", ques, filterques, queslabel)
-                            linkid.id = indvresult["_id"]
 
                             let config2 = {
                                 method: 'get',
@@ -113,7 +117,6 @@ function Signoff() {
                                 .then((response) => {
                                     // console.log("response2", response.data.content.survey)
                                     var statedata = []
-                                    linkid.uid = response.data.uid
                                     filterques.forEach(f => {
                                         var obj = {}
                                         let Label = response.data.content.survey.filter(function (el) {
@@ -122,18 +125,22 @@ function Signoff() {
                                         obj.indic = Label
                                         obj.quarter = quarter
                                         let indcdata = ques.filter(r => r.includes(f))
+                                        
                                         indcdata.forEach(i => {
-                                            // console.log(resultarr, i)
+                                            console.log(resultarr, i)
                                             if (i.toLowerCase().includes("actual")) {
                                                 obj.actual = resultarr[i]
                                             } else if (i.toLowerCase().includes("target")) {
                                                 obj.target = resultarr[i]
+                                            } else if (i.toLowerCase().includes("datasignoff")){
+                                                obj.user = resultarr[i]
                                             }
+                                            console.log(indcdata, themedata);
                                         })
-                                        themedata[statename].push(obj)
-                                        console.log(indcdata, themedata,formlinks);
+                                        if(obj.user == useremail){
+                                            themedata[statename].push(obj)
+                                        }
                                     })
-                                    formlinks[statename] = linkid
                                 })
                                 .catch((error) => {
                                     console.log(error);
@@ -146,8 +153,6 @@ function Signoff() {
                         setstates(Object.keys(themedata))
                         setactivestate(Object.keys(themedata)[0])
                         setactivetable(themedata[Object.keys(themedata)[0]])
-                        setformlinks(formlinks)
-
                     });
             }
         });
@@ -157,8 +162,6 @@ function Signoff() {
             setstates(Object.keys(themedata))
             setactivestate(Object.keys(themedata)[0])
             setactivetable(themedata[Object.keys(themedata)[0]])
-            setformlinks(formlinks)
-            console.log("forms",formlinks)
 
         }, 2000);
     }
@@ -176,32 +179,6 @@ function Signoff() {
         setactivestate(newvalue)
         setactivetable(statetables[newvalue])
     }
-
-    function editData(){
-
-        let {id,uid} = formlinks[activestate]
-        let config3 = {
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: "https://kf.rbmgateway.org/api/v2/assets/" + uid + "/data/" + id + "/enketo/edit/?return_url=false",
-            headers: {
-                'Authorization': 'Token ' + token
-            }
-        };
-        axios.request(config3)
-            .then((response) => {
-                console.log("link",response.data.url)
-                // setactivelink(response.data.url)
-                window.open(response.data.url,"_blank")
-            }).catch((error) => {
-                console.log(error);
-            });
-    }
-
-    const handleClose = () => {
-        setactivelink("");
-    };
-
 
     const COLUMNS = [
         {
@@ -273,18 +250,9 @@ function Signoff() {
                             })
                     }
                 </TabContext>
-                <Button variant="outlined" disabled={activelink.length<=0 && loading} className='signoffbtn' onClick={()=>editData()}>Edit data</Button>
+                <Button variant="outlined" disabled={loading} className='signoffbtn' >Sign off data</Button>
             </div>
-            <Dialog
-                fullScreen
-                open={activelink}
-                onClose={handleClose}
-                className="Formviewdialog"
-                disableEscapeKeyDown
-            >
-                <iframe src={activelink} width="100%" height="100%" />
-                <Button variant="outlined" className='modalsbmbtn' onClick={()=>setactivelink("")}>Sign off data</Button>
-            </Dialog>
+            
             <Footer />
         </>
     );
