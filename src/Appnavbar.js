@@ -125,7 +125,7 @@ export default function Appnavbar(props) {
                 {btnvisible && <MenuItem className='profmenubtn' onClick={()=>window.open("https://kf.rbmgateway.org/#/forms","_blank")}>Admin Panel</MenuItem>}
                 {/* {btnvisible && <MenuItem className='profmenubtn' onClick={()=>window.open("https://forms.rbmgateway.org/","_blank")}>Admin Panel</MenuItem>} */}
                 {btnvisible && <MenuItem className='profmenubtn' onClick={() => navigate("/signoff")}>Data Sign Off</MenuItem>}
-                <MenuItem className='profmenubtn' onClick={() => navigate("/passreset")}>Reset password</MenuItem>
+                {/* <MenuItem className='profmenubtn' onClick={() => navigate("/passreset")}>Reset password</MenuItem> */}
                 <MenuItem className='profmenubtn' onClick={Logout}>Logout</MenuItem>
             </Menu>
         </>
@@ -167,15 +167,17 @@ export default function Appnavbar(props) {
                     >
                         <MenuIcon />
                     </IconButton>
+                    <Box className='navbardiv' sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        {navItems}
+                    </Box>
                     <Typography
                         variant="h6"
                         component="div"
-                        sx={{ flexGrow: 1, textAlign: 'left', display: { xs: 'none', sm: 'block' } }}
+                        sx={{ flexGrow: 1, textAlign: 'right', marginRight:'20px', display: { xs: 'none', sm: 'block' } }}
                     >
                        <p>10<sup>th</sup> Country Programme</p>
-                                           </Typography>
+                    </Typography>
                     <Box className='navbardiv' sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        {navItems}
                         {ProfileDiv}
                     </Box>
                 </Toolbar>

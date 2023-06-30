@@ -134,6 +134,8 @@ function Signoff() {
                                                 obj.target = resultarr[i]
                                             } else if (i.toLowerCase().includes("datasignoff")){
                                                 obj.user = resultarr[i]
+                                            } else if(i.toLowerCase().includes("comment")){
+                                                obj.comment = resultarr[i]
                                             }
                                             console.log(indcdata, themedata);
                                         })
@@ -196,6 +198,10 @@ function Signoff() {
         {
             Header: 'Actual',
             accessor: 'actual',
+        },
+        {
+            Header: 'Comment',
+            accessor: 'comment',
         }
     ];
 
