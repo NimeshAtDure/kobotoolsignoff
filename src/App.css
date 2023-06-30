@@ -639,6 +639,7 @@ input:-webkit-autofill:active {
 .secondarynavbar{
   min-height: 55px !important;
   height: 55px;
+  padding-left: 9px !important;
 }
 
 .secondarynavbar p{
