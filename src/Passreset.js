@@ -72,9 +72,9 @@ export default function Passreset(props) {
     return (
         <Box sx={{ display: 'flex' }}>
             <Appnavbar navItems={{"form":false,"supchck":false,"dashboard":false}} />
-            <Box component="main" className='MainContainer loginpage' sx={{ p: 0, width: '100%' }}>
+            <Box component="main" className='MainContainer ' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
-                <Grid container spacing={2} className='loginpagemaindiv'>
+                <Grid container spacing={2} className='resetpassmaindiv'>
                     {/* <Grid item xs={3} className='Logocontainer'>
                         <div className='Logodiv'></div>
                     </Grid> */}
@@ -82,24 +82,24 @@ export default function Passreset(props) {
                     <Grid item xs={12}>
                     <p className='applicationtitle'></p>
                         <Card sx={{ maxWidth:"50%", margin:"0 auto", marginTop:"0px" }}>
-                        {/* <p className='formtitle '>Login</p> */}
+                         <p className='formtitle '>Reset Password</p> 
                             <CardContent>
                            
                             {/* <p className='formsubtitle text-left'>Fill your details to log in</p> */}
                     <p className='loginfielddiv'> 
-                            <p className='formsubtitle text-left'>Username</p>
+                            <p className='formsubtitle text-left'>Current Password</p>
                             <TextField id="outlined-basic" variant="outlined" type='text' value={name} onChange={e=>setname(e.target.value)}/>
                     </p>
                     <p className='loginfielddiv'>
-                            <p className='formsubtitle text-left'>Password</p>
+                            <p className='formsubtitle text-left'>New Password</p>
                             <TextField id="outlined-basic" variant="outlined" type='password' value={pass}onChange={e=>setpass(e.target.value)}  helperText={errortxt}/>
                             </p>
                             <p className='loginfielddiv'>
-                            <p className='formsubtitle text-left'>Password</p>
+                            <p className='formsubtitle text-left'>Verify Password</p>
                             <TextField id="outlined-basic" variant="outlined" type='password' value={pass}onChange={e=>setpass(e.target.value)}  helperText={errortxt}/>
                             </p>
                             <p>
-                            <Button variant="outlined" className='submitbtn mt-10px' onClick={Login}>Submit</Button>
+                            <Button variant="outlined" className='submitbtn mt-10px' onClick={Login}>Save Password</Button>
                             </p>
                             </CardContent>
                            

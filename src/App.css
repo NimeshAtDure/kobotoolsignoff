@@ -649,3 +649,16 @@ input:-webkit-autofill:active {
 .secondarynavbar ul{
   padding: 0px !important;
 }
+
+.resetpassmaindiv{
+  align-items: center;
+    justify-content: center;
+    padding: 40px 75px;
+    min-height: calc(100vh - 128px) !important;
+    padding-top: 0px;
+    margin-top: -60px !important;
+}
+
+.resetpassmaindiv .MuiPaper-root{
+  max-width: 400px;
+}
