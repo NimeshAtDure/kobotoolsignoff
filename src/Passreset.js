@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { settoken,setdata } from './Reducers/appReducer';
 import Footer from './Footer';
 
-export default function Loginpg(props) {
+export default function Passreset(props) {
     const { window } = props;
     const [name, setname] = React.useState('');
     const [pass, setpass] = React.useState('')
@@ -80,7 +80,7 @@ export default function Loginpg(props) {
                     </Grid> */}
                    
                     <Grid item xs={12}>
-                    <p className='applicationtitle'>Welcome to the RBM Gateway of UNFPA's India Country Office</p>
+                    <p className='applicationtitle'></p>
                         <Card sx={{ maxWidth:"50%", margin:"0 auto", marginTop:"0px" }}>
                         {/* <p className='formtitle '>Login</p> */}
                             <CardContent>
@@ -92,8 +92,11 @@ export default function Loginpg(props) {
                     </p>
                     <p className='loginfielddiv'>
                             <p className='formsubtitle text-left'>Password</p>
-                            <TextField id="outlined-basic" variant="outlined" type='password' value={pass}onChange={e=>setpass(e.target.value)}  helperText={errortxt}
-/>
+                            <TextField id="outlined-basic" variant="outlined" type='password' value={pass}onChange={e=>setpass(e.target.value)}  helperText={errortxt}/>
+                            </p>
+                            <p className='loginfielddiv'>
+                            <p className='formsubtitle text-left'>Password</p>
+                            <TextField id="outlined-basic" variant="outlined" type='password' value={pass}onChange={e=>setpass(e.target.value)}  helperText={errortxt}/>
                             </p>
                             <p>
                             <Button variant="outlined" className='submitbtn mt-10px' onClick={Login}>Submit</Button>

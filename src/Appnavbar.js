@@ -125,6 +125,7 @@ export default function Appnavbar(props) {
                 {btnvisible && <MenuItem className='profmenubtn' onClick={()=>window.open("https://kf.rbmgateway.org/#/forms","_blank")}>Admin Panel</MenuItem>}
                 {/* {btnvisible && <MenuItem className='profmenubtn' onClick={()=>window.open("https://forms.rbmgateway.org/","_blank")}>Admin Panel</MenuItem>} */}
                 {btnvisible && <MenuItem className='profmenubtn' onClick={() => navigate("/signoff")}>Data Sign Off</MenuItem>}
+                <MenuItem className='profmenubtn' onClick={() => navigate("/passreset")}>Reset password</MenuItem>
                 <MenuItem className='profmenubtn' onClick={Logout}>Logout</MenuItem>
             </Menu>
         </>
@@ -152,7 +153,7 @@ export default function Appnavbar(props) {
             
             <AppBar component="nav" >
                  <div className='logobar'>
-                     <div className='Logodiv' onClick={()=>navigate("/home")}><a></a></div>
+                     <div className='Logodiv' onClick={()=>navigate("/")}><a></a></div>
                      <div>
                         <p className='logo-name'>India</p></div> 
                  </div>

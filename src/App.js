@@ -6,12 +6,12 @@ import Signoff from "./Signoff"
 import Formview from "./Formview"
 import Loginpg from "./Loginpg"
 import Dashboardview from './Dashboardview';
-//import Dashboardview from './Dashboardview1';
+import Passreset from './Passreset';
 
 function App() {
 
   let token = useSelector((state) => state.user.token)
-
+  let username = JSON.parse(useSelector((state) => state.user.data)).username
   function getElement(e) {
       if (token) {
         switch (e) {
@@ -23,6 +23,8 @@ function App() {
             return <Signoff />
           case "dashboard": 
             return <Dashboardview />
+          case "passreset":
+            return <Passreset/>
         }
       } else {
         return <Loginpg />
@@ -41,8 +43,10 @@ function App() {
         <Route path="/" element={token ? <Navigate to="/dashboard" replace={true} /> : <Navigate to="/login" replace={true} />} />
         <Route path="/login" element={token ? <Navigate to="/dashboard" replace={true} /> : getElement("login")}/>
         <Route path="/dashboard" element={!token ? <Navigate to="/login" replace={true} /> : getElement("dashboard")} />
-        <Route path="/signoff" element={getElement("signoff")} />
+        <Route path="/signoff" element={ ( username && ( username.includes("admin") || username.includes("kaushik") ) )? getElement("signoff") : <Navigate to="/" replace={true} /> }/>
+        {/* <Route path="/signoff" element={ getElement("signoff")  }/> */}
         <Route path="/forms" element={getElement("forms")} />
+        <Route path='/passreset' element={getElement("passreset")} />
       </Routes>
     </div>
   );

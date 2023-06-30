@@ -27,7 +27,7 @@ function Signoff() {
     const [activetable, setactivetable] = useState(null)
     const [loading, setloading] = useState(false)
     const [token, settoken] = useState(sessionStorage.getItem("token"))
-    const [useremail,setuseremail] = useState(JSON.parse(sessionStorage.getItem("user")).email)
+    const [user,setuser] = useState(JSON.parse(sessionStorage.getItem("user")))
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -137,7 +137,7 @@ function Signoff() {
                                             }
                                             console.log(indcdata, themedata);
                                         })
-                                        if(obj.user == useremail){
+                                        if(obj.user == user.email || (user.username.includes("admin") || user.username.includes("kaushik"))){
                                             themedata[statename].push(obj)
                                         }
                                     })
