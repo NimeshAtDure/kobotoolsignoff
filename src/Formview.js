@@ -9,7 +9,11 @@ import { Grid } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import Dialog from '@mui/material/Dialog';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useNavigate } from "react-router-dom";
 import { Oval } from "react-loader-spinner"
 import axios from "axios";
@@ -31,7 +35,8 @@ export default function Formview(props) {
     const [dense, setDense] = React.useState(false);
     const [loading, setloading] = React.useState(false)
     const [formlink, setformlink] = React.useState("")
-    
+    const [expanded, setExpanded] = React.useState(false);
+
     const navigate = useNavigate();
 
     React.useEffect(() => {
@@ -95,7 +100,7 @@ export default function Formview(props) {
             })
             .catch((error) => {
                 console.log(error);
-            });    
+            });
     }, [])
 
     // const handleChange = (event) => {
@@ -176,10 +181,13 @@ export default function Formview(props) {
         setopen(false);
     };
 
+    const handleAccClick = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <Appnavbar navItems={{"forms":true,"supchck":true,"dashboard":true}} />
+            <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true }} />
             <Box component="main" className='MainContainer' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
                 <Grid container spacing={2}>
@@ -220,19 +228,29 @@ export default function Formview(props) {
                                 /> :
                                     <List dense={dense}>
                                         {
-                                            links?.map(l => {
+                                            links?.map((l, i) => {
                                                 return <>
-                                                    {l.name && l.formlink && <Grid container spacing={0} className='formdiv'>
-                                                        <Grid item xs={9}>
-                                                            <p className='text-left'>
-                                                                {l.name}
-                                                            </p>
-                                                        </Grid>
-                                                        <Grid item xs={3} className='vert-center'>
-                                                            <Button variant="outlined" className='viewbtn mt-0' onClick={() => openForm(l.formlink)}>Open</Button>
-                                                        </Grid>
+                                                    {l.name && l.formlink && <Accordion expanded={expanded === i} onChange={handleAccClick(i)}>
 
-                                                    </Grid>}
+                                                        <AccordionSummary
+                                                            expandIcon={<ExpandMoreIcon />}
+                                                            aria-controls="panel1bh-content"
+                                                            id="panel1bh-header"
+                                                        >
+                                                            <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                                                                <p className='text-left'>
+                                                                    {l.name}
+                                                                </p>
+                                                            </Typography>
+                                                        </AccordionSummary>
+                                                        <AccordionDetails>
+                                                            <Typography className="Formviewdialog">
+                                                                {expanded === i && <iframe src={l.formlink} width="100%" height="100%" frameBorder="0"/>}
+                                                            </Typography>
+                                                        </AccordionDetails>
+                                                    </Accordion>
+
+                                                    }
                                                 </>
                                             })
                                         }
@@ -303,7 +321,20 @@ export default function Formview(props) {
                         </Select>
                     </FormControl>
                 </p>
-            </Dialog> */}
+            </Dialog> 
+
+            // <Grid container spacing={0} className='formdiv'>
+                                                        //     <Grid item xs={9}>
+                                                        //         <p className='text-left'>
+                                                        //             {l.name}
+                                                        //         </p>
+                                                        //     </Grid>
+                                                        //     <Grid item xs={3} className='vert-center'>
+                                                        //         <Button variant="outlined" className='viewbtn mt-0' onClick={() => openForm(l.formlink)}>Open</Button>
+                                                        //     </Grid>
+
+                                                        // </Grid>
+                                                        */}
 
             <Dialog
                 fullScreen
