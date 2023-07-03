@@ -77,7 +77,7 @@ export default function Appnavbar(props) {
         <List>
             {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname == "/dashboard"?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'} onClick={() => navigate("/dashboard")}><span>Dashboard</span></Button>}
             {/* {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname == "/dashboard"?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'} onClick={()=>window.open("http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF","_blank")}><span>Dashboard</span></Button>} */}
-            {props.navItems.forms && <Button variant="outlined" className={window.location.pathname == "/forms" ?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}onClick={() => navigate("/forms")}><span>Forms</span></Button>}
+            {props.navItems.forms && <Button variant="outlined" className={window.location.pathname == "/forms" ?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}onClick={() => navigate("/forms")}><span>SIS Reporting</span></Button>}
             {/* {props.navItems.supchck && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>setformlink("https://ee.rbmgateway.org/x/QCgXLb2v")}><span>Supervision Checklist</span></Button>} */}
         </List>
     );
