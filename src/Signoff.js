@@ -10,7 +10,11 @@ import List from '@mui/material/List';
 import { Navigate, useNavigate } from "react-router-dom";
 import { Oval } from "react-loader-spinner"
 import Appnavbar from "./Appnavbar";
-import Dialog from '@mui/material/Dialog';
+import Typography from '@mui/material/Typography';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import './App.css';
 import { useEffect, useState } from "react";
 import Footer from "./Footer";
@@ -25,9 +29,12 @@ function Signoff() {
     const [activetheme, setactivetheme] = useState('')
     const [activestate, setactivestate] = useState('')
     const [activetable, setactivetable] = useState(null)
+    const [formlink,setformlink] = useState({})
+    const [activelink,setactivelink] = useState('')
     const [loading, setloading] = useState(false)
     const [token, settoken] = useState(sessionStorage.getItem("token"))
     const [user,setuser] = useState(JSON.parse(sessionStorage.getItem("user")))
+    const [expanded,setexpanded] = useState(false)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -91,10 +98,12 @@ function Signoff() {
 
     function Configtabledata(arr,admintoken) {
         let themedata = {}
+        let links= {}
         arr.forEach(element => {
             if (element.name.split("-").length == 3) {
                 let statename = element.name.split("-")[2]
                 themedata[statename] = []
+                links[statename] = ''
                 let config1 = {
                     method: 'get',
                     maxBodyLength: Infinity,
@@ -153,10 +162,11 @@ function Signoff() {
                                             } else if(i.toLowerCase().includes("comment")){
                                                 obj.comment = resultarr[i]
                                             }
-                                            console.log(indcdata, themedata);
+                                            console.log(indcdata, themedata,links);
                                         })
                                         if(obj.user == user.email || (user.username.includes("admin") || user.username.includes("kaushik"))){
                                             themedata[statename].push(obj)
+                                            links[statename] = response.data.deployment__links.offline_url
                                         }
                                     })
                                 })
@@ -171,6 +181,8 @@ function Signoff() {
                         setstates(Object.keys(themedata))
                         setactivestate(Object.keys(themedata)[0])
                         setactivetable(themedata[Object.keys(themedata)[0]])
+                        setformlink(links)
+                        setactivelink(links[Object.keys(themedata)[0]])
                     });
             }
         });
@@ -180,7 +192,8 @@ function Signoff() {
             setstates(Object.keys(themedata))
             setactivestate(Object.keys(themedata)[0])
             setactivetable(themedata[Object.keys(themedata)[0]])
-
+            setformlink(links)
+            setactivelink(links[Object.keys(themedata)[0]])
         }, 2000);
     }
 
@@ -188,6 +201,7 @@ function Signoff() {
     function handlethemeChange(event, newvalue) {
         // console.log(newvalue, thematicdata[thematic.indexOf(newvalue)])
         setloading(true)
+        setexpanded(false)
         setactivetheme(newvalue)
         Configtabledata(thematicdata[thematic.indexOf(newvalue)],token)
     }
@@ -195,8 +209,17 @@ function Signoff() {
 
     function handlestateChange(event, newvalue) {
         setactivestate(newvalue)
+        setexpanded(false)
         setactivetable(statetables[newvalue])
+        setactivelink(formlink[newvalue])
+        console.log("active",formlink)
+
     }
+
+    const handleAccClick = () => {
+        setexpanded(!expanded);
+        console.log("active",activelink)
+    };
 
     const COLUMNS = [
         {
@@ -223,7 +246,7 @@ function Signoff() {
 
     return (
         <>
-            <div className="App">
+            <div className="App signoffpg">
                 <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true }} />
                 <TabContext value={activetheme} >
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="thematictab">
@@ -272,7 +295,26 @@ function Signoff() {
                             })
                     }
                 </TabContext>
-                <Button variant="outlined" disabled={loading} className='signoffbtn' >Sign off data</Button>
+                <Button variant="outlined" disabled={loading || !activelink?.length>0} className='signoffbtn' onClick={handleAccClick}>Edit data</Button>
+                <Accordion expanded={expanded} className="signoffacc">
+
+                                                        {/* <AccordionSummary
+                                                            expandIcon={<ExpandMoreIcon />}
+                                                            aria-controls="panel1bh-content"
+                                                            id="panel1bh-header"
+                                                        >
+                                                            <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                                                                <p className='text-left'>
+                                                                    Signoff off data
+                                                                </p>
+                                                            </Typography>
+                                                        </AccordionSummary> */}
+                                                        <AccordionDetails>
+                                                            <Typography className={expanded?"Formviewdialog":""}>
+                                                                {expanded && <iframe src={activelink} width="100%" height="100%" frameBorder="0"/>}
+                                                            </Typography>
+                                                        </AccordionDetails>
+                                                    </Accordion>
             </div>
             
             <Footer />

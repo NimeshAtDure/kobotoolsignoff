@@ -33,29 +33,29 @@ export default function Table({ columns, data }) {
     data
   },
   useRowSelect,
-  hooks => {
-    hooks.allColumns.push(columns => [
-      // Let's make a column for selection
-      {
-        id: 'selection',
-        // The header can use the table's getToggleAllRowsSelectedProps method
-        // to render a checkbox
-        Header: ({ getToggleAllRowsSelectedProps }) => (
-          <div>
-            <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-          </div>
-        ),
-        // The cell can use the individual row's getToggleRowSelectedProps method
-        // to the render a checkbox
-        Cell: ({ row }) => (
-          <div>
-            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-          </div>
-        ),
-      },
-      ...columns,
-    ])
-  }
+  // hooks => {
+  //   hooks.allColumns.push(columns => [
+  //     // Let's make a column for selection
+  //     {
+  //       id: 'selection',
+  //       // The header can use the table's getToggleAllRowsSelectedProps method
+  //       // to render a checkbox
+  //       Header: ({ getToggleAllRowsSelectedProps }) => (
+  //         <div>
+  //           <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+  //         </div>
+  //       ),
+  //       // The cell can use the individual row's getToggleRowSelectedProps method
+  //       // to the render a checkbox
+  //       Cell: ({ row }) => (
+  //         <div>
+  //           <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+  //         </div>
+  //       ),
+  //     },
+  //     ...columns,
+  //   ])
+  // }
   );
 
   console.log("rows",selectedFlatRows.map(

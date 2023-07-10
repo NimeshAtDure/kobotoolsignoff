@@ -88,15 +88,16 @@ export default function Formview(props) {
                                 formlink: response.data.deployment__links.offline_url
                             }
                             linkarr.push(linkobj)
-                            setlinks(linkarr)
+                            // setlinks(linkarr)
                         })
                         .catch((error) => {
                             console.log(error);
                         });
                 })
                 setTimeout(() => {
+                    setlinks(linkarr)
                     setloading(false)
-                }, 2000);
+                }, 6000);
             })
             .catch((error) => {
                 console.log(error);

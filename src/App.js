@@ -7,6 +7,7 @@ import Formview from "./Formview"
 import Loginpg from "./Loginpg"
 import Dashboardview from './Dashboardview';
 import Passreset from './Passreset';
+import ProgressOverview from './ProgressOverview';
 
 function App() {
 
@@ -26,6 +27,8 @@ function App() {
             return <Dashboardview />
           case "passreset":
             return <Passreset/>
+          case "progressoverview":
+            return <ProgressOverview/>
         }
       } else {
         return <Loginpg />
@@ -48,6 +51,7 @@ function App() {
         <Route path="/signoff" element={ getElement("signoff")  }/>
         <Route path="/forms" element={getElement("forms")} />
         <Route path='/passreset' element={getElement("passreset")} />
+        <Route path='/progressoverview' element={getElement("progressoverview")} />
       </Routes>
     </div>
   );

@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  min-height: 100vh;
 }
 
 @font-face {
@@ -595,9 +596,9 @@ input:-webkit-autofill:active {
     margin-top: -8px;
 }
 
-.thematictabbody{
+/* .thematictabbody{
   min-height: calc(100vh - 200px) !important;
-}
+} */
 
 .navbardiv{
   display: flex !important;
@@ -662,4 +663,12 @@ input:-webkit-autofill:active {
 
 .resetpassmaindiv .MuiPaper-root{
   max-width: 400px;
+}
+
+.signoffpg .MuiPaper-root{
+  box-shadow: none;
+}
+
+.signoffpg .MuiAccordion-root{
+  margin-bottom: 15px;
 }
