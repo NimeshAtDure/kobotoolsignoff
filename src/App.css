@@ -672,3 +672,71 @@ input:-webkit-autofill:active {
 .signoffpg .MuiAccordion-root{
   margin-bottom: 15px;
 }
+
+.heatmaptableholder{
+  overflow-x: auto;
+}
+
+.fw-bold{
+  font-weight: bold;
+}
+
+.titleorange{
+  color: #eb7e00;
+}
+
+.fs-14px{
+  font-size: 14px;
+}
+
+.fs-13px{
+  font-size: 13px;
+}
+
+.cell-yellow{
+  background-color: #ffc100;
+}
+
+.cell-green{
+  background-color: #92d051;
+}
+
+.heatmaptableholder{
+  margin: 15px 0px 30px 0px;
+}
+
+.heatmaptableholder {
+  overflow-y: auto;
+  height: calc(100vh - 280px);
+}
+.heatmaptableholder thead th {
+  position: sticky;
+  top: 0;
+}
+
+.heatmaptableholder thead tr.secondline th {
+  position: sticky;
+  top: 50px;
+} 
+.heatmaptableholder table {
+  border-collapse: collapse;        
+  width: 100%;
+}
+
+.progressoverviewpage{
+  height: calc(100vh - 24px);
+  min-height: calc(100vh - 24px);
+  overflow: hidden;
+}
+
+.filtercontrolholder{
+  display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 15px 24px;
+    padding-bottom: 0px;
+}
+
+.filtercontrolholder .MuiFormControl-root{
+  margin-left: 15px;
+}
