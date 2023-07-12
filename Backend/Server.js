@@ -9,8 +9,9 @@ const app = express();
 app.use(bodyParser.json());
 
 
-app.use('/api', bookRoutes);
-app.use('/',defaultroute)
+app.use('/', bookRoutes);
+// app.use('/',defaultroute)
+
 // Basic 404 handler
 app.use((req, res) => {
     res.status(404).send({
