@@ -9,8 +9,8 @@ router.get('/users', bookController.getAllUser);
 router.get('/users/getuser', bookController.getUserById);
 router.put('/users/updateuser', bookController.updateUserById);
 router.delete('/users/deleteuser', bookController.deleteUserById);
-router.post("/users/generateotp",bookController.generateOTP)
-router.post("/users/login",bookController.login)
-
+router.post("/generateotp",bookController.generateOTP)
+router.post("/login",bookController.login)
+router.get("/getdata",bookController.getData)
 module.exports = router;
 

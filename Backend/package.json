@@ -1,5 +1,5 @@
 {
-  "name": "KoboToolBox Dashboard backend",
+  "name": "KoboToolBox_Dashboard_backend",
   "version": "1.0.0",
   "description": "KoboToolBox Dashboard backend",
   "main": "Server.js",

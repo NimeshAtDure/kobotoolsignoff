@@ -1,10 +1,19 @@
+const Pool = require('pg').Pool
 
 const { generateOTP, sendOTP } = require("../utils/otp");
 
+const pool = new Pool({
+  user: 'kobosuperuser',
+  host: '4.213.65.67',
+  database: 'kobosuperdb',
+  password: 'Rrr1T%^$-@i8t0$',
+  port: 5433,
+})
 class UserRepository {
 
     constructor(User) {
         this.User = User;
+        this.Pool = pool
     }
 
     addUser(email, OTP, OTPCreatedTime, OTPAttempts,isBlocked) {
@@ -74,7 +83,7 @@ class UserRepository {
 
       async generateOTP(email){
         try {
-          let user = await this.User.findOne({ email: email });
+          let user = await this.User.findOne({ where: { email: email } });
           let useremail
           // If user does not exist, create a new user
           if (!user) {
@@ -179,6 +188,17 @@ class UserRepository {
           return "Server error"
         }
       }
+
+      async getData(username){
+        this.Pool.query('SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf) AS t1 WHERE statehead = $1  OR responsible_person= $1', [username], (error, results) => {
+          // if (error) {
+          //   console.log(error);
+          //   return error;
+          // }
+          // console.log(results);
+          return results;
+        })
+      } 
 }
 
 module.exports = {

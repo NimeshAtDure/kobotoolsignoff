@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 
 
-app.use('/api/v1', bookRoutes);
+app.use('/api', bookRoutes);
 app.use('/',defaultroute)
 // Basic 404 handler
 app.use((req, res) => {
