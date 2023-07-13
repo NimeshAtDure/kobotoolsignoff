@@ -7,16 +7,17 @@ const generateOTP = () => {
 
 const sendOTP = (email, OTP) => {
   const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // use SSL
     auth: {
-        user: 'elta.roob64@ethereal.email',
-        pass: 'NnHjnr2E7Mt7C8tqPb'
+        user: 'contact.rbmgateway.org@gmail.com',
+        pass: 'ogglxjgqrgbcjdmo'
     }
 });
 
   const mailOptions = {
-    from: 'elta.roob64@ethereal.email',
+    from: 'contact.rbmgateway.org@gmail.com',
     to: email,
     subject: "Your OTP",
     text: `Your OTP is: ${OTP}`,

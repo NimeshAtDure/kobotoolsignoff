@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 router.get('/users', bookController.getAllUser);
 router.post("/generateotp",bookController.generateOTP)
 router.post("/login",bookController.login)
-router.get("/getdata",bookController.getData)
+router.post("/getdata",bookController.getData)
 
 module.exports = router;
 

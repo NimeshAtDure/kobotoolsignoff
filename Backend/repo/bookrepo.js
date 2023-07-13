@@ -1,5 +1,5 @@
 const Pool = require('pg').Pool
-
+const {sequelize} = require('../models/book')
 const { generateOTP, sendOTP } = require("../utils/otp");
 
 const pool = new Pool({
@@ -134,7 +134,8 @@ class UserRepository {
 
       async login(email,OTP){
         try {
-          const user = await this.User.findOne({ email: email });
+          console.log("ques",email,OTP)
+          const user = await this.User.findOne({ where: { email: email } });
       
           if (!user) {
             return "User not found"
@@ -190,15 +191,17 @@ class UserRepository {
       }
 
       async getData(username){
-        this.Pool.query('SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf) AS t1 WHERE statehead = $1  OR responsible_person= $1', [username], (error, results) => {
-          // if (error) {
-          //   console.log(error);
-          //   return error;
-          // }
-          // console.log(results);
-          return results;
+        console.log("usernaem",username)
+        return sequelize.query('SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf) AS t1 WHERE statehead = :username OR responsible_person= :username ',
+        { replacements: { username: username }, type: sequelize.QueryTypes.SELECT }).then(result => {
+            return result
         })
       } 
+
+      async updateData(){
+        let queries={"a&y":"update ay_dataset_final ay set actual='200', 'comments'='test' from (select * from (select * from (select * from ay_dataset_final adf union select * from gender_dataset_final gdf union select * from pd_dataset_final pdf union * from srh_dataset_final sdf )as t1 where statehead ='sunilthomasjacob'  or responsible_person='sunilthomasjacob')as t2 where unique_id='AY_44') as t3 where t3.unique_id=ay.unique_id;",
+      "pd":"update pd_dataset_final pd set actual='200','comments'='test' from (select * from (select * from (select * from ay_dataset_final adf union select * from gender_dataset_final gdf union select * from pd_dataset_final pdf union select * from srh_dataset_final sdf )as t1 where statehead ='sunilthomasjacob'  or responsible_person='sunilthomasjacob')as t2 where unique_id='AY_44') as t3 where t3.unique_id=pd.unique_id;","srh":"update srh_dataset_final srh set actual='200','comments'='test' from (select * from (select * from (select * from ay_dataset_final adf union select * from gender_dataset_final gdf union select * from pd_dataset_final pdf union select * from srh_dataset_final sdf )as t1 where statehead ='sunilthomasjacob'  or responsible_person='sunilthomasjacob')as t2 where unique_id='AY_44') as t3 where t3.unique_id=srh.unique_id;",}
+      }
 }
 
 module.exports = {

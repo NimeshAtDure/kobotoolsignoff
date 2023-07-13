@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+var cors = require('cors')
 
 const customResourceResponse = require('./utils/constant');
 const bookRoutes = require('./route/booksroute');
@@ -7,8 +8,22 @@ const defaultroute = require("./route/defaultroute")
 const app = express();
 
 app.use(bodyParser.json());
-
-
+var allowedOrigins = ['http://localhost:3000',
+                      'https://rbmgateway.org'];
+app.use(cors());
+// {
+//   origin: function(origin, callback){
+    // allow requests with no origin 
+    // (like mobile apps or curl requests)
+//     if(!origin) return callback(null, true);
+//     if(allowedOrigins.indexOf(origin) === -1){
+//       var msg = 'The CORS policy for this site does not ' +
+//                 'allow access from the specified Origin.';
+//       return callback(new Error(msg), false);
+//     }
+//     return callback(null, true);
+//   }
+// }
 app.use('/', bookRoutes);
 // app.use('/',defaultroute)
 
