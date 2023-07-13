@@ -19,8 +19,11 @@ const sendOTP = (email, OTP) => {
   const mailOptions = {
     from: 'contact.rbmgateway.org@gmail.com',
     to: email,
-    subject: "Your OTP",
-    text: `Your OTP is: ${OTP}`,
+    subject: "RBM Gateway - OTP for User Login",
+    //text: `Your OTP is: ${OTP}`,
+    html: `<p>Please use the following One Time Password (OTP) for authentication:</p>
+            <p><b><strong>${OTP}</strong></b></p>
+            <p>Don't share the OTP with anyone.</p>`
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
