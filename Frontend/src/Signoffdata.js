@@ -150,8 +150,8 @@ function Signoffdata() {
         <>
             <div className="App signoffpg progressoverviewpage">
                 <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
-                <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                    <TableContainer sx={{ maxHeight: "100vh" }}>
+                <Paper sx={{ width: '100%', overflow: 'hidden' }} >
+                    <TableContainer sx={{ maxHeight: "100vh" }} className="heatmaptableholder">
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
 

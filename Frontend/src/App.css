@@ -834,3 +834,23 @@ input:-webkit-autofill:active {
   text-align: center;
   font-weight: bold;
 }
+
+.progressoverviewpage .MuiTableContainer-root.heatmaptableholder{
+  max-height: calc(100vh - 50px);
+  height: calc(100vh - 50px);
+}
+
+.signoffpg.progressoverviewpage thead {
+  position: sticky;
+  z-index: 9;
+}
+
+.MuiTableContainer-root.heatmaptableholder thead th {
+  position: sticky;
+  top: 98px;
+}
+
+.MuiTableContainer-root.heatmaptableholder thead tr:nth-child(2) th{
+  position: sticky;
+  top: 147px !important;
+}
