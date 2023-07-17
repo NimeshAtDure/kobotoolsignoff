@@ -62,6 +62,10 @@ body,
   font-family: "UNFPA-Regular" !important;
 }
 
+.hidden{
+  display: none;
+}
+
 .MuiAppBar-root .MuiTypography-root.MuiTypography-h6 {
   font-family: "UNFPA-Bold" !important;
 }
@@ -739,4 +743,33 @@ input:-webkit-autofill:active {
 
 .filtercontrolholder .MuiFormControl-root{
   margin-left: 15px;
+}
+
+.signoffpg table{
+  margin-top: 130px;
+}
+
+.signoffpg table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #333847;
+  color: white;
+}
+
+.signoffpg thead  {
+  position: sticky;
+}
+
+.editSection{
+  display:flex;
+  flex-direction: column;
+}
+
+.editdialoglabel{
+  margin: 15px 0px !important;
+}
+
+.editdialogtxt{
+  margin: 5px 0px !important;
 }

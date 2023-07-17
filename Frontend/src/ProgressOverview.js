@@ -31,8 +31,8 @@ function ProgressOverview() {
     const [thematic, setthematic] = useState(["Consolidated Heatmap", "Office indicators"])
     const [activetheme, setactivetheme] = useState("Consolidated Heatmap")
 
-    const [age, setAge] = useState('');
-    const [quarter, setQuarter] = useState('');
+    const [age, setAge] = useState('2023');
+    const [quarter, setQuarter] = useState('Q2');
 
     const handleChange = (event) => {
       setAge(event.target.value);
@@ -52,7 +52,7 @@ function ProgressOverview() {
     return (
         <>
             <div className="App signoffpg progressoverviewpage">
-                <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true }} />
+                <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true,"progoverview":true }} />
               
                 <TabContext value={activetheme} >
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="thematictab">
@@ -67,9 +67,9 @@ function ProgressOverview() {
           label="Age"
           onChange={handleChange}
         >
-          <MenuItem value={10}>2023</MenuItem>
-          <MenuItem value={20}>2022</MenuItem>
-          <MenuItem value={30}>2021</MenuItem>
+          <MenuItem value={"2023"}>2023</MenuItem>
+          <MenuItem value={"2022"}>2022</MenuItem>
+          <MenuItem value={"2021"}>2021</MenuItem>
         </Select>
       </FormControl>
       <FormControl>
@@ -81,10 +81,10 @@ function ProgressOverview() {
           label="Age"
           onChange={handleChangeQuarter}
         >
-          <MenuItem value={10}>Q1</MenuItem>
-          <MenuItem value={20}>Q2</MenuItem>
-          <MenuItem value={30}>Q3</MenuItem>
-          <MenuItem value={40}>Q4</MenuItem>
+          <MenuItem value={"Q1"}>Q1</MenuItem>
+          <MenuItem value={"Q2"}>Q2</MenuItem>
+          <MenuItem value={"Q3"}>Q3</MenuItem>
+          <MenuItem value={"Q4"}>Q4</MenuItem>
         </Select>
       </FormControl>
                 </div>

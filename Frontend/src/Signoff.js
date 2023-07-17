@@ -29,76 +29,100 @@ function Signoff() {
     const [activetheme, setactivetheme] = useState('')
     const [activestate, setactivestate] = useState('')
     const [activetable, setactivetable] = useState(null)
-    const [formlink,setformlink] = useState({})
-    const [activelink,setactivelink] = useState('')
+    const [formlink, setformlink] = useState({})
+    const [activelink, setactivelink] = useState('')
     const [loading, setloading] = useState(false)
     const [token, settoken] = useState(sessionStorage.getItem("token"))
-    const [user,setuser] = useState(JSON.parse(sessionStorage.getItem("user")))
-    const [expanded,setexpanded] = useState(false)
+    const [user, setuser] = useState(JSON.parse(sessionStorage.getItem("user")))
+    const [expanded, setexpanded] = useState(false)
     const navigate = useNavigate();
 
     useEffect(() => {
 
-
         axios({
-            method: "get",
-            url: "https://kf.rbmgateway.org/token/?format=json",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": 'Basic ' + btoa("super_admin" + ':' + "HbSaHSlF6lhu41zvNt6J")
+            method: 'post',
+            url: 'https://service.rbmgateway.org/getdata',
+            data: {
+                "username": user.username
             }
         })
-            .then((response) => {
-                settoken(response.data.token)
-                var admintoken = response.data.token
-                let config = {
-                    method: 'get',
-                    maxBodyLength: Infinity,
-                    url: 'https://kf.rbmgateway.org/api/v2/assets.json',
-                    headers: {
-                        'Authorization': 'Token ' + admintoken
-                    }
-                };
-        
-                axios.request(config)
-                    .then((response) => {
-                        setloading(true)
-                        let thm = []
-                        let arr = []
-        
-                        response.data.results.forEach(element => {
-                            var surname = element.name
-                            if (surname.includes("SIS") && surname.split("-").length == 3) {
-                                thm.push(surname.split("-")[1])
-                            } 
-                        });
-                        var filterthm = thm.filter((value, index, array) => array.indexOf(value) === index)
-                        console.log("themes",thm,filterthm)
-                        setthematic(filterthm)
-                        setactivetheme(filterthm[0])
-                        filterthm?.map((t) => {
-                            arr.push(response.data.results.filter((r) =>
-                                r.name.split("-")[1] == t))
-                        })
-                        // console.log(arr);
-                        setthematicdata(arr)
-                        setTimeout(() => {
-                            Configtabledata(arr[0],admintoken)
-                        }, 5000);
-                    })
-                    .catch((error) => {
-                        console.log(error);
+            .then(
+                response => {
+                    let themes = [];
+                    let states = []
+                    response.data.data.forEach((item) => {
+                        if (states.indexOf(item.state) === -1) {
+                            states.push(item.state);
+                        }
+                        if (themes.indexOf(item.thematic) === -1) {
+                            themes.push(item.thematic);
+                        }
                     });
-            })
-            .catch((error) => {
-                console.log("getRequest err>>", error);
-            });
+
+                    console.log(response,themes,states)
+
+                }
+            ).catch((err) => { console.log(err) });
+
+        // axios({
+        //     method: "get",
+        //     url: "https://kf.rbmgateway.org/token/?format=json",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "Authorization": 'Basic ' + btoa("super_admin" + ':' + "HbSaHSlF6lhu41zvNt6J")
+        //     }
+        // })
+        //     .then((response) => {
+        //         settoken(response.data.token)
+        //         var admintoken = response.data.token
+        //         let config = {
+        //             method: 'get',
+        //             maxBodyLength: Infinity,
+        //             url: 'https://kf.rbmgateway.org/api/v2/assets.json',
+        //             headers: {
+        //                 'Authorization': 'Token ' + admintoken
+        //             }
+        //         };
+
+        //         axios.request(config)
+        //             .then((response) => {
+        //                 setloading(true)
+        //                 let thm = []
+        //                 let arr = []
+
+        //                 response.data.results.forEach(element => {
+        //                     var surname = element.name
+        //                     if (surname.includes("SIS") && surname.split("-").length == 3) {
+        //                         thm.push(surname.split("-")[1])
+        //                     } 
+        //                 });
+        //                 var filterthm = thm.filter((value, index, array) => array.indexOf(value) === index)
+        //                 console.log("themes",thm,filterthm)
+        //                 setthematic(filterthm)
+        //                 setactivetheme(filterthm[0])
+        //                 filterthm?.map((t) => {
+        //                     arr.push(response.data.results.filter((r) =>
+        //                         r.name.split("-")[1] == t))
+        //                 })
+        //                 // console.log(arr);
+        //                 setthematicdata(arr)
+        //                 setTimeout(() => {
+        //                     Configtabledata(arr[0],admintoken)
+        //                 }, 5000);
+        //             })
+        //             .catch((error) => {
+        //                 console.log(error);
+        //             });
+        //     })
+        //     .catch((error) => {
+        //         console.log("getRequest err>>", error);
+        //     });
 
     }, [user])
 
-    function Configtabledata(arr,admintoken) {
+    function Configtabledata(arr, admintoken) {
         let themedata = {}
-        let links= {}
+        let links = {}
         arr.forEach(element => {
             if (element.name.split("-").length == 3) {
                 let statename = element.name.split("-")[2]
@@ -150,21 +174,21 @@ function Signoff() {
                                         obj.indic = Label
                                         obj.quarter = quarter
                                         let indcdata = ques.filter(r => r.includes(f))
-                                        
+
                                         indcdata.forEach(i => {
                                             console.log(resultarr, i)
                                             if (i.toLowerCase().includes("actual")) {
                                                 obj.actual = resultarr[i]
                                             } else if (i.toLowerCase().includes("target")) {
                                                 obj.target = resultarr[i]
-                                            } else if (i.toLowerCase().includes("datasignoff")){
+                                            } else if (i.toLowerCase().includes("datasignoff")) {
                                                 obj.user = resultarr[i]
-                                            } else if(i.toLowerCase().includes("comment")){
+                                            } else if (i.toLowerCase().includes("comment")) {
                                                 obj.comment = resultarr[i]
                                             }
-                                            console.log(indcdata, themedata,links);
+                                            console.log(indcdata, themedata, links);
                                         })
-                                        if(obj.user == user.email || (user.username.includes("admin") || user.username.includes("kaushik"))){
+                                        if (obj.user == user.email || (user.username.includes("admin") || user.username.includes("kaushik"))) {
                                             themedata[statename].push(obj)
                                             links[statename] = response.data.deployment__links.offline_url
                                         }
@@ -203,7 +227,7 @@ function Signoff() {
         setloading(true)
         setexpanded(false)
         setactivetheme(newvalue)
-        Configtabledata(thematicdata[thematic.indexOf(newvalue)],token)
+        Configtabledata(thematicdata[thematic.indexOf(newvalue)], token)
     }
 
 
@@ -212,13 +236,13 @@ function Signoff() {
         setexpanded(false)
         setactivetable(statetables[newvalue])
         setactivelink(formlink[newvalue])
-        console.log("active",formlink)
+        console.log("active", formlink)
 
     }
 
     const handleAccClick = () => {
         setexpanded(!expanded);
-        console.log("active",activelink)
+        console.log("active", activelink)
     };
 
     const COLUMNS = [
@@ -247,7 +271,7 @@ function Signoff() {
     return (
         <>
             <div className="App signoffpg">
-                <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true }} />
+                <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
                 <TabContext value={activetheme} >
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }} className="thematictab">
                         <TabList onChange={handlethemeChange} >
@@ -295,10 +319,10 @@ function Signoff() {
                             })
                     }
                 </TabContext>
-                <Button variant="outlined" disabled={loading || !activelink?.length>0} className='signoffbtn' onClick={handleAccClick}>Edit data</Button>
+                <Button variant="outlined" disabled={loading || !activelink?.length > 0} className='signoffbtn' onClick={handleAccClick}>Edit data</Button>
                 <Accordion expanded={expanded} className="signoffacc">
 
-                                                        {/* <AccordionSummary
+                    {/* <AccordionSummary
                                                             expandIcon={<ExpandMoreIcon />}
                                                             aria-controls="panel1bh-content"
                                                             id="panel1bh-header"
@@ -309,14 +333,14 @@ function Signoff() {
                                                                 </p>
                                                             </Typography>
                                                         </AccordionSummary> */}
-                                                        <AccordionDetails>
-                                                            <Typography className={expanded?"Formviewdialog":""}>
-                                                                {expanded && <iframe src={activelink} width="100%" height="100%" frameBorder="0"/>}
-                                                            </Typography>
-                                                        </AccordionDetails>
-                                                    </Accordion>
+                    <AccordionDetails>
+                        <Typography className={expanded ? "Formviewdialog" : ""}>
+                            {expanded && <iframe src={activelink} width="100%" height="100%" frameBorder="0" />}
+                        </Typography>
+                    </AccordionDetails>
+                </Accordion>
             </div>
-            
+
             <Footer />
         </>
     );

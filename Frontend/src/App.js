@@ -8,7 +8,7 @@ import Loginpg from "./Loginpg"
 import Dashboardview from './Dashboardview';
 import Passreset from './Passreset';
 import ProgressOverview from './ProgressOverview';
-
+import Signoffdata from './Signoffdata'
 function App() {
 
   let token = useSelector((state) => state.user.token)
@@ -22,7 +22,7 @@ function App() {
           case "login": 
             return <Navigate to="/home" replace={true} />
           case "signoff": 
-            return <Signoff />
+            return <Signoffdata />
           case "dashboard": 
             return <Dashboardview />
           case "passreset":

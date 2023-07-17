@@ -62,7 +62,7 @@ export default function Passreset(props) {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <Appnavbar navItems={{ "form": false, "supchck": false, "dashboard": false }} />
+            <Appnavbar navItems={{ "form": false, "supchck": false, "dashboard": false,"progoverview":true }} />
             <Box component="main" className='MainContainer ' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
                 <Grid container spacing={2} className='resetpassmaindiv'>
