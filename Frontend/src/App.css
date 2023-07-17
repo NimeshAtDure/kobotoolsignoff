@@ -829,3 +829,8 @@ input:-webkit-autofill:active {
 .progressoverviewpage tbody tr td{
   vertical-align: top;
 }
+
+.progressoverviewpage tbody tr td.numberholder{
+  text-align: center;
+  font-weight: bold;
+}

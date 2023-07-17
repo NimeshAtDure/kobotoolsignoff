@@ -212,6 +212,7 @@ function Signoffdata() {
                                                             return (
                                                                 <>
                                                                     <TableCell
+                                                                    className="numberholder"
                                                                         style={{
                                                                             backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 ? "#92d051" : "#ffc100" : '')
                                                                         }}>
@@ -225,7 +226,11 @@ function Signoffdata() {
                                                                             </div>
                                                                         }
                                                                     </TableCell>
-                                                                    <TableCell>{data[s + "target"]}</TableCell>
+                                                                    <TableCell
+                                                                    className="numberholder"
+                                                                 
+                                                                    
+                                                                    >{data[s + "target"]}</TableCell>
                                                                     {/* <TableCell>{data[s+"comment"]}</TableCell> */}
                                                                 </>
                                                             )
