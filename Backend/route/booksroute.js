@@ -22,6 +22,7 @@ router.get('/users', bookController.getAllUser);
 router.post("/generateotp",bookController.generateOTP)
 router.post("/login",bookController.login)
 router.post("/getdata",bookController.getData)
+router.post("/updatedata",bookController.updateData)
 
 module.exports = router;
 

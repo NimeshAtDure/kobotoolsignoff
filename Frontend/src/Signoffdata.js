@@ -45,7 +45,7 @@ function Signoffdata() {
 
         axios({
             method: 'post',
-            url: 'http://localhost:8080/getdata',
+            url: 'http://service.rbmgateway.org/getdata',
             data: {
                 "username": user.username
             }
@@ -126,7 +126,7 @@ function Signoffdata() {
         console.log("edit",editdata)
         axios({
             method: 'post',
-            url: 'http://localhost:8080/updatedata',
+            url: 'http://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual":editdata.actual,

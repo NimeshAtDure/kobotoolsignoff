@@ -81,7 +81,16 @@ exports.login = async (req, res, next) => {
 exports.getData = async (req, res, next) => {
   try {
     const response = await userService.getData(req);
-    console.log("resp",response)
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.updateData = async (req, res, next) => {
+  try {
+    const response = await userService.updateData(req);
     res.statusCode = response.statusCode;
     return res.json({ message: response.message, data: response.data });
   } catch (error) {
