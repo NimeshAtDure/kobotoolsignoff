@@ -755,6 +755,8 @@ input:-webkit-autofill:active {
   text-align: center;
   background-color: #333847;
   color: white;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .signoffpg thead  {
@@ -772,4 +774,50 @@ input:-webkit-autofill:active {
 
 .editdialogtxt{
   margin: 5px 0px !important;
+}
+
+.editSection button{
+  background: #333847;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    margin: 0px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.editSection button:hover{
+  background: #333847;
+}
+
+.editSection{
+  flex-direction: row;
+}
+
+.MuiDialog-container h2.MuiDialogTitle-root{
+  background: #1a1c24;
+    color: #fff;
+}
+
+.editdatabtn{
+  background: #4CAF50 !important;
+    color: #fff !important;
+}
+
+.MuiDialogActions-root{
+  padding-bottom: 20px;
+}
+
+.cancelbtn{
+  background: #F44336 !important;
+    color: #fff !important;
+}
+
+.MuiTooltip-popper .MuiTooltip-tooltip{
+  font-size: 14px !important;
+}
+
+.progressoverviewpage .MuiTableContainer-root{
+  max-height: calc(100vh - 50px);
 }

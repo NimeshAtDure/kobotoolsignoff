@@ -148,7 +148,7 @@ function Signoffdata() {
 
     return (
         <>
-            <div className="App signoffpg">
+            <div className="App signoffpg progressoverviewpage">
                 <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                     <TableContainer sx={{ maxHeight: "100vh" }}>
@@ -277,8 +277,8 @@ function Signoffdata() {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={editRowData}>Edit Data</Button>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={editRowData} className="editdatabtn">Edit Data</Button>
+                    <Button onClick={handleClose} className="cancelbtn">Cancel</Button>
                 </DialogActions>
             </Dialog>
             <Footer />
