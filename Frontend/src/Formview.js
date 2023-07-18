@@ -230,29 +230,41 @@ export default function Formview(props) {
                                     <List dense={dense}>
                                         {
                                             links?.map((l, i) => {
-                                                return <>
-                                                    {l.name && l.formlink && <Accordion expanded={expanded === i} onChange={handleAccClick(i)}>
-
-                                                        <AccordionSummary
-                                                            expandIcon={<ExpandMoreIcon />}
-                                                            aria-controls="panel1bh-content"
-                                                            id="panel1bh-header"
+                                                return (
+                                                  <>
+                                                    {l.name && l.formlink && (
+                                                      <Grid
+                                                        container
+                                                        spacing={0}
+                                                        className='formdiv'
+                                                      >
+                                                        <Grid item xs={9}>
+                                                          <p className='text-left'>
+                                                            {l.name}
+                                                          </p>
+                                                        </Grid>
+                                                        <Grid
+                                                          item
+                                                          xs={3}
+                                                          className='vert-center'
                                                         >
-                                                            <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                                                                <p className='text-left'>
-                                                                    {l.name}
-                                                                </p>
-                                                            </Typography>
-                                                        </AccordionSummary>
-                                                        <AccordionDetails>
-                                                            <Typography className="Formviewdialog">
-                                                                {expanded === i && <iframe src={l.formlink} width="100%" height="100%" frameBorder="0"/>}
-                                                            </Typography>
-                                                        </AccordionDetails>
-                                                    </Accordion>
-
-                                                    }
-                                                </>
+                                                          {/* <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button> */}
+                                                          <Button
+                                                            variant='outlined'
+                                                            className='viewbtn mt-0'
+                                                            onClick={() =>
+                                                              openForm(
+                                                                l.formlink
+                                                              )
+                                                            }
+                                                          >
+                                                            Open
+                                                          </Button>
+                                                        </Grid>
+                                                      </Grid>
+                                                    )}
+                                                  </>
+                                                );
                                             })
                                         }
                                         {
