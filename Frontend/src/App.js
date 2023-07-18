@@ -28,7 +28,7 @@ function App() {
           case "passreset":
             return <Passreset/>
           case "progressoverview":
-            return <ProgressOverview/>
+            return <Signoffdata/>
         }
       } else {
         return <Loginpg />
@@ -49,6 +49,8 @@ function App() {
         <Route path="/dashboard" element={!token ? <Navigate to="/login" replace={true} /> : getElement("dashboard")} />
         {/* <Route path="/signoff" element={ ( username && ( username.includes("admin") || username.includes("kaushik") ) )? getElement("signoff") : <Navigate to="/" replace={true} /> }/> */}
         <Route path="/signoff" element={ getElement("signoff")  }/>
+        <Route path="/statesignoff" element={ getElement("signoff")  }/>
+        <Route path="/respsignoff" element={ getElement("signoff")  }/>
         <Route path="/forms" element={getElement("forms")} />
         <Route path='/passreset' element={getElement("passreset")} />
         <Route path='/progressoverview' element={getElement("progressoverview")} />

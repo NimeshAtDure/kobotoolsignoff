@@ -1,6 +1,7 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import axios from "axios";
 import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
@@ -14,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Dialog from '@mui/material/Dialog';
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,Link} from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 import { settoken,setdata } from './Reducers/appReducer';
 
@@ -28,6 +29,8 @@ export default function Appnavbar(props) {
     const [menuopen, setmenuopen] = React.useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [formlink,setformlink] = React.useState('')
+    const [statesignoff,setstatesignoff] = React.useState(true)
+    const [respsignoff,setrespsignoff] = React.useState(true)
 
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -37,11 +40,40 @@ export default function Appnavbar(props) {
             if(sessionStorage.getItem("user")){
                 var details = JSON.parse(sessionStorage.getItem("user"))
                 setuser(details)
-                setbtnvisible(details?.username.toLowerCase().includes("admin") || details?.username.toLowerCase().includes("kaushik"))
+                var checkadm = details?.username.toLowerCase().includes("admin") || details?.username.toLowerCase().includes("kaushik")
+                if(checkadm){
+                    setbtnvisible(checkadm)
+                    setrespsignoff(checkadm)
+                    setstatesignoff(checkadm)
+                }else{
+                    getAccess(details)
+                }
             }
         }, 2000);
     },[])
 
+
+
+    function getAccess(details){
+        axios({
+            method: 'post',
+            url: 'https://service.rbmgateway.org/getdata',
+            data: {
+                "username": details?.username,
+                "usertype":"all"
+            }
+        })
+            .then(
+                response => {
+                    setstatesignoff( response.data.data.filter((r)=>{
+                       return r.statehead==user.username
+                    }).length>0?true:false)
+                    setrespsignoff( response.data.data.filter((r)=>{
+                       return r.responsible_person==user.username
+                    }).length>0?true:false)
+                }
+                ).catch((err) => { console.log(err) });
+    }
 
     const openMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -78,8 +110,10 @@ export default function Appnavbar(props) {
             {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname == "/dashboard"?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'} onClick={() => navigate("/dashboard")}><span>Dashboard</span></Button>}
             {/* {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname == "/dashboard"?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'} onClick={()=>window.open("http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF","_blank")}><span>Dashboard</span></Button>} */}
             {props.navItems.forms && <Button variant="outlined" className={window.location.pathname == "/forms" ?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}onClick={() => navigate("/forms")}><span>SIS Reporting</span></Button>}
-            {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/progressoverview" ?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}onClick={() => navigate("/progressoverview")}><span>Progress Report</span></Button>}
+            {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/progressoverview" ?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'}><Link to="/progressoverview" state={"admin"}><span>Progress Report</span></Link></Button>}
             {/* {props.navItems.supchck && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>setformlink("https://ee.rbmgateway.org/x/QCgXLb2v")}><span>Supervision Checklist</span></Button>} */}
+            {statesignoff && <Button variant="outlined" className={window.location.pathname == "/statesignoff" ?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'} ><Link to="/statesignoff" state={"statehead"}><span>Statehead signoff</span></Link></Button>}
+            {respsignoff && <Button variant="outlined" className={window.location.pathname == "/respsignoff" ?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'} ><Link to="/respsignoff" state={"respperson"}><span>Responsible person signoff</span></Link></Button>}
         </List>
     );
 
@@ -125,7 +159,7 @@ export default function Appnavbar(props) {
 
                 {btnvisible && <MenuItem className='profmenubtn' onClick={()=>window.open("https://kf.rbmgateway.org/#/forms","_blank")}>Admin Panel</MenuItem>}
                 {/* {btnvisible && <MenuItem className='profmenubtn' onClick={()=>window.open("https://forms.rbmgateway.org/","_blank")}>Admin Panel</MenuItem>} */}
-                <MenuItem className='profmenubtn' onClick={() => navigate("/signoff")}>Data Sign Off</MenuItem>
+                {/* <MenuItem className='profmenubtn' onClick={() => navigate("/signoff")}>Data Sign Off</MenuItem> */}
                 {/* <MenuItem className='profmenubtn' onClick={() => navigate("/passreset")}>Reset password</MenuItem> */}
                 <MenuItem className='profmenubtn' onClick={Logout}>Logout</MenuItem>
             </Menu>

@@ -770,6 +770,12 @@ input:-webkit-autofill:active {
 
 .editdialoglabel{
   margin: 15px 0px !important;
+  color: #F44336 !important;
+  font-weight: 700 !important;
+}
+
+.editdialoglabel1{
+  margin: 15px 0px !important;
 }
 
 .editdialogtxt{

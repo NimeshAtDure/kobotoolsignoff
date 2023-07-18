@@ -21,6 +21,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import CommentIcon from '@mui/icons-material/Comment';
 import EditIcon from '@mui/icons-material/Edit';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { Link, useLocation } from "react-router-dom";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const CustomWidthTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -32,6 +39,7 @@ const CustomWidthTooltip = styled(({ className, ...props }) => (
 
 
 function Signoffdata() {
+    const location = useLocation();
 
     const [user, setuser] = useState(JSON.parse(sessionStorage.getItem("user")))
     const [tabledata, settabledata] = useState([])
@@ -41,13 +49,19 @@ function Signoffdata() {
     const [rowdata, setrowdata] = useState([])
     const [editdata, seteditdata] = useState({})
     const [open, setOpen] = useState(false)
-    useEffect(() => {
+    const [alerttxt,setalerttxt] = useState('')
 
+    useEffect(() => {
+        getFormData()
+    }, [user,location.state])
+
+    function getFormData() {
         axios({
             method: 'post',
             url: 'https://service.rbmgateway.org/getdata',
             data: {
-                "username": user.username
+                "username": location.state=="admin"?"super_admin":user.username,
+                "usertype":location.state?location.state:"admin"
             }
         })
             .then(
@@ -64,7 +78,7 @@ function Signoffdata() {
                             filtthemes.push(item.thematic);
                         }
                     });
-                    setthematic(filtthemes)
+                    setthematic(filtthemes.sort())
                     setstates(filtstates)
                     thematicarr = filtthemes.map((theme) => {
                         let newArray = response.data.data.filter(function (el) {
@@ -74,7 +88,7 @@ function Signoffdata() {
                         return { [theme]: newArray }
                     })
                     var data = []
-                    thematicarr.map((theme) => {
+                    thematicarr.sort().map((theme) => {
                         var rowobj = {}
                         rowobj["indic"] = Object.keys(theme)[0]
                         rowobj["haschild"] = true
@@ -104,8 +118,8 @@ function Signoffdata() {
                                 rowobj3[i.state + "target"] = i.target
                                 rowobj3[i.state + "comment"] = i.comments
                                 data.push(rowobj3)
+                                console.log("ind",indi, i.questionname, i.actual, i.target)
                             })
-                            // console.log("ind",indi)
                         })
                         console.log(thematicarr, data, themearr)
                     })
@@ -113,37 +127,46 @@ function Signoffdata() {
 
                 }
             ).catch((err) => { console.log(err) });
-    }, [user])
+    }
 
     function openModal(id) {
         setOpen(true)
         seteditdata(tabledata.filter(function (td) {
             return td.unique_id == id
         })[0])
+        console.log(tabledata.filter(function (td) {
+            return td.unique_id == id
+        })[0])
     }
 
-    function editRowData(){
-        console.log("edit",editdata)
+    function editRowData() {
+        console.log("edit", editdata)
         axios({
             method: 'post',
             url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
-                "actual":editdata.actual,
-                "comment":editdata.comments,
-                "theme":editdata.thematic.toLowerCase(),
-                "id":editdata.unique_id
+                "actual": editdata.actual,
+                "comment": editdata.comments,
+                "theme": editdata.thematic.toLowerCase(),
+                "id": editdata.unique_id
             }
         })
             .then(
                 response => {
                     console.log(response)
+                    setOpen(false);
+                    setalerttxt("success")
+                    getFormData()
                 }
-                ).catch((err) => { console.log(err) });
+            ).catch((err) => { 
+                console.log(err) 
+                setalerttxt("error")});
     }
 
     const handleClose = () => {
         setOpen(false);
+        setalerttxt("")
     };
 
     return (
@@ -160,7 +183,7 @@ function Signoffdata() {
                                     <TableCell
                                         key="indic"
                                     >
-                                        Theme and Indicators
+                                        Thematic area and Indicators
                                     </TableCell>
                                     {states?.map((column, id) => (
                                         <TableCell
@@ -180,16 +203,17 @@ function Signoffdata() {
                                     {states?.map((column, id) => (
                                         <>
                                             <TableCell
+                                                key={column + "target"}
+                                            >
+                                                Target
+                                            </TableCell>
+                                            <TableCell
                                                 key={column + "actual"}
 
                                             >
                                                 Actual
                                             </TableCell>
-                                            <TableCell
-                                                key={column + "target"}
-                                            >
-                                                Target
-                                            </TableCell>
+                                            
                                             {/* <TableCell
                                             key={column + "comment"}
                                         >
@@ -205,7 +229,11 @@ function Signoffdata() {
                                         <TableRow>
                                             {
                                                 data.haschild ?
-                                                    <TableCell colSpan={states.length * 2 + 1}>{data.indic}</TableCell> :
+                                                    <TableCell style={{
+                                                        color: "#eb7e00",
+                                                        fontWeight: 700
+                                                    }}
+                                                        colSpan={states.length * 2 + 1}>{data.indic}</TableCell> :
                                                     <>
                                                         <TableCell>{data.indic}</TableCell>
                                                         {states?.map(s => {
@@ -213,24 +241,25 @@ function Signoffdata() {
                                                                 <>
                                                                     <TableCell
                                                                     className="numberholder"
+                                                                 
+                                                                    
+                                                                    >{data[s + "target"]}</TableCell>
+                                                                    <TableCell
+                                                                    className="numberholder"
                                                                         style={{
                                                                             backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 ? "#92d051" : "#ffc100" : '')
                                                                         }}>
                                                                         {data[s + "actual"]}
-                                                                        {data[s + "actual"] && data[s + "comment"] &&
+                                                                        {location.state != "admin" && data[s + "actual"] && data[s + "comment"] &&
                                                                             <div className="editSection">
                                                                                 <CustomWidthTooltip title={data[s + "comment"]}>
                                                                                     <Button sx={{ m: 1 }}><CommentIcon /></Button>
                                                                                 </CustomWidthTooltip>
-                                                                                <Button sx={{ m: 1 }} onClick={()=>openModal(data.id)}><EditIcon /></Button>
+                                                                                <Button sx={{ m: 1 }} onClick={() => openModal(data.id)}><EditIcon /></Button>
                                                                             </div>
                                                                         }
                                                                     </TableCell>
-                                                                    <TableCell
-                                                                    className="numberholder"
-                                                                 
                                                                     
-                                                                    >{data[s + "target"]}</TableCell>
                                                                     {/* <TableCell>{data[s+"comment"]}</TableCell> */}
                                                                 </>
                                                             )
@@ -251,7 +280,7 @@ function Signoffdata() {
                     <DialogContentText className="editdialoglabel">
                         {editdata.rrfname}
                     </DialogContentText>
-                    <DialogContentText className="editdialoglabel">
+                    <DialogContentText className="editdialoglabel1">
                         {editdata.questionname}
                     </DialogContentText>
                     <TextField
@@ -265,7 +294,7 @@ function Signoffdata() {
                         multiline
                         value={editdata.actual}
                         variant="standard"
-                        onChange={e => seteditdata({...editdata,actual:e.target.value})}
+                        onChange={e => seteditdata({ ...editdata, actual: e.target.value })}
                     />
                     <TextField
                         className="editdialogtxt"
@@ -278,14 +307,18 @@ function Signoffdata() {
                         multiline
                         value={editdata.comments}
                         variant="standard"
-                        onChange={e => seteditdata({...editdata,comments:e.target.value})}
+                        onChange={e => seteditdata({ ...editdata, comments: e.target.value })}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={editRowData} className="editdatabtn">Edit Data</Button>
+                    <Button onClick={editRowData} className="editdatabtn">Save Data</Button>
                     <Button onClick={handleClose} className="cancelbtn">Cancel</Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar open={alerttxt.length>0} autoHideDuration={6000} onClose={handleClose}>
+                {alerttxt=="success"?<Alert severity="success">Data saved !</Alert>:alerttxt=="error"?<Alert severity="error">Update failed !</Alert>:''
+                }
+            </Snackbar>
             <Footer />
         </>
 
