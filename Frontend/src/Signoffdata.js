@@ -203,7 +203,7 @@ function Signoffdata() {
 
     return (
         <>
-            <div className="App signoffpg progressoverviewpage">
+            <div className="App signoffpg progressoverviewpage signoff-section">
                 <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
                 <Paper sx={{ width: '100%', overflow: 'hidden' }} >
                     <TableContainer sx={{ maxHeight: "100vh" }} className="heatmaptableholder">

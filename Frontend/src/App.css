@@ -770,7 +770,7 @@ input:-webkit-autofill:active {
 
 .editdialoglabel{
   margin: 15px 0px !important;
-  color: #F44336 !important;
+  color: rgb(235, 126, 0) !important;
   font-weight: 700 !important;
 }
 
@@ -863,4 +863,14 @@ input:-webkit-autofill:active {
 
 .signoffmenu .MuiPopover-paper{
   background-color: #333847 !important
+}
+
+.signoff-section .MuiTableContainer-root.heatmaptableholder thead tr:nth-child(2) th{
+  min-width: 220px;
+}
+
+.signoff-section .editSection{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
