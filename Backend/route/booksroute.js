@@ -23,6 +23,7 @@ router.post("/generateotp",bookController.generateOTP)
 router.post("/login",bookController.login)
 router.post("/getdata",bookController.getData)
 router.post("/updatedata",bookController.updateData)
+router.post("/statesignoff",bookController.stateSignoff)
 
 module.exports = router;
 

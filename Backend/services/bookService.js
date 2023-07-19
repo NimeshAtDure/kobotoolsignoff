@@ -151,9 +151,9 @@ class UserService {
 
     async getData(req){
       const response = {};
-      const { username } = req.body;
+      const { username, usertype } = req.body;
 
-      const data = await this.userRepo.getData(username);
+      const data = await this.userRepo.getData(username,usertype);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;
@@ -168,9 +168,26 @@ class UserService {
 
     async updateData(req){
       const response = {};
-      const { username,id,actual,comment,theme } = req.body;
+      const { username,id,actual,comment,theme,stateupdttime,respupdttime } = req.body;
 
-      const data = await this.userRepo.updateData(username,id,actual,comment,theme);
+      const data = await this.userRepo.updateData(username,id,actual,comment,theme,stateupdttime,respupdttime);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
+    async stateSignoff(req){
+      const response = {};
+      const { username } = req.body;
+
+      const data = await this.userRepo.stateSignoff(username);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;
