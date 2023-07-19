@@ -32,8 +32,8 @@ function Signoff() {
     const [formlink, setformlink] = useState({})
     const [activelink, setactivelink] = useState('')
     const [loading, setloading] = useState(false)
-    const [token, settoken] = useState(sessionStorage.getItem("token"))
-    const [user, setuser] = useState(JSON.parse(sessionStorage.getItem("user")))
+    const [token, settoken] = useState(localStorage.getItem("token"))
+    const [user, setuser] = useState(JSON.parse(localStorage.getItem("user")))
     const [expanded, setexpanded] = useState(false)
     const navigate = useNavigate();
 

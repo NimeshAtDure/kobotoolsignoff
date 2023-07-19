@@ -40,7 +40,7 @@ export default function Passreset(props) {
                 maxBodyLength: Infinity,
                 url: 'https://kf.rbmgateway.org/me/?current_password=' + prevpass  + '&new_password=' + newpass ,
                 headers: {
-                    'Authorization': 'Token' + sessionStorage.getItem("token")
+                    'Authorization': 'Token' + localStorage.getItem("token")
                 }
             };
 

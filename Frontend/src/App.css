@@ -865,7 +865,8 @@ input:-webkit-autofill:active {
   background-color: #333847 !important
 }
 
-.signoff-section .MuiTableContainer-root.heatmaptableholder thead tr:nth-child(2) th{
+
+.progressoverviewpage tbody tr td:nth-child(1){
   min-width: 220px;
 }
 

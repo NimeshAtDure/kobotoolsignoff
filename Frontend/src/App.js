@@ -9,6 +9,8 @@ import Dashboardview from './Dashboardview';
 import Passreset from './Passreset';
 import ProgressOverview from './ProgressOverview';
 import Signoffdata from './Signoffdata'
+import Formdisp from './Formdisp';
+
 function App() {
 
   let token = useSelector((state) => state.user.token)
@@ -29,6 +31,8 @@ function App() {
             return <Passreset/>
           case "progressoverview":
             return <Signoffdata/>
+          case "formsdisp":
+            return <Formdisp/>
         }
       } else {
         return <Loginpg />
@@ -52,6 +56,7 @@ function App() {
         <Route path="/statesignoff" element={ getElement("signoff")  }/>
         <Route path="/respsignoff" element={ getElement("signoff")  }/>
         <Route path="/forms" element={getElement("forms")} />
+        <Route path="/formsview/:formid" element={getElement("formsdisp")} />
         <Route path='/passreset' element={getElement("passreset")} />
         <Route path='/progressoverview' element={getElement("progressoverview")} />
       </Routes>

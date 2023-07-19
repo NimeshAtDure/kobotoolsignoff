@@ -42,7 +42,7 @@ const CustomWidthTooltip = styled(({ className, ...props }) => (
 function Signoffdata() {
     const location = useLocation();
 
-    const [user, setuser] = useState(JSON.parse(sessionStorage.getItem("user")))
+    const [user, setuser] = useState(JSON.parse(localStorage.getItem("user")))
     const [tabledata, settabledata] = useState([])
     const [thematic, setthematic] = useState([])
     const [states, setstates] = useState([])
@@ -122,10 +122,10 @@ function Signoffdata() {
                                 rowobj3["statesignedOff"] = i.statehead_approved
                                 rowobj3["respsignedOff"] = i.responsible_person_approved
                                 data.push(rowobj3)
-                                console.log("ind", indi, i.questionname, i.actual, i.target)
+                                // console.log("ind", indi, i.questionname, i.actual, i.target)
                             })
                         })
-                        console.log(thematicarr, data, themearr)
+                        // console.log(thematicarr, data, themearr)
                     })
                     setrowdata(data)
                     setenablesignoff(!data.filter(function (th) {
@@ -141,9 +141,7 @@ function Signoffdata() {
         seteditdata(tabledata.filter(function (td) {
             return td.unique_id == id
         })[0])
-        console.log(tabledata.filter(function (td) {
-            return td.unique_id == id
-        })[0])
+        
     }
 
     function editRowData() {
@@ -164,7 +162,7 @@ function Signoffdata() {
         })
             .then(
                 response => {
-                    console.log(response)
+                    // console.log(response)
                     setOpen(false);
                     setalerttxt("success")
                     getFormData()
@@ -186,7 +184,7 @@ function Signoffdata() {
             })
                 .then(
                     response => {
-                        console.log(response)
+                        // console.log(response)
                         setalerttxt("success")
                     }
                 ).catch((err) => {
