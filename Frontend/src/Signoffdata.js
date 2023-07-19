@@ -15,6 +15,7 @@ import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
+import Fab from '@mui/material/Fab';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -49,19 +50,20 @@ function Signoffdata() {
     const [rowdata, setrowdata] = useState([])
     const [editdata, seteditdata] = useState({})
     const [open, setOpen] = useState(false)
-    const [alerttxt,setalerttxt] = useState('')
+    const [alerttxt, setalerttxt] = useState('')
+    const [enablesignoff,setenablesignoff] = useState(true)
 
     useEffect(() => {
         getFormData()
-    }, [user,location.state])
+    }, [user, location.state])
 
     function getFormData() {
         axios({
             method: 'post',
             url: 'https://service.rbmgateway.org/getdata',
             data: {
-                "username": location.state=="admin"?"super_admin":user.username,
-                "usertype":location.state?location.state:"admin"
+                "username": location.state == "admin" ? "super_admin" : user.username,
+                "usertype": (user.username == "super_admin" || user.username == "kaushiks") ? "admin" : location.state ? location.state : "admin"
             }
         })
             .then(
@@ -117,13 +119,18 @@ function Signoffdata() {
                                 rowobj3[i.state + "actual"] = i.actual
                                 rowobj3[i.state + "target"] = i.target
                                 rowobj3[i.state + "comment"] = i.comments
+                                rowobj3["statesignedOff"] = i.statehead_approved
+                                rowobj3["respsignedOff"] = i.responsible_person_approved
                                 data.push(rowobj3)
-                                console.log("ind",indi, i.questionname, i.actual, i.target)
+                                console.log("ind", indi, i.questionname, i.actual, i.target)
                             })
                         })
                         console.log(thematicarr, data, themearr)
                     })
                     setrowdata(data)
+                    setenablesignoff(!data.filter(function (th) {
+                        return th.statesignedOff == "Yes"
+                    }).length==0)
 
                 }
             ).catch((err) => { console.log(err) });
@@ -140,7 +147,8 @@ function Signoffdata() {
     }
 
     function editRowData() {
-        console.log("edit", editdata)
+        const date = new Date();
+
         axios({
             method: 'post',
             url: 'https://service.rbmgateway.org/updatedata',
@@ -149,7 +157,9 @@ function Signoffdata() {
                 "actual": editdata.actual,
                 "comment": editdata.comments,
                 "theme": editdata.thematic.toLowerCase(),
-                "id": editdata.unique_id
+                "id": editdata.unique_id,
+                "stateupdttime": location.state == "statehead" ? date.toISOString() : null,
+                "respupdttime": location.state == "respperson" ? date.toISOString() : null
             }
         })
             .then(
@@ -159,9 +169,31 @@ function Signoffdata() {
                     setalerttxt("success")
                     getFormData()
                 }
-            ).catch((err) => { 
-                console.log(err) 
-                setalerttxt("error")});
+            ).catch((err) => {
+                console.log(err)
+                setalerttxt("error")
+            });
+    }
+
+    function signoffData(){
+        if(!enablesignoff){
+            axios({
+                method: 'post',
+                url: 'https://service.rbmgateway.org/stateSignoff',
+                data: {
+                    "username": user.username,
+                }
+            })
+                .then(
+                    response => {
+                        console.log(response)
+                        setalerttxt("success")
+                    }
+                ).catch((err) => {
+                    console.log(err)
+                    setalerttxt("error")
+                });
+        }
     }
 
     const handleClose = () => {
@@ -213,7 +245,7 @@ function Signoffdata() {
                                             >
                                                 Actual
                                             </TableCell>
-                                            
+
                                             {/* <TableCell
                                             key={column + "comment"}
                                         >
@@ -224,6 +256,8 @@ function Signoffdata() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
+                                {rowdata.length>0?
+                                <>
                                 {rowdata.map((data) => {
                                     return (
                                         <TableRow>
@@ -240,17 +274,17 @@ function Signoffdata() {
                                                             return (
                                                                 <>
                                                                     <TableCell
-                                                                    className="numberholder"
-                                                                 
-                                                                    
+                                                                        className="numberholder"
+
+
                                                                     >{data[s + "target"]}</TableCell>
                                                                     <TableCell
-                                                                    className="numberholder"
+                                                                        className="numberholder"
                                                                         style={{
                                                                             backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 ? "#92d051" : "#ffc100" : '')
                                                                         }}>
                                                                         {data[s + "actual"]}
-                                                                        {location.state != "admin" && data[s + "actual"] && data[s + "comment"] &&
+                                                                        {(user.username != "admin" && location.state != "admin") && ((!data["statesignedOff"] && location.state == "statehead") || (!data["respsignedOff"] && location.state == "respperson")) && data[s + "actual"] &&
                                                                             <div className="editSection">
                                                                                 <CustomWidthTooltip title={data[s + "comment"]}>
                                                                                     <Button sx={{ m: 1 }}><CommentIcon /></Button>
@@ -259,7 +293,7 @@ function Signoffdata() {
                                                                             </div>
                                                                         }
                                                                     </TableCell>
-                                                                    
+
                                                                     {/* <TableCell>{data[s+"comment"]}</TableCell> */}
                                                                 </>
                                                             )
@@ -269,6 +303,12 @@ function Signoffdata() {
                                         </TableRow>
                                     )
                                 })}
+                                </>
+                                :<TableRow>
+                                    <TableCell colSpan={states.length+1} align="center">
+                                        Awaiting State Head Sign Off
+                                    </TableCell>
+                                    </TableRow>}
                             </TableBody>
                         </Table>
                     </TableContainer>
@@ -315,10 +355,25 @@ function Signoffdata() {
                     <Button onClick={handleClose} className="cancelbtn">Cancel</Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={alerttxt.length>0} autoHideDuration={6000} onClose={handleClose}>
-                {alerttxt=="success"?<Alert severity="success">Data saved !</Alert>:alerttxt=="error"?<Alert severity="error">Update failed !</Alert>:''
+            <Snackbar open={alerttxt.length > 0} autoHideDuration={6000} onClose={handleClose}>
+                {alerttxt == "success" ? <Alert severity="success">Data saved !</Alert> : alerttxt == "error" ? <Alert severity="error">Update failed !</Alert> : ''
                 }
             </Snackbar>
+            {location.state=="statehead"?<Fab variant="extended" size="medium" sx={{
+                position: 'absolute',
+                bottom: 50,
+                right: 16,
+                bgcolor: "#333847",
+                color: "#fff",
+                '&:hover': {
+                    bgcolor: "#fff",
+                    color: "#000"
+                },
+            }}  
+            onClick={signoffData}
+            >
+                Sign off
+            </Fab>:''}
             <Footer />
         </>
 
