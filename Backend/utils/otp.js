@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey("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");
+sgMail.setApiKey("");
 
 const generateOTP = () => {
   return crypto.randomBytes(3).toString("hex");
