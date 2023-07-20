@@ -12,8 +12,11 @@ import Appnavbar from './Appnavbar';
 import { useSelector, useDispatch } from 'react-redux'
 import { settoken, setdata } from './Reducers/appReducer';
 import Footer from './Footer';
+import useLocalStorage from './Hooks/useLocalStorage';
+import Cookies from 'universal-cookie';
 
 export default function Loginpg(props) {
+    const cookies = new Cookies();
     const { window } = props;
     const [name, setname] = React.useState('');
     const [pass, setpass] = React.useState('')
@@ -24,6 +27,7 @@ export default function Loginpg(props) {
     const [errortxt, seterrortxt] = React.useState('')
     const [otperrtxt,setotperrtxt] = React.useState('')
     const dispatch = useDispatch()
+    const [value, setValue] = useLocalStorage(usertoken);
 
     const navigate = useNavigate();
 
@@ -40,7 +44,8 @@ export default function Loginpg(props) {
                 .then((response) => {
                     seterrortxt("")
                     
-                    setusertoken(response.data.token)
+                    setusertoken(response.data.token);
+
                     let config = {
                         method: 'get',
                         maxBodyLength: Infinity,
@@ -49,7 +54,10 @@ export default function Loginpg(props) {
                             'Authorization': 'Token ' + response.data.token
                         }
                     };
-
+                    console.log("setusertoken:", usertoken);
+                    cookies.set("user_token", usertoken, {
+                      expires: new Date(usertoken.exp * 10000),
+                    });
                     axios.request(config)
                         .then((response) => {
                             // console.log("me",response.data)
@@ -112,8 +120,16 @@ export default function Loginpg(props) {
                 if(response.data.message=="User logged in successfully"){
                     console.log("resp",response.data)
                     sessionStorage.setItem('token', usertoken)
+                    cookies.set("user_token", usertoken, {
+                        expires: new Date(
+                        usertoken.exp * 1000
+                        ),
+                    });
                     dispatch(settoken(usertoken))
                     sessionStorage.setItem("user", JSON.stringify(userdata))
+                    cookies.set("user", JSON.stringify(userdata), {
+                      expires: new Date(usertoken.exp * 10000),
+                    });
                     dispatch(setdata(JSON.stringify(userdata)))
                     navigate('/dashboard')                
                 }else{
