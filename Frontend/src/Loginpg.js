@@ -64,7 +64,6 @@ export default function Loginpg(props) {
                         });
                 })
                 .catch((error) => {
-                    console.log("getRequest err>>", error);
                     seterrortxt("Please enter valid credentials")
                 });
         } else {

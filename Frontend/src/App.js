@@ -32,7 +32,7 @@ function App() {
           case "progressoverview":
             return <Signoffdata/>
           case "formsdisp":
-            return <Formdisp/>
+            return <Formdisp />
         }
       } else {
         return <Loginpg />
@@ -40,7 +40,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className='App'>
       <Routes>
         {/* <Route path="/" element={token ? <Navigate to="/forms" replace={true} /> : <Navigate to="/login" replace={true} />} />
         <Route path="/login" element={token ? <Navigate to="/forms" replace={true} /> : getElement("login")}/>
@@ -48,17 +48,48 @@ function App() {
         <Route path="/signoff" element={getElement("signoff")} />
         <Route path="/dashboard" element={getElement("dashboard")} /> */}
 
-        <Route path="/" element={token ? <Navigate to="/dashboard" replace={true} /> : <Navigate to="/login" replace={true} />} />
-        <Route path="/login" element={token ? <Navigate to="/dashboard" replace={true} /> : getElement("login")}/>
-        <Route path="/dashboard" element={!token ? <Navigate to="/login" replace={true} /> : getElement("dashboard")} />
+        <Route
+          path='/'
+          element={
+            token ? (
+              <Navigate to='/dashboard' replace={true} />
+            ) : (
+              <Navigate to='/login' replace={true} />
+            )
+          }
+        />
+        <Route
+          path='/login'
+          element={
+            token ? (
+              <Navigate to='/dashboard' replace={true} />
+            ) : (
+              getElement("login")
+            )
+          }
+        />
+        <Route
+          path='/dashboard'
+          element={
+            !token ? (
+              <Navigate to='/login' replace={true} />
+            ) : (
+              getElement("dashboard")
+            )
+          }
+        />
         {/* <Route path="/signoff" element={ ( username && ( username.includes("admin") || username.includes("kaushik") ) )? getElement("signoff") : <Navigate to="/" replace={true} /> }/> */}
-        <Route path="/signoff" element={ getElement("signoff")  }/>
-        <Route path="/statesignoff" element={ getElement("signoff")  }/>
-        <Route path="/respsignoff" element={ getElement("signoff")  }/>
-        <Route path="/forms" element={getElement("forms")} />
-        <Route path="/formsview/:formid" element={getElement("formsdisp")} />
+        <Route path='/signoff' element={getElement("signoff")} />
+        <Route path='/statesignoff' element={getElement("signoff")} />
+        <Route path='/respsignoff' element={getElement("signoff")} />
+        <Route path='/forms' element={getElement("forms")} />
+        <Route path='/formsview/:formid' element={getElement("formsdisp")} />
         <Route path='/passreset' element={getElement("passreset")} />
-        <Route path='/progressoverview' element={getElement("progressoverview")} />
+        <Route
+          path='/progressoverview'
+          element={getElement("progressoverview")}
+        />
+        <Route path='*' element={<Navigate to="/login" />} />
       </Routes>
     </div>
   );
