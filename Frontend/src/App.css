@@ -865,12 +865,54 @@ input:-webkit-autofill:active {
   background-color: #333847 !important
 }
 
-.signoff-section .MuiTableContainer-root.heatmaptableholder thead tr:nth-child(2) th{
+/* .signoff-section .MuiTableContainer-root.heatmaptableholder thead tr:nth-child(2) th{
   min-width: 220px;
-}
+} */
 
+.progressoverviewpage tbody tr td:nth-child(1){
+  min-width: 200px;
+    width: 70%;
+}
 .signoff-section .editSection{
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+.select-user span{
+  color: #fff !important;
+
+}
+
+.select-user .MuiSvgIcon-root{
+  color: #fff !important;
+  /* right: 77px !important; */
+}
+
+
+#menu- .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper,
+#menu- ul{
+  background-color: #333847 !important
+}
+
+#menu- a{
+  color: #fff !important;
+}
+
+.menubutton{
+  background-color: transparent !important;
+}
+
+.menubutton label{
+  color: #fff !important;
+  /* margin-top: -7px; */
+}
+
+.menubutton .MuiOutlinedInput-notchedOutline{
+  border-color: #fff !important;
+}
+
+.menu-button fieldset span{
+  padding-left: 32px !important;
+}
+

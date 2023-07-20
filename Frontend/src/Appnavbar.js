@@ -18,10 +18,20 @@ import Dialog from '@mui/material/Dialog';
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 import { settoken, setdata } from './Reducers/appReducer';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
 
 const drawerWidth = 240;
 
 export default function Appnavbar(props) {
+
+    const [signoff, setsignoff] = React.useState('');
+
+    const handleChange = (event) => {
+      setsignoff(event.target.value);
+    };
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [user, setuser] = React.useState(null)
@@ -126,7 +136,7 @@ export default function Appnavbar(props) {
             {props.navItems.forms && <Button variant="outlined" className={window.location.pathname == "/forms" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={() => navigate("/forms")}><span>SIS Reporting</span></Button>}
             {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/progressoverview" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/progressoverview" state={"admin"}><span>Progress Report</span></Link></Button>}
             {/* {props.navItems.supchck && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>setformlink("https://ee.rbmgateway.org/x/QCgXLb2v")}><span>Supervision Checklist</span></Button>} */}
-            {statesignoff && <Button variant="outlined" className={window.location.pathname.includes("sign") ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={openSgnoffmenu}><span>Sign off</span></Button>}
+            {/* {statesignoff && <Button variant="outlined" className={window.location.pathname.includes("sign") ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={openSgnoffmenu}><span>Sign off</span></Button>}
             <Menu
                 id="demo-positioned-menu"
                 aria-labelledby="demo-positioned-button"
@@ -134,6 +144,7 @@ export default function Appnavbar(props) {
                 open={sgnoffmenuopn}
                 anchorEl={anchorEl1}
                 onClose={closeSgnoffmenu}
+              
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'left',
@@ -143,11 +154,32 @@ export default function Appnavbar(props) {
                     horizontal: 'left',
                 }}
             >
-                <MenuItem>{statesignoff && <Button variant="outlined" className={window.location.pathname == "/statesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/statesignoff" state={"statehead"}><span>Statehead signoff</span></Link></Button>}</MenuItem>
+                
+                <MenuItem>
+                {statesignoff && <Button variant="outlined" className={window.location.pathname == "/statesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/statesignoff" state={"statehead"}><span>Statehead signoff</span></Link></Button>}</MenuItem>
                 <MenuItem>{respsignoff && <Button variant="outlined" className={window.location.pathname == "/respsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/respsignoff" state={"respperson"}><span>Responsible person signoff</span></Link></Button>}</MenuItem>
                 <MenuItem></MenuItem>
-            </Menu>
+            </Menu> */}
             
+       <Button className="menu-sign">
+       <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+        <InputLabel id="demo-simple-select-helper-label">Sign Off </InputLabel>
+        <Select
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          value={signoff}
+          className='select-user'
+          label="sign off"
+          onChange={handleChange}
+        >
+      
+           <MenuItem value={10} className='menu-item'>{statesignoff && <span variant="outlined" className={window.location.pathname == "/statesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/statesignoff" state={"statehead"}><span>State Head </span></Link></span>}</MenuItem>
+          <MenuItem value={20} className='menu-item'>{respsignoff && <span variant="outlined" className={window.location.pathname == "/respsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/respsignoff" state={"respperson"}><span>Responsible Person </span></Link></span>}</MenuItem>
+         
+        </Select>
+        
+      </FormControl>
+      </Button>    
             
         </List>
     );
