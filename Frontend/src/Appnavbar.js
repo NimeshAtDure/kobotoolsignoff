@@ -43,14 +43,16 @@ export default function Appnavbar(props) {
     const [sgnoffmenuopn,setsgnoffmenuopn] = React.useState(false)
     const [statesignoff, setstatesignoff] = React.useState(false)
     const [respsignoff, setrespsignoff] = React.useState(false)
+    const [SVC,setSVC] = React.useState(false)
 
     const dispatch = useDispatch()
     const navigate = useNavigate();
+    let token = useSelector((state) => state.user.token)
 
     React.useEffect(() => {
         setTimeout(() => {
-            if (sessionStorage.getItem("user")) {
-                var details = JSON.parse(sessionStorage.getItem("user"))
+            if (localStorage.getItem("user")) {
+                var details = JSON.parse(localStorage.getItem("user"))
                 setuser(details)
                 var checkadm = details?.username.toLowerCase().includes("admin") || details?.username.toLowerCase().includes("kaushik")
                 if (checkadm) {
@@ -60,8 +62,46 @@ export default function Appnavbar(props) {
                 } else {
                     getAccess(details)
                 }
+                let config = {
+                    method: 'get',
+                    maxBodyLength: Infinity,
+                    url: 'https://kf.rbmgateway.org/api/v2/assets.json',
+                    headers: {
+                        'Authorization': 'Token ' + token
+                    }
+                };
+        
+                axios.request(config)
+                    .then((response) => {
+                        // console.log(response.data.results)
+                        var filterSVC = response.data.results.filter((r) => {
+                            return r.name == "Supervision Checklist for Health Facility"
+                        })
+
+                        setSVC(filterSVC.length>0?true:false)
+                        let config2 = {
+                            method: 'get',
+                            maxBodyLength: Infinity,
+                            url: filterSVC[0]?.url,
+                            headers: {
+                                'Authorization': 'Token ' + token
+                            }
+                        };
+    
+                        axios.request(config2)
+                            .then((response) => {
+                                var link = response.data.deployment__links.offline_url.split("/")
+                                // console.log(response.data.deployment__links.offline_url)
+                                setformlink(link[link.length-1])
+                                
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    })
             }
-        }, 2000);
+
+        }, 1500);
     }, [])
 
 
@@ -83,9 +123,9 @@ export default function Appnavbar(props) {
                     setrespsignoff(response.data.data.filter((r) => {
                         return r.responsible_person == details.username
                     }).length > 0 ? true : false)
-                    console.log("resp", response.data.data.filter((r) => {
-                        return r.responsible_person == details.username
-                    }));
+                    // console.log("resp", response.data.data.filter((r) => {
+                    //     return r.responsible_person == details.username
+                    // }));
                 }
             ).catch((err) => { console.log(err) });
     }
@@ -110,8 +150,8 @@ export default function Appnavbar(props) {
     }
 
     const Logout = () => {
-        sessionStorage.setItem('token', "")
-        sessionStorage.setItem('user', "")
+        localStorage.setItem('token', "")
+        localStorage.setItem('user', "")
         dispatch(settoken(""))
         document.cookie.split(";").forEach((c) => {
             document.cookie = c
@@ -134,8 +174,8 @@ export default function Appnavbar(props) {
             {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname == "/dashboard" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={() => navigate("/dashboard")}><span>Dashboard</span></Button>}
             {/* {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname == "/dashboard"?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'} onClick={()=>window.open("http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF","_blank")}><span>Dashboard</span></Button>} */}
             {props.navItems.forms && <Button variant="outlined" className={window.location.pathname == "/forms" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={() => navigate("/forms")}><span>SIS Reporting</span></Button>}
-            {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/progressoverview" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/progressoverview" state={"admin"}><span>Progress Report</span></Link></Button>}
-            {/* {props.navItems.supchck && <Button variant="outlined" className='viewbtn mt-0 dbbutton' onClick={()=>setformlink("https://ee.rbmgateway.org/x/QCgXLb2v")}><span>Supervision Checklist</span></Button>} */}
+            {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/progressoverview" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/progressoverview" state={"admin"} ><span>Progress Report</span></Link></Button>}
+            {SVC && formlink.length>0 && <Button variant="outlined" className='viewbtn mt-0 dbbutton'><Link to={"/formsview/"+formlink} target='_blank'><span>Supervision Checklist</span></Link></Button>}
             {/* {statesignoff && <Button variant="outlined" className={window.location.pathname.includes("sign") ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={openSgnoffmenu}><span>Sign off</span></Button>}
             <Menu
                 id="demo-positioned-menu"
@@ -159,9 +199,9 @@ export default function Appnavbar(props) {
                 {statesignoff && <Button variant="outlined" className={window.location.pathname == "/statesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/statesignoff" state={"statehead"}><span>Statehead signoff</span></Link></Button>}</MenuItem>
                 <MenuItem>{respsignoff && <Button variant="outlined" className={window.location.pathname == "/respsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/respsignoff" state={"respperson"}><span>Responsible person signoff</span></Link></Button>}</MenuItem>
                 <MenuItem></MenuItem>
-            </Menu> */}
+            </Menu>  */}
             
-       <Button className="menu-sign">
+            {statesignoff && <Button className="menu-sign">
        <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
         <InputLabel id="demo-simple-select-helper-label">Sign Off </InputLabel>
         <Select
@@ -179,7 +219,7 @@ export default function Appnavbar(props) {
         </Select>
         
       </FormControl>
-      </Button>    
+      </Button> }   
             
         </List>
     );
@@ -301,7 +341,7 @@ export default function Appnavbar(props) {
                     {drawer}
                 </Drawer>
             </Box>
-            <Dialog
+            {/* <Dialog
                 fullScreen
                 open={formlink.length > 0}
                 onClose={handleClose}
@@ -309,7 +349,7 @@ export default function Appnavbar(props) {
                 disableEscapeKeyDown
             >
                 <iframe src={formlink} width="100%" height="100%" />
-            </Dialog>
+            </Dialog> */}
         </>
     );
 

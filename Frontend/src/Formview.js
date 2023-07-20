@@ -14,7 +14,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Dialog from '@mui/material/Dialog';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Oval } from "react-loader-spinner"
 import axios from "axios";
 import Appnavbar from './Appnavbar';
@@ -28,7 +28,7 @@ export default function Formview(props) {
     const [statedata, setstatedata] = React.useState([])
     const [ofcindc, setofcindc] = React.useState([])
     const [activestate, setactivestate] = React.useState('')
-    const [usertoken, setusertoken] = React.useState(sessionStorage.getItem("token"))
+    const [usertoken, setusertoken] = React.useState(localStorage.getItem("token"))
     const [open, setopen] = React.useState(false)
     const [links, setlinks] = React.useState([])
     const [oilinks, setoilinks] = React.useState([])
@@ -83,9 +83,10 @@ export default function Formview(props) {
 
                     axios.request(config2)
                         .then((response) => {
+                            var link = response.data.deployment__links.offline_url.split("/")
                             let linkobj = {
                                 name: response.data.name,
-                                formlink: response.data.deployment__links.offline_url
+                                formlink: link[link.length - 1]
                             }
                             linkarr.push(linkobj)
                             // setlinks(linkarr)
@@ -188,7 +189,7 @@ export default function Formview(props) {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true,"progoverview":true }} />
+            <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
             <Box component="main" className='MainContainer' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
                 <Grid container spacing={2}>
@@ -231,39 +232,41 @@ export default function Formview(props) {
                                         {
                                             links?.map((l, i) => {
                                                 return (
-                                                  <>
-                                                    {l.name && l.formlink && (
-                                                      <Grid
-                                                        container
-                                                        spacing={0}
-                                                        className='formdiv'
-                                                      >
-                                                        <Grid item xs={9}>
-                                                          <p className='text-left'>
-                                                            {l.name}
-                                                          </p>
-                                                        </Grid>
-                                                        <Grid
-                                                          item
-                                                          xs={3}
-                                                          className='vert-center'
-                                                        >
-                                                          {/* <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button> */}
-                                                          <Button
-                                                            variant='outlined'
-                                                            className='viewbtn mt-0'
-                                                            onClick={() =>
-                                                              openForm(
-                                                                l.formlink
-                                                              )
-                                                            }
-                                                          >
-                                                            Open
-                                                          </Button>
-                                                        </Grid>
-                                                      </Grid>
-                                                    )}
-                                                  </>
+                                                    <>
+                                                        {l.name && l.formlink && (
+                                                            <Grid
+                                                                container
+                                                                spacing={0}
+                                                                className='formdiv'
+                                                            >
+                                                                <Grid item xs={9}>
+                                                                    <p className='text-left'>
+                                                                        {l.name}
+                                                                    </p>
+                                                                </Grid>
+                                                                <Grid
+                                                                    item
+                                                                    xs={3}
+                                                                    className='vert-center'
+                                                                >
+                                                                    {/* <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button> */}
+                                                                    <Link to={"/formsview/" + l.formlink} target='_blank'>
+                                                                        <Button
+                                                                            variant='outlined'
+                                                                            className='viewbtn mt-0'
+                                                                        // onClick={() =>
+                                                                        //   openForm(
+                                                                        //     l.formlink
+                                                                        //   )
+                                                                        // }
+                                                                        >
+                                                                            Open
+                                                                        </Button>
+                                                                    </Link>
+                                                                </Grid>
+                                                            </Grid>
+                                                        )}
+                                                    </>
                                                 );
                                             })
                                         }

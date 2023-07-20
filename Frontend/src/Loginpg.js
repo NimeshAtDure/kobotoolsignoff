@@ -88,7 +88,7 @@ export default function Loginpg(props) {
                     }else{
                         seterrortxt("Please enter valid credentials") 
                     }
-                    console.log(response)
+                    // console.log(response)
                     
                   }
               ).catch((err) => {console.log(err)
@@ -110,10 +110,10 @@ export default function Loginpg(props) {
           .then(
               response => {
                 if(response.data.message=="User logged in successfully"){
-                    console.log("resp",response.data)
-                    sessionStorage.setItem('token', usertoken)
+                    // console.log("resp",response.data)
+                    localStorage.setItem('token', usertoken)
                     dispatch(settoken(usertoken))
-                    sessionStorage.setItem("user", JSON.stringify(userdata))
+                    localStorage.setItem("user", JSON.stringify(userdata))
                     dispatch(setdata(JSON.stringify(userdata)))
                     navigate('/dashboard')                
                 }else{
