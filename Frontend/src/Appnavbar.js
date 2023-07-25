@@ -30,7 +30,7 @@ export default function Appnavbar(props) {
     const [signoff, setsignoff] = React.useState('');
 
     const handleChange = (event) => {
-      setsignoff(event.target.value);
+        setsignoff(event.target.value);
     };
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -40,10 +40,13 @@ export default function Appnavbar(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [anchorEl1, setAnchorEl1] = React.useState(null);
     const [formlink, setformlink] = React.useState('')
-    const [sgnoffmenuopn,setsgnoffmenuopn] = React.useState(false)
+    const [sgnoffmenuopn, setsgnoffmenuopn] = React.useState(false)
     const [statesignoff, setstatesignoff] = React.useState(false)
     const [respsignoff, setrespsignoff] = React.useState(false)
-    const [SVC,setSVC] = React.useState(false)
+    const [thematicsignoff, setthematicsignoff] = React.useState(false)
+    const [mnesignoff, setmnesignoff] = React.useState(false)
+
+    const [SVC, setSVC] = React.useState(false)
 
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -54,7 +57,8 @@ export default function Appnavbar(props) {
             if (localStorage.getItem("user")) {
                 var details = JSON.parse(localStorage.getItem("user"))
                 setuser(details)
-                var checkadm = details?.username.toLowerCase().includes("admin") || details?.username.toLowerCase().includes("kaushik")
+                var checkadm = details?.username.toLowerCase().includes("admin")
+                // || details?.username.toLowerCase().includes("kaushik")
                 if (checkadm) {
                     setbtnvisible(checkadm)
                     setrespsignoff(checkadm)
@@ -70,46 +74,48 @@ export default function Appnavbar(props) {
                         'Authorization': 'Token ' + token
                     }
                 };
-        
+
                 axios.request(config)
                     .then((response) => {
                         // console.log(response.data.results)
                         var filterSVC = response.data.results.filter((r) => {
                             return r.name == "Supervision Checklist for Health Facility"
                         })
+                        if (filterSVC.length > 0) {
+                            setSVC(true)
+                            let config2 = {
+                                method: 'get',
+                                maxBodyLength: Infinity,
+                                url: filterSVC[0]?.url,
+                                headers: {
+                                    'Authorization': 'Token ' + token
+                                }
+                            };
 
-                        setSVC(filterSVC.length>0?true:false)
-                        let config2 = {
-                            method: 'get',
-                            maxBodyLength: Infinity,
-                            url: filterSVC[0]?.url,
-                            headers: {
-                                'Authorization': 'Token ' + token
-                            }
-                        };
-    
-                        axios.request(config2)
-                            .then((response) => {
-                                var link = response.data.deployment__links.offline_url.split("/")
-                                // console.log(response.data.deployment__links.offline_url)
-                                setformlink(link[link.length-1])
-                                
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
+                            axios.request(config2)
+                                .then((response) => {
+                                    var link = response.data.deployment__links.offline_url.split("/")
+                                    // console.log(response.data.deployment__links.offline_url)
+                                    setformlink(link[link.length - 1])
+
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        }
                     })
             }
 
         }, 1500);
-    }, [])
+    }, [anchorEl1])
 
 
 
     function getAccess(details) {
         axios({
             method: 'post',
-            url: 'https://service.rbmgateway.org/getdata',
+            url: 'http://localhost:8080/getdata',
+            // url: 'https://service.rbmgateway.org/getdata',
             data: {
                 "username": details?.username,
                 "usertype": "all"
@@ -122,6 +128,12 @@ export default function Appnavbar(props) {
                     }).length > 0 ? true : false)
                     setrespsignoff(response.data.data.filter((r) => {
                         return r.responsible_person == details.username
+                    }).length > 0 ? true : false)
+                    setthematicsignoff(response.data.data.filter((r) => {
+                        return r.thematichead == details.username
+                    }).length > 0 ? true : false)
+                    setmnesignoff(response.data.data.filter((r) => {
+                        return r["m&ehead"] == details.username
                     }).length > 0 ? true : false)
                     // console.log("resp", response.data.data.filter((r) => {
                     //     return r.responsible_person == details.username
@@ -140,12 +152,12 @@ export default function Appnavbar(props) {
         setAnchorEl(null);
     }
 
-    const openSgnoffmenu = (event) =>{
+    const openSgnoffmenu = (event) => {
         setsgnoffmenuopn(true)
         setAnchorEl1(event.currentTarget);
     }
 
-    const closeSgnoffmenu = () =>{
+    const closeSgnoffmenu = () => {
         setsgnoffmenuopn(false)
     }
 
@@ -174,8 +186,8 @@ export default function Appnavbar(props) {
             {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname == "/dashboard" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={() => navigate("/dashboard")}><span>Dashboard</span></Button>}
             {/* {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname == "/dashboard"?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'} onClick={()=>window.open("http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF","_blank")}><span>Dashboard</span></Button>} */}
             {props.navItems.forms && <Button variant="outlined" className={window.location.pathname == "/forms" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={() => navigate("/forms")}><span>SIS Reporting</span></Button>}
-            {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/progressoverview" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/progressoverview" state={"admin"} ><span>Progress Report</span></Link></Button>}
-            {SVC && formlink.length>0 && <Button variant="outlined" className='viewbtn mt-0 dbbutton'><Link to={"/formsview/"+formlink} target='_blank'><span>Supervision Checklist</span></Link></Button>}
+            {/* {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/progressoverview" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/progressoverview" ><span>Progress Report</span></Link></Button>} */}
+            {SVC && formlink.length > 0 && <Button variant="outlined" className='viewbtn mt-0 dbbutton'><Link to={"/formsview/" + formlink} target='_blank'><span>Supervision Checklist</span></Link></Button>}
             {/* {statesignoff && <Button variant="outlined" className={window.location.pathname.includes("sign") ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={openSgnoffmenu}><span>Sign off</span></Button>}
             <Menu
                 id="demo-positioned-menu"
@@ -200,27 +212,28 @@ export default function Appnavbar(props) {
                 <MenuItem>{respsignoff && <Button variant="outlined" className={window.location.pathname == "/respsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/respsignoff" state={"respperson"}><span>Responsible person signoff</span></Link></Button>}</MenuItem>
                 <MenuItem></MenuItem>
             </Menu>  */}
-            
-            {statesignoff && <Button className="menu-sign">
-       <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
-        <InputLabel id="demo-simple-select-helper-label">Sign Off </InputLabel>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          value={signoff}
-          className='select-user'
-          label="sign off"
-          onChange={handleChange}
-        >
-      
-           <MenuItem value={10} className='menu-item'>{statesignoff && <span variant="outlined" className={window.location.pathname == "/statesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/statesignoff" state={"statehead"}><span>State Head </span></Link></span>}</MenuItem>
-          <MenuItem value={20} className='menu-item'>{respsignoff && <span variant="outlined" className={window.location.pathname == "/respsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/respsignoff" state={"respperson"}><span>Responsible Person </span></Link></span>}</MenuItem>
-         
-        </Select>
-        
-      </FormControl>
-      </Button> }   
-            
+
+            {(statesignoff || respsignoff || thematicsignoff || mnesignoff) && <Button className="menu-sign">
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                    <InputLabel id="demo-simple-select-helper-label">Sign Off </InputLabel>
+                    <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        value={signoff}
+                        className='select-user'
+                        label="sign off"
+                        onChange={handleChange}
+                    >
+
+                        {statesignoff && <MenuItem value={10} className='menu-item'><span variant="outlined" className={window.location.pathname == "/statesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/statesignoff" ><span>State Head </span></Link></span></MenuItem>}
+                        {respsignoff && <MenuItem value={20} className='menu-item'><span variant="outlined" className={window.location.pathname == "/respsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/respsignoff" ><span>Responsible Person </span></Link></span></MenuItem>}
+                        {thematicsignoff && <MenuItem value={30} className='menu-item'><span variant="outlined" className={window.location.pathname == "/thematicsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/thematicsignoff" ><span>Thematic Head </span></Link></span></MenuItem>}
+                        {mnesignoff && <MenuItem value={40} className='menu-item'><span variant="outlined" className={window.location.pathname == "/mnesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/mnesignoff" ><span>M&E Head </span></Link></span></MenuItem>}
+                    </Select>
+
+                </FormControl>
+            </Button>}
+
         </List>
     );
 

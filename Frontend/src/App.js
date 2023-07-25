@@ -8,7 +8,10 @@ import Loginpg from "./Loginpg"
 import Dashboardview from './Dashboardview';
 import Passreset from './Passreset';
 import ProgressOverview from './ProgressOverview';
-import Signoffdata from './Signoffdata'
+import Signoffstate from './Signoffstate'
+import Signoffresp from './Signoffresp';
+import Signoffthematic from './Signoffthematic';
+import Signoffmne from './Signoffmne';
 import Formdisp from './Formdisp';
 
 function App() {
@@ -23,14 +26,22 @@ function App() {
             return <Formview />
           case "login": 
             return <Navigate to="/home" replace={true} />
-          case "signoff": 
-            return <Signoffdata />
           case "dashboard": 
             return <Dashboardview />
           case "passreset":
             return <Passreset/>
+          case "signoff": 
+            return <Signoffstate />
           case "progressoverview":
-            return <Signoffdata/>
+            return <Signoffmne/>
+          case "statesignoff": 
+            return <Signoffstate />
+          case "respsignoff": 
+            return <Signoffresp />
+          case "thematicsignoff": 
+            return <Signoffthematic />
+          case "mnesignoff": 
+            return <Signoffmne />
           case "formsdisp":
             return <Formdisp />
         }
@@ -80,8 +91,10 @@ function App() {
         />
         {/* <Route path="/signoff" element={ ( username && ( username.includes("admin") || username.includes("kaushik") ) )? getElement("signoff") : <Navigate to="/" replace={true} /> }/> */}
         <Route path='/signoff' element={getElement("signoff")} />
-        <Route path='/statesignoff' element={getElement("signoff")} />
-        <Route path='/respsignoff' element={getElement("signoff")} />
+        <Route path='/statesignoff' element={getElement("statesignoff")} />
+        <Route path='/respsignoff' element={getElement("respsignoff")} />
+        <Route path='/thematicsignoff' element={getElement("thematicsignoff")} />
+        <Route path='/mnesignoff' element={getElement("mnesignoff")} />
         <Route path='/forms' element={getElement("forms")} />
         <Route path='/formsview/:formid' element={getElement("formsdisp")} />
         <Route path='/passreset' element={getElement("passreset")} />

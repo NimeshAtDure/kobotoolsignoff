@@ -805,6 +805,11 @@ input:-webkit-autofill:active {
   flex-direction: row;
 }
 
+.Commenttooltip .Mui-disabled {
+  color: #fff !important;
+  -webkit-text-fill-color:#fff !important
+}
+
 .MuiDialog-container h2.MuiDialogTitle-root{
   background: #1a1c24;
     color: #fff;
@@ -881,6 +886,7 @@ input:-webkit-autofill:active {
 
 .select-user span{
   color: #fff !important;
+  font-size: 0.875rem;
 
 }
 
@@ -914,5 +920,9 @@ input:-webkit-autofill:active {
 
 .menu-button fieldset span{
   padding-left: 32px !important;
+}
+
+.menubutton label {
+  font-size: 0.875rem;
 }
 

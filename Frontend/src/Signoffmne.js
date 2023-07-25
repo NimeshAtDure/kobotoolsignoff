@@ -39,7 +39,7 @@ const CustomWidthTooltip = styled(({ className, ...props }) => (
 });
 
 
-function Signoffdata() {
+function Signoffmne() {
     const location = useLocation();
 
     const [user, setuser] = useState(JSON.parse(localStorage.getItem("user")))
@@ -51,7 +51,9 @@ function Signoffdata() {
     const [editdata, seteditdata] = useState({})
     const [open, setOpen] = useState(false)
     const [alerttxt, setalerttxt] = useState('')
-    const [enablesignoff,setenablesignoff] = useState(true)
+    const [enablesignoffstate, setenablesignoffstate] = useState(true)
+    const [enablesignoff, setenablesignoff] = useState(true)
+
 
     useEffect(() => {
         getFormData()
@@ -60,10 +62,11 @@ function Signoffdata() {
     function getFormData() {
         axios({
             method: 'post',
-            url: 'https://service.rbmgateway.org/getdata',
+            url:'http://localhost:8080/getdata',
+            // url: 'https://service.rbmgateway.org/getdata',
             data: {
-                "username": location.state == "admin" ? "super_admin" : user.username,
-                "usertype": (user.username == "super_admin" || user.username == "kaushiks") ? "admin" : location.state ? location.state : "admin"
+                "username":  user.username,
+                "usertype":  "mnehead"
             }
         })
             .then(
@@ -112,25 +115,43 @@ function Signoffdata() {
                                 return th.rrfname == f
                             })
                             indi.forEach(i => {
-                                var rowobj3 = {}
-                                rowobj3["id"] = i.unique_id
-                                rowobj3["indic"] = i.questionname
-                                rowobj3["haschild"] = false
-                                rowobj3[i.state + "actual"] = i.actual
-                                rowobj3[i.state + "target"] = i.target
-                                rowobj3[i.state + "comment"] = i.comments
-                                rowobj3["statesignedOff"] = i.statehead_approved
-                                rowobj3["respsignedOff"] = i.responsible_person_approved
-                                data.push(rowobj3)
+                                console.log("data",Object.values(data))
+                                if (data.findIndex((obj => obj.indic == i.questionname)) > -1) {
+                                    let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme==i.thematic)));
+                                    data[objIndex][i.state + "id"] = i.unique_id
+                                    data[objIndex][i.state + "actual"] = i.actual
+                                    data[objIndex][i.state + "target"] = i.target
+                                    data[objIndex][i.state + "comment"] = i.comments
+                                    data[objIndex][i.state + "respcomment"] = i.responsible_person_comment
+                                    data[objIndex]["total"] = i.actual && isNumeric(i.actual) ? data[objIndex]["total"] + parseInt(i.actual) : data[objIndex]["total"]
+                                    data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
+                                } else {
+                                    var rowobj3 = {}
+                                    rowobj3[i.state + "id"] = i.unique_id
+                                    rowobj3["indic"] = i.questionname
+                                    rowobj3["theme"] = i.thematic
+                                    rowobj3["haschild"] = false
+                                    rowobj3[i.state + "actual"] = i.actual
+                                    rowobj3[i.state + "target"] = i.target
+                                    rowobj3[i.state + "comment"] = i.comments
+                                    rowobj3[i.state + "respcomment"] = i.responsible_person_comment
+                                    rowobj3["total"] = i.actual && isNumeric(i.actual) ? parseInt(i.actual) : 0
+                                    rowobj3[i.state + "respsignedOff"] = i.responsible_person_approved
+                                    data.push(rowobj3)
+                                }
                                 // console.log("ind", indi, i.questionname, i.actual, i.target)
                             })
                         })
-                        // console.log(thematicarr, data, themearr)
+                        console.log(thematicarr, data, themearr)
                     })
-                    setrowdata(data)
-                    setenablesignoff(!data.filter(function (th) {
-                        return th.statesignedOff == "Yes"
-                    }).length==0)
+                    var signoffstate = response.data.data.filter(function (th) {
+                        return th.thematichead_approved == null
+                    })
+                    signoffstate.length == 0?setrowdata(data):setrowdata([])
+                    
+                    setenablesignoff(!response.data.data.filter(function (th) {
+                        return th.responsible_person_approved== "Yes"
+                    }).length == 0)
 
                 }
             ).catch((err) => { console.log(err) });
@@ -141,7 +162,11 @@ function Signoffdata() {
         seteditdata(tabledata.filter(function (td) {
             return td.unique_id == id
         })[0])
-        
+
+    }
+
+    function isNumeric(num) {
+        return !isNaN(num)
     }
 
     function editRowData() {
@@ -149,15 +174,14 @@ function Signoffdata() {
 
         axios({
             method: 'post',
-            url: 'https://service.rbmgateway.org/updatedata',
+            url:'http://localhost:8080/updatedata',
+            // url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editdata.actual,
                 "comment": editdata.comments,
-                "theme": editdata.thematic.toLowerCase(),
+                "type": location.state,
                 "id": editdata.unique_id,
-                "stateupdttime": location.state == "statehead" ? date.toISOString() : null,
-                "respupdttime": location.state == "respperson" ? date.toISOString() : null
             }
         })
             .then(
@@ -173,11 +197,12 @@ function Signoffdata() {
             });
     }
 
-    function signoffData(){
-        if(!enablesignoff){
+    function signoffData() {
+        if (!enablesignoff) {
             axios({
                 method: 'post',
-                url: 'https://service.rbmgateway.org/stateSignoff',
+                url:'http://localhost:8080/resposignoff',
+                // url: 'https://service.rbmgateway.org/m&esignoff',
                 data: {
                     "username": user.username,
                 }
@@ -224,6 +249,8 @@ function Signoffdata() {
                                             {column}
                                         </TableCell>
                                     ))}
+                                    <TableCell>
+                                    </TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell
@@ -251,61 +278,75 @@ function Signoffdata() {
                                         </TableCell> */}
                                         </>
                                     ))}
+                                    <TableCell
+                                        key={"total"}
+                                    >
+                                        Total
+                                    </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rowdata.length>0?
-                                <>
-                                {rowdata.map((data) => {
-                                    return (
+                                {rowdata.length > 0 ?
+                                    <>
+                                        {rowdata.map((data) => {
+                                            return (
+                                                <TableRow>
+                                                    {
+                                                        data.haschild ?
+                                                            <TableCell style={{
+                                                                color: "#eb7e00",
+                                                                fontWeight: 700
+                                                            }}
+                                                                colSpan={states.length * 2 + 2}>{data.indic}</TableCell> :
+                                                            <>
+                                                                <TableCell>{data.indic}</TableCell>
+                                                                {states?.map(s => {
+                                                                    return (
+                                                                        <>
+                                                                            <TableCell
+                                                                                className="numberholder"
+
+
+                                                                            >{data[s + "target"]}</TableCell>
+                                                                            <TableCell
+                                                                                className="numberholder"
+                                                                                style={{
+                                                                                    backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 || data[s + "actual"].toString().toLowerCase() === data[s + "target"].toString().toLowerCase()? "#92d051" : "#ffc100" : '')
+                                                                                }}>
+                                                                                {data[s + "actual"]}
+                                                                                {/* { !data[s + "respsignedOff"] && data[s + "actual"] &&
+                                                                                    <div className="editSection">
+                                                                                        <CustomWidthTooltip title={data[s + "comment"]}>
+                                                                                            <Button sx={{ m: 1 }}><CommentIcon /></Button>
+                                                                                        </CustomWidthTooltip>
+                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
+                                                                                    </div>
+                                                                                } */}
+                                                                            </TableCell>
+
+                                                                            {/* <TableCell>{data[s+"comment"]}</TableCell> */}
+                                                                        </>
+                                                                    )
+                                                                })}
+                                                                                                                                                                                            <TableCell className="numberholder">{data.total}</TableCell>
+
+                                                            </>
+                                                    }
+                                                </TableRow>
+                                            )
+                                        })}
                                         <TableRow>
-                                            {
-                                                data.haschild ?
-                                                    <TableCell style={{
-                                                        color: "#eb7e00",
-                                                        fontWeight: 700
-                                                    }}
-                                                        colSpan={states.length * 2 + 1}>{data.indic}</TableCell> :
-                                                    <>
-                                                        <TableCell>{data.indic}</TableCell>
-                                                        {states?.map(s => {
-                                                            return (
-                                                                <>
-                                                                    <TableCell
-                                                                        className="numberholder"
-
-
-                                                                    >{data[s + "target"]}</TableCell>
-                                                                    <TableCell
-                                                                        className="numberholder"
-                                                                        style={{
-                                                                            backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 ? "#92d051" : "#ffc100" : '')
-                                                                        }}>
-                                                                        {data[s + "actual"]}
-                                                                        {(user.username != "admin" && location.state != "admin") && ((!data["statesignedOff"] && location.state == "statehead") || (!data["respsignedOff"] && location.state == "respperson")) && data[s + "actual"] &&
-                                                                            <div className="editSection">
-                                                                                <CustomWidthTooltip title={data[s + "comment"]}>
-                                                                                    <Button sx={{ m: 1 }}><CommentIcon /></Button>
-                                                                                </CustomWidthTooltip>
-                                                                                <Button sx={{ m: 1 }} onClick={() => openModal(data.id)}><EditIcon /></Button>
-                                                                            </div>
-                                                                        }
-                                                                    </TableCell>
-
-                                                                    {/* <TableCell>{data[s+"comment"]}</TableCell> */}
-                                                                </>
-                                                            )
-                                                        })}
-                                                    </>
-                                            }
+                                        <TableCell colSpan={states.length * 2 + 2} align="center" style={{
+                                                                height:"60px"
+                                                                
+                                                            }}>
+                                        </TableCell>    
                                         </TableRow>
-                                    )
-                                })}
-                                </>
-                                :<TableRow>
-                                    <TableCell colSpan={states.length+1} align="center">
-                                        Awaiting State Head Sign Off
-                                    </TableCell>
+                                    </>
+                                    : <TableRow>
+                                        <TableCell colSpan={states.length * 2 + 2} align="center">
+                                            Awaiting Thematic Head Sign Off
+                                        </TableCell>
                                     </TableRow>}
                             </TableBody>
                         </Table>
@@ -357,7 +398,8 @@ function Signoffdata() {
                 {alerttxt == "success" ? <Alert severity="success">Data saved !</Alert> : alerttxt == "error" ? <Alert severity="error">Update failed !</Alert> : ''
                 }
             </Snackbar>
-            {location.state=="statehead"?<Fab variant="extended" size="medium" sx={{
+            
+            { rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
                 position: 'absolute',
                 bottom: 50,
                 right: 16,
@@ -367,15 +409,15 @@ function Signoffdata() {
                     bgcolor: "#fff",
                     color: "#000"
                 },
-            }}  
-            onClick={signoffData}
+            }}
+                onClick={signoffData}
             >
                 Sign off
-            </Fab>:''}
+            </Fab> }
             <Footer />
         </>
 
     )
 }
 
-export default Signoffdata;
+export default Signoffmne;

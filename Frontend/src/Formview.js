@@ -72,28 +72,30 @@ export default function Formview(props) {
                 setloading(true)
                 let linkarr = []
                 response.data.results.forEach(f => {
-                    let config2 = {
-                        method: 'get',
-                        maxBodyLength: Infinity,
-                        url: f.url,
-                        headers: {
-                            'Authorization': 'Token ' + usertoken
-                        }
-                    };
-
-                    axios.request(config2)
-                        .then((response) => {
-                            var link = response.data.deployment__links.offline_url.split("/")
-                            let linkobj = {
-                                name: response.data.name,
-                                formlink: link[link.length - 1]
+                    if(f.name !="Supervision Checklist for Health Facility"){
+                        let config2 = {
+                            method: 'get',
+                            maxBodyLength: Infinity,
+                            url: f.url,
+                            headers: {
+                                'Authorization': 'Token ' + usertoken
                             }
-                            linkarr.push(linkobj)
-                            // setlinks(linkarr)
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
+                        };
+    
+                        axios.request(config2)
+                            .then((response) => {
+                                var link = response.data.deployment__links.offline_url.split("/")
+                                let linkobj = {
+                                    name: response.data.name,
+                                    formlink: link[link.length - 1]
+                                }
+                                linkarr.push(linkobj)
+                                // setlinks(linkarr)
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    }
                 })
                 setTimeout(() => {
                     setlinks(linkarr)
