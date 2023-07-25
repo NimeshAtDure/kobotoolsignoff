@@ -74,8 +74,8 @@ export default function Loginpg(props) {
     function sendOTP(responsedata){
             axios({
                 method: 'post',
-                url: 'http://localhost:8080/generateotp',
-                // url: 'https://service.rbmgateway.org/generateotp',
+                // url: 'http://localhost:8080/generateotp',
+                url: 'https://service.rbmgateway.org/generateotp',
                 headers: {},
                 data: {
                   "email": responsedata.email,
@@ -100,8 +100,8 @@ export default function Loginpg(props) {
         
         axios({
             method: 'post',
-            url: 'http://localhost:8080/login',
-            // url: 'https://service.rbmgateway.org/login',
+            // url: 'http://localhost:8080/login',
+            url: 'https://service.rbmgateway.org/login',
             headers: {},
             data: {
               "email": userdata.email,

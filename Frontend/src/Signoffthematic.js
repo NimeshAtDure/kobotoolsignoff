@@ -75,8 +75,8 @@ function Signoffthematic() {
     function getFormData() {
         axios({
             method: 'post',
-            url:'http://localhost:8080/getdata',
-            // url: 'https://service.rbmgateway.org/getdata',
+            // url:'http://localhost:8080/getdata',
+            url: 'https://service.rbmgateway.org/getdata',
             data: {
                 "username":  user.username,
                 "usertype":  "thematichead"
@@ -187,8 +187,8 @@ function Signoffthematic() {
 
         axios({
             method: 'post',
-            url:'http://localhost:8080/updatedata',
-            // url: 'https://service.rbmgateway.org/updatedata',
+            // url:'http://localhost:8080/updatedata',
+            url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editdata.actual,
@@ -214,8 +214,8 @@ function Signoffthematic() {
         if (!enablesignoff && rowdata.length > 0) {
             axios({
                 method: 'post',
-                url:'http://localhost:8080/resposignoff',
-                // url: 'https://service.rbmgateway.org/thematicsignoff',
+                // url:'http://localhost:8080/resposignoff',
+                url: 'https://service.rbmgateway.org/thematicsignoff',
                 data: {
                     "username": user.username,
                 }

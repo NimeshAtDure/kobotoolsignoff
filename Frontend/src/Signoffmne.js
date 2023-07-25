@@ -62,8 +62,8 @@ function Signoffmne() {
     function getFormData() {
         axios({
             method: 'post',
-            url:'http://localhost:8080/getdata',
-            // url: 'https://service.rbmgateway.org/getdata',
+            // url:'http://localhost:8080/getdata',
+            url: 'https://service.rbmgateway.org/getdata',
             data: {
                 "username":  user.username,
                 "usertype":  "mnehead"
@@ -174,8 +174,8 @@ function Signoffmne() {
 
         axios({
             method: 'post',
-            url:'http://localhost:8080/updatedata',
-            // url: 'https://service.rbmgateway.org/updatedata',
+            // url:'http://localhost:8080/updatedata',
+            url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editdata.actual,
@@ -201,8 +201,8 @@ function Signoffmne() {
         if (!enablesignoff) {
             axios({
                 method: 'post',
-                url:'http://localhost:8080/resposignoff',
-                // url: 'https://service.rbmgateway.org/m&esignoff',
+                // url:'http://localhost:8080/resposignoff',
+                url: 'https://service.rbmgateway.org/m&esignoff',
                 data: {
                     "username": user.username,
                 }
