@@ -107,3 +107,33 @@ exports.stateSignoff = async (req, res, next) => {
     next(error);
   }
 }
+
+exports.resppersonSignoff = async (req, res, next) => {
+  try {
+    const response = await userService.resppersonSignoff(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.thematicheadSignoff = async (req, res, next) => {
+  try {
+    const response = await userService.thematicheadSignoff(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.MNEheadSignoff = async (req, res, next) => {
+  try {
+    const response = await userService.MNEheadSignoff(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}

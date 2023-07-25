@@ -168,9 +168,9 @@ class UserService {
 
     async updateData(req){
       const response = {};
-      const { username,id,actual,comment,theme,stateupdttime,respupdttime } = req.body;
+      const { username,id,actual,comment,respcomment,type } = req.body;
 
-      const data = await this.userRepo.updateData(username,id,actual,comment,theme,stateupdttime,respupdttime);
+      const data = await this.userRepo.updateData(username,id,actual,comment,respcomment,type);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;
@@ -188,6 +188,57 @@ class UserService {
       const { username } = req.body;
 
       const data = await this.userRepo.stateSignoff(username);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
+    async resppersonSignoff(req){
+      const response = {};
+      const { username } = req.body;
+
+      const data = await this.userRepo.resppersonSignoff(username);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
+    async thematicheadSignoff(req){
+      const response = {};
+      const { username } = req.body;
+
+      const data = await this.userRepo.thematicheadSignoff(username);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
+    async MNEheadSignoff(req){
+      const response = {};
+      const { username } = req.body;
+
+      const data = await this.userRepo.MNEheadSignoff(username);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;

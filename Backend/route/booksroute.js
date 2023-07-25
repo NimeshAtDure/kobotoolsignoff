@@ -24,6 +24,9 @@ router.post("/login",bookController.login)
 router.post("/getdata",bookController.getData)
 router.post("/updatedata",bookController.updateData)
 router.post("/statesignoff",bookController.stateSignoff)
+router.post("/resposignoff",bookController.resppersonSignoff)
+router.post("/thematicsignoff",bookController.thematicheadSignoff)
+router.post("/m&esignoff",bookController.MNEheadSignoff)
 
 module.exports = router;
 

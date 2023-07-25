@@ -109,7 +109,7 @@ class UserRepository {
       const currentTime = new Date();
 
       if (lastOTPTime && currentTime - lastOTPTime < 60000) {
-        return "Minimum 1-minute gap required between OTP requests"
+        return "OTP already sent. Please try after sometime."
       }
 
       const OTP = generateOTP();
@@ -117,13 +117,13 @@ class UserRepository {
       user.OTPCreatedTime = currentTime;
 
       // await user.save();
-      console.log("usersss", user)
+      // console.log("usersss", user)
       if (!useremail) {
         let result = this.addUser(user.email, user.OTP, user.OTPCreatedTime, user.OTPAttempts, user.isBlocked)
       } else {
         let result = this.updateUserById(email, user.OTP, user.OTPCreatedTime, user.OTPAttempts, user.isBlocked)
       }
-      sendOTP(email, OTP);
+      // sendOTP(email, OTP);
 
       return "OTP sent successfully"
     } catch (err) {
@@ -134,7 +134,7 @@ class UserRepository {
 
   async login(email, OTP) {
     try {
-      console.log("ques", email, OTP)
+      // console.log("ques", email, OTP)
       const user = await this.User.findOne({ where: { email: email } });
 
       if (!user) {
@@ -202,13 +202,21 @@ class UserRepository {
     // }
 
     var queries = { 
-      "statehead":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE statehead =:username );",
+      // "statehead":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE statehead =:username );",
 
-      "respperson":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE responsible_person =:username)and statehead_approved='Yes';",
+      "statehead":"SELECT * FROM get_statehead_view(:username);",
+
+      // "respperson":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE responsible_person =:username)and statehead_approved='Yes';",
+
+      "respperson":"SELECT * FROM get_responsiblepersion_view(:username);",
+
+      "thematichead":"SELECT * FROM get_thematichead_view (:username);",
+
+      "mnehead":"SELECT * FROM get_mehead_view (:username);",
 
       "admin":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2);",
       
-      "all":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE statehead =:username OR responsible_person =:username); "
+      "all":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE statehead =:username OR responsible_person =:username OR thematichead=:username); "
     }
     
     return sequelize.query(queries[usertype],
@@ -217,26 +225,58 @@ class UserRepository {
         })
   }
 
-  async updateData(username,id,actual,comment,theme,stateupdttime,respupdttime) {
+  async updateData(username,id,actual,comment,respcomment,type) {
     let queries = {
-      "a&y": "UPDATE ay_dataset_final ay SET actual=:editactual,comments=:editcomment,updated_by_statehead_on=:stateupdttime,updated_by_responsible_person_on=:respupdttime FROM (SELECT * FROM (SELECT * FROM ay_dataset_final adf WHERE adf.statehead =:username OR adf.responsible_person=:username) AS t1 ) AS t4 WHERE t4.unique_id=:id and t4.unique_id=ay.unique_id",
+      // "a&y": "UPDATE ay_dataset_final ay SET actual=:editactual,comments=:editcomment,updated_by_statehead_on=:stateupdttime,updated_by_responsible_person_on=:respupdttime FROM (SELECT * FROM (SELECT * FROM ay_dataset_final adf WHERE adf.statehead =:username OR adf.responsible_person=:username) AS t1 ) AS t4 WHERE t4.unique_id=:id and t4.unique_id=ay.unique_id",
       
-      "pd": "UPDATE pd_dataset_final pd SET actual=:editactual,comments=:editcomment,updated_by_statehead_on=:stateupdttime,updated_by_responsible_person_on=:respupdttime FROM (SELECT * FROM (SELECT * FROM pd_dataset_final pd WHERE pd.statehead =:username OR pd.responsible_person=:username) AS t1 ) AS t4 WHERE t4.unique_id=:id and t4.unique_id=pd.unique_id",                                                                                                "srh": "UPDATE srh_dataset_final srh SET actual=:editactual,comments=:editcomment,updated_by_statehead_on=:stateupdttime,updated_by_responsible_person_on=:respupdttime FROM (SELECT * FROM (SELECT * FROM srh_dataset_final srh WHERE srh.statehead =:username OR srh.responsible_person=:username) AS t1 ) AS t4 WHERE t4.unique_id=:id and t4.unique_id=srh.unique_id",
+      // "pd": "UPDATE pd_dataset_final pd SET actual=:editactual,comments=:editcomment,updated_by_statehead_on=:stateupdttime,updated_by_responsible_person_on=:respupdttime FROM (SELECT * FROM (SELECT * FROM pd_dataset_final pd WHERE pd.statehead =:username OR pd.responsible_person=:username) AS t1 ) AS t4 WHERE t4.unique_id=:id and t4.unique_id=pd.unique_id",                                                                                                "srh": "UPDATE srh_dataset_final srh SET actual=:editactual,comments=:editcomment,updated_by_statehead_on=:stateupdttime,updated_by_responsible_person_on=:respupdttime FROM (SELECT * FROM (SELECT * FROM srh_dataset_final srh WHERE srh.statehead =:username OR srh.responsible_person=:username) AS t1 ) AS t4 WHERE t4.unique_id=:id and t4.unique_id=srh.unique_id",
 
-      "gender": "UPDATE gender_dataset_final g SET actual=:editactual,comments=:editcomment,updated_by_statehead_on=:stateupdttime,updated_by_responsible_person_on=:respupdttime FROM (SELECT * FROM (SELECT * FROM gender_dataset_final g WHERE g.statehead =:username OR g.responsible_person=:username) AS t1 ) AS t4 WHERE t4.unique_id=:id and t4.unique_id=g.unique_id"
+      // "gender": "UPDATE gender_dataset_final g SET actual=:editactual,comments=:editcomment,updated_by_statehead_on=:stateupdttime,updated_by_responsible_person_on=:respupdttime FROM (SELECT * FROM (SELECT * FROM gender_dataset_final g WHERE g.statehead =:username OR g.responsible_person=:username) AS t1 ) AS t4 WHERE t4.unique_id=:id and t4.unique_id=g.unique_id"
+
+      "statehead":	"SELECT * FROM custom_dataupdate_statehead(:username,:id,:editactual,:editcomment);",
+
+      "respperson":"SELECT * FROM custom_dataupdate_responsibleperson(:username,:id,:editactual,:editcomment,:respcomment);"
+
     }
 
-    console.log("data",username, actual, comment, theme,id,stateupdttime,respupdttime)
-    return await sequelize.query(queries[theme],
-      { replacements: { username: username, editactual:actual, editcomment:comment, stateupdttime:stateupdttime, respupdttime:respupdttime, id:id }, type: sequelize.QueryTypes.UPDATE })
+    // console.log("data",username, actual, comment, theme,id,stateupdttime,respupdttime)
+    return await sequelize.query(queries[type],
+      { replacements: { username: username, editactual:actual, editcomment:comment,respcomment:respcomment, id:id }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
-        console.log("results",result)
+        // console.log("results",result)
         return result
       })
   }
 
   async stateSignoff(username){
     return await sequelize.query("SELECT * FROM custom_flag_data_update_statehead(:username);",
+      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+
+  async resppersonSignoff(username){
+    return await sequelize.query("SELECT * FROM custom_flag_data_update_responsible_person(:username)",
+      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        console.log("results",result)
+        return result
+      })
+  }
+
+  async thematicheadSignoff(username){
+    return await sequelize.query("SELECT * FROM custom_flag_data_update_thematic(:username)",
+      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        console.log("results",result)
+        return result
+      })
+  }
+
+  async MNEheadSignoff(username){
+    return await sequelize.query("SELECT * FROM custom_flag_data_update_mehead(:username)",
       { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         console.log("results",result)
