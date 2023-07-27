@@ -382,7 +382,7 @@ function Signoffstate() {
                 {alerttxt == "success" ? <Alert severity="success">Data saved !</Alert> : alerttxt == "error" ? <Alert severity="error">Update failed !</Alert> : ''
                 }
             </Snackbar>
-            <Fab variant="extended" size="medium" sx={{
+            {!enablesignoffstate && rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
                 position: 'absolute',
                 bottom: 50,
                 right: 16,
@@ -396,7 +396,7 @@ function Signoffstate() {
                 onClick={signoffDataState}
             >
                 Sign off
-            </Fab> 
+            </Fab> }
             
             <Footer />
         </>

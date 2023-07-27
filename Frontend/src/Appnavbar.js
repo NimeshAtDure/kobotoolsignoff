@@ -27,7 +27,7 @@ const drawerWidth = 240;
 
 export default function Appnavbar(props) {
 
-    const [signoff, setsignoff] = React.useState('');
+    const [signoff, setsignoff] = React.useState(["/statesignoff","/respsignoff","/thematicsignoff","/mnesignoff"].includes(window.location.pathname)?window.location.pathname:'');
 
     const handleChange = (event) => {
         setsignoff(event.target.value);
@@ -225,10 +225,10 @@ export default function Appnavbar(props) {
                         onChange={handleChange}
                     >
 
-                        {statesignoff && <MenuItem value={10} className='menu-item'><span variant="outlined" className={window.location.pathname == "/statesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/statesignoff" ><span>State Head </span></Link></span></MenuItem>}
-                        {respsignoff && <MenuItem value={20} className='menu-item'><span variant="outlined" className={window.location.pathname == "/respsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/respsignoff" ><span>Responsible Person </span></Link></span></MenuItem>}
-                        {thematicsignoff && <MenuItem value={30} className='menu-item'><span variant="outlined" className={window.location.pathname == "/thematicsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/thematicsignoff" ><span>Thematic Head </span></Link></span></MenuItem>}
-                        {mnesignoff && <MenuItem value={40} className='menu-item'><span variant="outlined" className={window.location.pathname == "/mnesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/mnesignoff" ><span>M&E Head </span></Link></span></MenuItem>}
+                        {statesignoff && <MenuItem value={"/statesignoff"} className='menu-item'><span variant="outlined" className={window.location.pathname == "/statesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/statesignoff" ><span>State Head </span></Link></span></MenuItem>}
+                        {respsignoff && <MenuItem value={"/respsignoff"} className='menu-item'><span variant="outlined" className={window.location.pathname == "/respsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/respsignoff" ><span>Responsible Person </span></Link></span></MenuItem>}
+                        {thematicsignoff && <MenuItem value={"/thematicsignoff"} className='menu-item'><span variant="outlined" className={window.location.pathname == "/thematicsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/thematicsignoff" ><span>Thematic Head </span></Link></span></MenuItem>}
+                        {mnesignoff && <MenuItem value={"/mnesignoff"} className='menu-item'><span variant="outlined" className={window.location.pathname == "/mnesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/mnesignoff" ><span>M&E Head </span></Link></span></MenuItem>}
                     </Select>
 
                 </FormControl>

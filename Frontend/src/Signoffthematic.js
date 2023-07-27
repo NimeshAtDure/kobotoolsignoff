@@ -136,7 +136,8 @@ function Signoffthematic() {
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
                                     data[objIndex][i.state + "respcomment"] = i.responsible_person_comment
-                                    data[objIndex]["total"] = i.actual && isNumeric(i.actual) ? data[objIndex]["total"] + parseInt(i.actual) : data[objIndex]["total"]
+                                    data[objIndex]["actualtotal"] = i.actual && isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"]
+                                    data[objIndex]["targettotal"] = i.target && isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"]
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
                                 } else {
                                     var rowobj3 = {}
@@ -148,7 +149,8 @@ function Signoffthematic() {
                                     rowobj3[i.state + "target"] = i.target
                                     rowobj3[i.state + "comment"] = i.comments
                                     rowobj3[i.state + "respcomment"] = i.responsible_person_comment
-                                    rowobj3["total"] = i.actual && isNumeric(i.actual) ? parseInt(i.actual) : 0
+                                    rowobj3["actualtotal"] = i.actual && isNumeric(i.actual) ? parseInt(i.actual) : 0
+                                    rowobj3["targettotal"] = i.target && isNumeric(i.target) ? parseInt(i.target) : 0
                                     rowobj3[i.state + "respsignedOff"] = i.responsible_person_approved
                                     data.push(rowobj3)
                                 }
@@ -214,7 +216,7 @@ function Signoffthematic() {
         if (!enablesignoff && rowdata.length > 0) {
             axios({
                 method: 'post',
-                url:'http://localhost:8080/resposignoff',
+                url:'http://localhost:8080/thematicsignoff',
                 // url: 'https://service.rbmgateway.org/thematicsignoff',
                 data: {
                     "username": user.username,
@@ -262,7 +264,8 @@ function Signoffthematic() {
                                             {column}
                                         </TableCell>
                                     ))}
-                                    <TableCell>
+                                    <TableCell colSpan={2}>
+                                    Total
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -292,9 +295,14 @@ function Signoffthematic() {
                                         </>
                                     ))}
                                     <TableCell
-                                        key={"total"}
+                                        key={"targettotal"}
                                     >
-                                        Total
+                                        Target
+                                    </TableCell>
+                                    <TableCell
+                                        key={"actualtotal"}
+                                    >
+                                        Actual
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
@@ -310,7 +318,7 @@ function Signoffthematic() {
                                                                 color: "#eb7e00",
                                                                 fontWeight: 700
                                                             }}
-                                                                colSpan={states.length * 2 + 2}>{data.indic}</TableCell> :
+                                                                colSpan={states.length * 2 + 3}>{data.indic}</TableCell> :
                                                             <>
                                                                 <TableCell>{data.indic}</TableCell>
                                                                 {states?.map(s => {
@@ -381,14 +389,16 @@ function Signoffthematic() {
                                                                         </>
                                                                     )
                                                                 })}
-                                                                <TableCell className="numberholder">{data.total}</TableCell>
-                                                            </>
+                                                                <TableCell className="numberholder">{data.targettotal}</TableCell>
+                                                                <TableCell className="numberholder" style={{
+                                                                                    backgroundColor: (data["actualtotal"] ? data["actualtotal"] - data["targettotal"] >= 0 ? "#92d051" : "#ffc100" : '')
+                                                                                }}>{data.actualtotal}</TableCell>                                                            </>
                                                     }
                                                 </TableRow>
                                             )
                                         })}
                                         <TableRow>
-                                        <TableCell colSpan={states.length * 2 + 2} align="center" style={{
+                                        <TableCell colSpan={states.length * 2 + 3} align="center" style={{
                                                                 height:"60px"
                                                                 
                                                             }}>
@@ -396,7 +406,7 @@ function Signoffthematic() {
                                         </TableRow>
                                     </>
                                     : <TableRow>
-                                        <TableCell colSpan={states.length * 2 + 2} align="center">
+                                        <TableCell colSpan={states.length * 2 + 3} align="center">
                                             Awaiting Responsible Person Sign Off
                                         </TableCell>
                                     </TableRow>}
@@ -451,7 +461,7 @@ function Signoffthematic() {
                 }
             </Snackbar>
             
-            { rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
+            { !enablesignoff && rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
                 position: 'absolute',
                 bottom: 50,
                 right: 16,
