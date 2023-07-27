@@ -62,7 +62,9 @@ function Signoffresp() {
     const [columns, setcolumns] = useState([])
     const [rowdata, setrowdata] = useState([])
     const [editdata, seteditdata] = useState({})
+    const [editrespdata, seteditrespdata] = useState({})
     const [open, setOpen] = useState(false)
+    const [open2, setOpen2] = useState(false)
     const [alerttxt, setalerttxt] = useState('')
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
     const [enablesignoff, setenablesignoff] = useState(true)
@@ -135,8 +137,9 @@ function Signoffresp() {
                                     data[objIndex][i.state + "actual"] = i.actual
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
-                                    data[objIndex][i.state + "respcomment"] = i.responsible_person_comment
-                                    data[objIndex]["total"] = i.actual && isNumeric(i.actual) ? data[objIndex]["total"] + parseInt(i.actual) : data[objIndex]["total"]
+                                    data[objIndex]["respcomment"] = i.responsible_person_comment.length>0 ? i.responsible_person_comment :data[objIndex]["respcomment"]
+                                    data[objIndex]["actualtotal"] = i.actual && isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"]
+                                    data[objIndex]["targettotal"] = i.target && isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"]
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
                                 } else {
                                     var rowobj3 = {}
@@ -147,8 +150,9 @@ function Signoffresp() {
                                     rowobj3[i.state + "actual"] = i.actual
                                     rowobj3[i.state + "target"] = i.target
                                     rowobj3[i.state + "comment"] = i.comments
-                                    rowobj3[i.state + "respcomment"] = i.responsible_person_comment
-                                    rowobj3["total"] = i.actual && isNumeric(i.actual) ? parseInt(i.actual) : 0
+                                    rowobj3["respcomment"] = i.responsible_person_comment
+                                    rowobj3["actualtotal"] = i.actual && isNumeric(i.actual) ? parseInt(i.actual) : 0
+                                    rowobj3["targettotal"] = i.target && isNumeric(i.target) ? parseInt(i.target) : 0
                                     rowobj3[i.state + "respsignedOff"] = i.responsible_person_approved
 
                                     data.push(rowobj3)
@@ -163,7 +167,6 @@ function Signoffresp() {
                         return th.statehead_approved == null
                     })
                     signoffstate.length == 0?setrowdata(data):setrowdata([])
-
                     setenablesignoff(!response.data.data.filter(function (th) {
                         return th.responsible_person_approved == "Yes"
                     }).length == 0)
@@ -182,6 +185,15 @@ function Signoffresp() {
             return td.unique_id == id
         })[0])
 
+    }
+
+    function openModal2(id) {
+        setOpen2(true)
+        seteditrespdata(tabledata.filter(function (td) {
+            return td.questionname == id
+        }).sort((a, b) => {
+            return a._id - b._id;
+        })[0])
     }
 
     function editRowData() {
@@ -213,6 +225,35 @@ function Signoffresp() {
             });
     }
 
+    function editRespData() {
+        const date = new Date();
+
+        axios({
+            method: 'post',
+            // url:'http://localhost:8080/updatedata',
+            url: 'https://service.rbmgateway.org/updatedata',
+            data: {
+                "username": user.username,
+                "actual": editrespdata.actual,
+                "comment": editrespdata.comments,
+                "respcomment":editrespdata.responsible_person_comment,
+                "type": "respperson",
+                "id": editrespdata.unique_id,
+            }
+        })
+            .then(
+                response => {
+                    // console.log(response)
+                    setOpen2(false);
+                    setalerttxt("success")
+                    getFormData()
+                }
+            ).catch((err) => {
+                console.log(err)
+                setalerttxt("error")
+            });
+    }
+
     function signoffDataResp() {
         if (!enablesignoff ) {
             axios({
@@ -227,6 +268,7 @@ function Signoffresp() {
                     response => {
                         // console.log(response)
                         setalerttxt("success")
+                        getFormData()
                     }
                 ).catch((err) => {
                     console.log(err)
@@ -237,6 +279,7 @@ function Signoffresp() {
 
     const handleClose = () => {
         setOpen(false);
+        setOpen2(false)
         setalerttxt("")
     };
 
@@ -265,7 +308,8 @@ function Signoffresp() {
                                             {column}
                                         </TableCell>
                                     ))}
-                                    <TableCell>
+                                    <TableCell colSpan={2}>
+                                    Total
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -295,15 +339,21 @@ function Signoffresp() {
                                         </>
                                     ))}
                                     <TableCell
-                                        key={"total"}
+                                        key={"targettotal"}
                                     >
-                                        Total
+                                        Target
+                                    </TableCell>
+                                    <TableCell
+                                        key={"actualtotal"}
+                                    >
+                                        Actual
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {rowdata.length > 0 ?
                                     <>
+                                        {console.log}
                                         {rowdata.map((data) => {
                                             return (
                                                 <TableRow>
@@ -313,7 +363,7 @@ function Signoffresp() {
                                                                 color: "#eb7e00",
                                                                 fontWeight: 700
                                                             }}
-                                                                colSpan={states.length * 2 + 2}>{data.indic}</TableCell> :
+                                                                colSpan={states.length * 2 + 3}>{data.indic}</TableCell> :
                                                             <>
                                                                 <TableCell>{data.indic}</TableCell>
                                                                 {states?.map(s => {
@@ -335,7 +385,7 @@ function Signoffresp() {
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
                                                                                             title={
-                                                                                                data[s + "comment"] || data[s + "respcomment"]?<React.Fragment>
+                                                                                                data[s + "comment"] ?<React.Fragment>
                                                                                                     {data[s + "comment"] && <TextField
                                                                                                         
                                                                                                         autoFocus
@@ -348,18 +398,7 @@ function Signoffresp() {
                                                                                                         value={data[s + "comment"]}
                                                                                                         variant="standard"
                                                                                                     />}
-                                                                                                    {data[s + "respcomment"]&& <TextField
-                                                                                                        
-                                                                                                        autoFocus
-                                                                                                        margin="dense"
-                                                                                                        label="Responsible Person Comment"
-                                                                                                        type="text"
-                                                                                                        fullWidth
-                                                                                                        multiline
-                                                                                                        disabled
-                                                                                                        value={data[s + "respcomment"]}
-                                                                                                        variant="standard"
-                                                                                                    />}
+                                                                                                    
                                                                                                 </React.Fragment>:""
                                                                                             }
                                                                                         >
@@ -375,15 +414,48 @@ function Signoffresp() {
                                                                             {/* <TableCell>{data[s+"comment"]}</TableCell> */}
                                                                         </>
                                                                     )
-                                                                })}                                                         <TableCell className="numberholder">{data.total}</TableCell>
-
+                                                                })}                                                         <TableCell className="numberholder">{data.targettotal}</TableCell>
+                                                                <TableCell className="numberholder" style={{
+                                                                                    backgroundColor: (data["actualtotal"] ? data["actualtotal"] - data["targettotal"] >= 0 ? "#92d051" : "#ffc100" : '')
+                                                                                }}>
+                                                                                    {data.actualtotal}
+                                                                                    {!enablesignoff && data["actualtotal"] &&
+                                                                                    <div className="editSection">
+                                                                                        <HtmlTooltip
+                                                                                            className="Commenttooltip"
+                                                                                            title={
+                                                                                                data["respcomment"]?<React.Fragment>
+                                                                                                    
+                                                                                                    {data["respcomment"]&& <TextField
+                                                                                                        
+                                                                                                        autoFocus
+                                                                                                        margin="dense"
+                                                                                                        label="Responsible Person Comment"
+                                                                                                        type="text"
+                                                                                                        fullWidth
+                                                                                                        multiline
+                                                                                                        disabled
+                                                                                                        value={data["respcomment"]}
+                                                                                                        variant="standard"
+                                                                                                    />}
+                                                                                                </React.Fragment>:""
+                                                                                            }
+                                                                                        >
+                                                                                            <Button sx={{ m: 1 }}>
+                                                                                                <CommentIcon />
+                                                                                            </Button>
+                                                                                        </HtmlTooltip>
+                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><EditIcon /></Button>
+                                                                                    </div>
+                                                                                }
+                                                                                    </TableCell>
                                                             </>
                                                     }
                                                 </TableRow>
                                             )
                                         })}
                                         <TableRow>
-                                            <TableCell colSpan={states.length * 2 + 2} align="center" style={{
+                                            <TableCell colSpan={states.length * 2 + 3} align="center" style={{
                                                 height: "60px"
 
                                             }}>
@@ -391,7 +463,7 @@ function Signoffresp() {
                                         </TableRow>
                                     </>
                                     : <TableRow>
-                                        <TableCell colSpan={states.length * 2 + 2} align="center">
+                                        <TableCell colSpan={states.length * 2 + 3} align="center">
                                             Awaiting State Head Sign Off
                                         </TableCell>
                                     </TableRow>}
@@ -436,7 +508,7 @@ function Signoffresp() {
                         variant="standard"
                         onChange={e => seteditdata({ ...editdata, comments: e.target.value })}
                     />
-                    <TextField
+                    {/* <TextField
                         className="editdialogtxt"
                         autoFocus
                         margin="dense"
@@ -448,10 +520,39 @@ function Signoffresp() {
                         value={editdata.responsible_person_comment}
                         variant="standard"
                         onChange={e => seteditdata({ ...editdata, responsible_person_comment: e.target.value })}
-                    />
+                    /> */}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={editRowData} className="editdatabtn">Save Data</Button>
+                    <Button onClick={handleClose} className="cancelbtn">Cancel</Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog open={open2} onClose={handleClose}>
+                <DialogTitle>{editrespdata.thematic}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText className="editdialoglabel">
+                        {editrespdata.rrfname}
+                    </DialogContentText>
+                    <DialogContentText className="editdialoglabel1">
+                        {editrespdata.questionname}
+                    </DialogContentText>
+                    <TextField
+                        className="editdialogtxt"
+                        autoFocus
+                        margin="dense"
+                        id="commentdata"
+                        label="Responsible Person Comment"
+                        type="text"
+                        fullWidth
+                        multiline
+                        value={editrespdata.responsible_person_comment}
+                        variant="standard"
+                        onChange={e => seteditrespdata({ ...editrespdata, responsible_person_comment: e.target.value })}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={editRespData} className="editdatabtn">Save Data</Button>
                     <Button onClick={handleClose} className="cancelbtn">Cancel</Button>
                 </DialogActions>
             </Dialog>
@@ -460,7 +561,7 @@ function Signoffresp() {
                 }
             </Snackbar>
 
-            { rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
+            { !enablesignoff && rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
                 position: 'absolute',
                 bottom: 50,
                 right: 16,
