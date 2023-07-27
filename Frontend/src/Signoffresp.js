@@ -137,7 +137,7 @@ function Signoffresp() {
                                     data[objIndex][i.state + "actual"] = i.actual
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
-                                    data[objIndex]["respcomment"] = i.responsible_person_comment?.length && i.responsible_person_comment.length>0 ? i.responsible_person_comment :data[objIndex]["respcomment"]
+                                    data[objIndex]["respcomment"] = i.responsible_person_comment && i.responsible_person_comment?.length>0 ? i.responsible_person_comment :data[objIndex]["respcomment"]
                                     data[objIndex]["actualtotal"] = i.actual && isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"]
                                     data[objIndex]["targettotal"] = i.target && isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"]
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
