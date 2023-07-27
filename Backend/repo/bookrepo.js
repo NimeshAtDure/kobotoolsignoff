@@ -204,11 +204,15 @@ class UserRepository {
     var queries = { 
       // "statehead":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE statehead =:username );",
 
-      "statehead":"SELECT * FROM get_statehead_view(:username);",
+      // "statehead":"SELECT * FROM get_statehead_view(:username);",
+
+      "statehead":"SELECT * FROM get_view_statehead(:username);",
 
       // "respperson":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE responsible_person =:username)and statehead_approved='Yes';",
 
-      "respperson":"SELECT * FROM get_responsiblepersion_view(:username);",
+      // "respperson":"SELECT * FROM get_responsiblepersion_view(:username);",
+
+      "respperson":"SELECT * FROM get_view_responsibleperson(:username);",
 
       "thematichead":"SELECT * FROM get_thematichead_view (:username);",
 
@@ -216,7 +220,9 @@ class UserRepository {
 
       "admin":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2);",
       
-      "all":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE statehead =:username OR responsible_person =:username OR thematichead=:username); "
+      // "all":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE statehead =:username OR responsible_person =:username OR thematichead=:username); "
+
+      "all":"SELECT * FROM statehead_data sd WHERE statehead =:username OR responsible_person =:username OR thematichead=:username;"
     }
     
     return sequelize.query(queries[usertype],
@@ -233,9 +239,11 @@ class UserRepository {
 
       // "gender": "UPDATE gender_dataset_final g SET actual=:editactual,comments=:editcomment,updated_by_statehead_on=:stateupdttime,updated_by_responsible_person_on=:respupdttime FROM (SELECT * FROM (SELECT * FROM gender_dataset_final g WHERE g.statehead =:username OR g.responsible_person=:username) AS t1 ) AS t4 WHERE t4.unique_id=:id and t4.unique_id=g.unique_id"
 
-      "statehead":	"SELECT * FROM custom_dataupdate_statehead(:username,:id,:editactual,:editcomment);",
+      // "statehead":	"SELECT * FROM custom_dataupdate_statehead(:username,:id,:editactual,:editcomment);",
 
-      "respperson":"SELECT * FROM custom_dataupdate_responsibleperson(:username,:id,:editactual,:editcomment,:respcomment);"
+      "statehead":	"SELECT * FROM update_data_statehead(:username,:id,:editactual,:editcomment);",
+
+      "respperson":"SELECT * FROM update_data_responsibleperson(:username,:id,:editactual,:editcomment,:respcomment);"
 
     }
 
@@ -249,7 +257,7 @@ class UserRepository {
   }
 
   async stateSignoff(username){
-    return await sequelize.query("SELECT * FROM custom_flag_data_update_statehead(:username);",
+    return await sequelize.query("SELECT * FROM update_flag_signoff_statehead(:username);",
       { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
@@ -258,7 +266,7 @@ class UserRepository {
   }
 
   async resppersonSignoff(username){
-    return await sequelize.query("SELECT * FROM custom_flag_data_update_responsible_person(:username)",
+    return await sequelize.query("SELECT * FROM update_flag_signoff_responsibleperson(:username)",
       { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         console.log("results",result)
