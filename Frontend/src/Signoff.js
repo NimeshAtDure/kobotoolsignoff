@@ -59,7 +59,7 @@ function Signoff() {
                         }
                     });
 
-                    console.log(response,themes,states)
+                    // console.log(response,themes,states)
 
                 }
             ).catch((err) => { console.log(err) });
@@ -141,7 +141,7 @@ function Signoff() {
                     .then((response) => {
                         if (response.data.results.length > 0) {
                             let indvresult = response.data.results[response.data.results.length - 1]
-                            console.log("indvresult", indvresult)
+                            // console.log("indvresult", indvresult)
                             let resultarr = indvresult
                             let ques = Object.keys(indvresult).filter(r => r.includes("Question_") && !r.includes("/Milestone"))
                             let quarter = indvresult[Object.keys(indvresult).filter(r => r.includes("/QuarterText"))]
@@ -151,7 +151,7 @@ function Signoff() {
                             let queslabel = ques.map((q) => {
                                 return q.split("/").slice(0, 4).join("/")
                             }).filter((value, index, array) => array.indexOf(value) === index)
-                            console.log("response1", ques, filterques, queslabel)
+                            // console.log("response1", ques, filterques, queslabel)
 
                             let config2 = {
                                 method: 'get',
@@ -176,7 +176,7 @@ function Signoff() {
                                         let indcdata = ques.filter(r => r.includes(f))
 
                                         indcdata.forEach(i => {
-                                            console.log(resultarr, i)
+                                            // console.log(resultarr, i)
                                             if (i.toLowerCase().includes("actual")) {
                                                 obj.actual = resultarr[i]
                                             } else if (i.toLowerCase().includes("target")) {
@@ -186,7 +186,7 @@ function Signoff() {
                                             } else if (i.toLowerCase().includes("comment")) {
                                                 obj.comment = resultarr[i]
                                             }
-                                            console.log(indcdata, themedata, links);
+                                            // console.log(indcdata, themedata, links);
                                         })
                                         if (obj.user == user.email || (user.username.includes("admin") || user.username.includes("kaushik"))) {
                                             themedata[statename].push(obj)
@@ -236,13 +236,13 @@ function Signoff() {
         setexpanded(false)
         setactivetable(statetables[newvalue])
         setactivelink(formlink[newvalue])
-        console.log("active", formlink)
+        // console.log("active", formlink)
 
     }
 
     const handleAccClick = () => {
         setexpanded(!expanded);
-        console.log("active", activelink)
+        // console.log("active", activelink)
     };
 
     const COLUMNS = [

@@ -49,7 +49,7 @@ function Dashboardview() {
         .then(
             response => {
               setAuthToken(response.data.token)
-              console.log(response.data.token)
+              // console.log(response.data.token)
             }
         )
     }

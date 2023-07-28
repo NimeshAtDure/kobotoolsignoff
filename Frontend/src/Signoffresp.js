@@ -22,6 +22,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import CommentIcon from '@mui/icons-material/Comment';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { Link, useLocation } from "react-router-dom";
@@ -98,6 +99,12 @@ function Signoffresp() {
                             filtthemes.push(item.thematic);
                         }
                     });
+                    filtstates.sort()
+                    if( filtstates.length>1 && filtstates.includes("Delhi")){
+                        const state = filtstates.slice(1,2)
+                        filtstates.splice(1, 1);
+                        filtstates.push(state)
+                    }
                     setthematic(filtthemes.sort())
                     setstates(filtstates)
                     thematicarr = filtthemes.map((theme) => {
@@ -130,14 +137,14 @@ function Signoffresp() {
                                 return th.rrfname == f
                             })
                             indi.forEach(i => {
-                                console.log("data", Object.values(data))
+                                // console.log("data", Object.values(data))
                                 if (data.findIndex((obj => obj.indic == i.questionname)) > -1) {
                                     let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme == i.thematic)));
                                     data[objIndex][i.state + "id"] = i.unique_id
                                     data[objIndex][i.state + "actual"] = i.actual
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
-                                    data[objIndex]["respcomment"] = i.responsible_person_comment?.length && i.responsible_person_comment.length>0 ? i.responsible_person_comment :data[objIndex]["respcomment"]
+                                    data[objIndex]["respcomment"] = i.responsible_person_comment?.length && i.responsible_person_comment?.length>0 ? i.responsible_person_comment :data[objIndex]["respcomment"]
                                     data[objIndex]["actualtotal"] = i.actual && isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"]
                                     data[objIndex]["targettotal"] = i.target && isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"]
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
@@ -160,7 +167,7 @@ function Signoffresp() {
                                 // console.log("ind", indi, i.questionname, i.actual, i.target)
                             })
                         })
-                        console.log(thematicarr, data, themearr)
+                        // console.log(thematicarr, data, themearr)
                     })
 
                     var signoffstate = response.data.data.filter(function (th) {
@@ -299,6 +306,9 @@ function Signoffresp() {
                                     >
                                         Thematic area and Indicators
                                     </TableCell>
+                                    <TableCell colSpan={2}>
+                                        National
+                                    </TableCell>
                                     {states?.map((column, id) => (
                                         <TableCell
                                             key={column}
@@ -308,14 +318,22 @@ function Signoffresp() {
                                             {column}
                                         </TableCell>
                                     ))}
-                                    <TableCell colSpan={2}>
-                                    Total
-                                    </TableCell>
+                                    
                                 </TableRow>
                                 <TableRow>
                                     <TableCell
                                         colSpan={1}
                                     >
+                                    </TableCell>
+                                    <TableCell
+                                        key={"targettotal"}
+                                    >
+                                        Target
+                                    </TableCell>
+                                    <TableCell
+                                        key={"actualtotal"}
+                                    >
+                                        Actual
                                     </TableCell>
                                     {states?.map((column, id) => (
                                         <>
@@ -338,16 +356,7 @@ function Signoffresp() {
                                         </TableCell> */}
                                         </>
                                     ))}
-                                    <TableCell
-                                        key={"targettotal"}
-                                    >
-                                        Target
-                                    </TableCell>
-                                    <TableCell
-                                        key={"actualtotal"}
-                                    >
-                                        Actual
-                                    </TableCell>
+                                    
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -366,6 +375,41 @@ function Signoffresp() {
                                                                 colSpan={states.length * 2 + 3}>{data.indic}</TableCell> :
                                                             <>
                                                                 <TableCell>{data.indic}</TableCell>
+                                                                <TableCell className="numberholder">{data.targettotal}</TableCell>
+                                                                <TableCell className="numberholder" style={{
+                                                                                    backgroundColor: (data["actualtotal"] ? data["actualtotal"] - data["targettotal"] >= 0 ? "#92d051" : "#ffc100" : '')
+                                                                                }}>
+                                                                                    {data.actualtotal}
+                                                                                    { data["actualtotal"] &&
+                                                                                    <div className="editSection">
+                                                                                        <HtmlTooltip
+                                                                                            className="Commenttooltip"
+                                                                                            title={
+                                                                                                data["respcomment"]?<React.Fragment>
+                                                                                                    
+                                                                                                    {data["respcomment"]&& <TextField
+                                                                                                        
+                                                                                                        autoFocus
+                                                                                                        margin="dense"
+                                                                                                        label="Comment"
+                                                                                                        type="text"
+                                                                                                        fullWidth
+                                                                                                        multiline
+                                                                                                        disabled
+                                                                                                        value={data["respcomment"]}
+                                                                                                        variant="standard"
+                                                                                                    />}
+                                                                                                </React.Fragment>:""
+                                                                                            }
+                                                                                        >
+                                                                                            <Button sx={{ m: 1 }}>
+                                                                                                <CommentIcon />
+                                                                                            </Button>
+                                                                                        </HtmlTooltip>
+                                                                                        {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
+                                                                                    </div>
+                                                                                }
+                                                                                    </TableCell>
                                                                 {states?.map(s => {
                                                                     return (
                                                                         <>
@@ -380,7 +424,7 @@ function Signoffresp() {
                                                                                     backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 ? "#92d051" : "#ffc100" : '')
                                                                                 }}>
                                                                                 {data[s + "actual"]}
-                                                                                {!data[s + "respsignedOff"] && data[s + "actual"] &&
+                                                                                {data[s + "actual"] &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
@@ -406,7 +450,7 @@ function Signoffresp() {
                                                                                                 <CommentIcon />
                                                                                             </Button>
                                                                                         </HtmlTooltip>
-                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
+                                                                                        {!data[s + "respsignedOff"] &&<Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>}
                                                                                     </div>
                                                                                 }
                                                                             </TableCell>
@@ -414,41 +458,7 @@ function Signoffresp() {
                                                                             {/* <TableCell>{data[s+"comment"]}</TableCell> */}
                                                                         </>
                                                                     )
-                                                                })}                                                         <TableCell className="numberholder">{data.targettotal}</TableCell>
-                                                                <TableCell className="numberholder" style={{
-                                                                                    backgroundColor: (data["actualtotal"] ? data["actualtotal"] - data["targettotal"] >= 0 ? "#92d051" : "#ffc100" : '')
-                                                                                }}>
-                                                                                    {data.actualtotal}
-                                                                                    {!enablesignoff && data["actualtotal"] &&
-                                                                                    <div className="editSection">
-                                                                                        <HtmlTooltip
-                                                                                            className="Commenttooltip"
-                                                                                            title={
-                                                                                                data["respcomment"]?<React.Fragment>
-                                                                                                    
-                                                                                                    {data["respcomment"]&& <TextField
-                                                                                                        
-                                                                                                        autoFocus
-                                                                                                        margin="dense"
-                                                                                                        label="Responsible Person Comment"
-                                                                                                        type="text"
-                                                                                                        fullWidth
-                                                                                                        multiline
-                                                                                                        disabled
-                                                                                                        value={data["respcomment"]}
-                                                                                                        variant="standard"
-                                                                                                    />}
-                                                                                                </React.Fragment>:""
-                                                                                            }
-                                                                                        >
-                                                                                            <Button sx={{ m: 1 }}>
-                                                                                                <CommentIcon />
-                                                                                            </Button>
-                                                                                        </HtmlTooltip>
-                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><EditIcon /></Button>
-                                                                                    </div>
-                                                                                }
-                                                                                    </TableCell>
+                                                                })}                                                         
                                                             </>
                                                     }
                                                 </TableRow>
@@ -499,7 +509,7 @@ function Signoffresp() {
                         autoFocus
                         margin="dense"
                         id="commentdata"
-                        label="Statehead Comment"
+                        label="State Head Comment"
                         type="text"
                         fullWidth
                         multiline
@@ -542,7 +552,7 @@ function Signoffresp() {
                         autoFocus
                         margin="dense"
                         id="commentdata"
-                        label="Responsible Person Comment"
+                        label="Comment"
                         type="text"
                         fullWidth
                         multiline

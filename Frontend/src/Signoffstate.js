@@ -114,7 +114,7 @@ function Signoffstate() {
                                 return th.rrfname == f
                             })
                             indi.forEach(i => {
-                                console.log("data",Object.values(data))
+                                // console.log("data",Object.values(data))
                                 if (data.findIndex((obj => obj.indic == i.questionname)) > -1) {
                                     let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme==i.thematic)));
                                     data[objIndex][i.state + "id"] = i.unique_id
@@ -137,7 +137,7 @@ function Signoffstate() {
                                 // console.log("ind", indi, i.questionname, i.actual, i.target)
                             })
                         })
-                        console.log(thematicarr, data, themearr)
+                        // console.log(thematicarr, data, themearr)
                     })
                     setrowdata(data)
                     setenablesignoffstate(!response.data.data.filter(function (th) {
@@ -300,12 +300,12 @@ function Signoffstate() {
                                                                                     backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 ? "#92d051" : "#ffc100" : '')
                                                                                 }}>
                                                                                 {data[s + "actual"]}
-                                                                                { !data[s + "statesignedOff"]  && data[s + "actual"] &&
+                                                                                {  data[s + "actual"] &&
                                                                                     <div className="editSection">
                                                                                         <CustomWidthTooltip title={data[s + "comment"]}>
                                                                                             <Button sx={{ m: 1 }}><CommentIcon /></Button>
                                                                                         </CustomWidthTooltip>
-                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
+                                                                                        { !data[s + "statesignedOff"]  &&<Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>}
                                                                                     </div>
                                                                                 }
                                                                             </TableCell>

@@ -11,6 +11,7 @@ import ProgressOverview from './ProgressOverview';
 import Signoffstate from './Signoffstate'
 import Signoffresp from './Signoffresp';
 import Signoffthematic from './Signoffthematic';
+import Signoffprogress from './Signoffprogress';
 import Signoffmne from './Signoffmne';
 import Formdisp from './Formdisp';
 
@@ -33,7 +34,7 @@ function App() {
           case "signoff": 
             return <Signoffstate />
           case "progressoverview":
-            return <Signoffmne/>
+            return <Signoffprogress/>
           case "statesignoff": 
             return <Signoffstate />
           case "respsignoff": 
