@@ -236,8 +236,8 @@ function Signoffthematic() {
 
         axios({
             method: 'post',
-            url: 'http://localhost:8080/updatedata',
-            // url: 'https://service.rbmgateway.org/updatedata',
+            // url: 'http://localhost:8080/updatedata',
+            url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editrespdata.actual,
