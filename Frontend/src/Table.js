@@ -58,9 +58,9 @@ export default function Table({ columns, data }) {
   // }
   );
 
-  console.log("rows",selectedFlatRows.map(
-    d =>  d.original
-  ),selectedRowIds)
+  // console.log("rows",selectedFlatRows.map(
+  //   d =>  d.original
+  // ),selectedRowIds)
 
   /* 
     Render the UI for your table

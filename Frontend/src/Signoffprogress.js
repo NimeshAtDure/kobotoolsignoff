@@ -23,7 +23,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CommentIcon from '@mui/icons-material/Comment';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
-
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { Link, useLocation } from "react-router-dom";
@@ -53,8 +52,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     },
 }));
 
-
-function Signoffthematic() {
+function Signoffprogress() {
     const location = useLocation();
 
     const [user, setuser] = useState(JSON.parse(localStorage.getItem("user")))
@@ -82,8 +80,8 @@ function Signoffthematic() {
             // url:'http://localhost:8080/getdata',
             url: 'https://service.rbmgateway.org/getdata',
             data: {
-                "username": user.username,
-                "usertype": "thematichead"
+                "username":  user.username,
+                "usertype":  "progressov"
             }
         })
             .then(
@@ -138,9 +136,9 @@ function Signoffthematic() {
                                 return th.rrfname == f
                             })
                             indi.forEach(i => {
-                                // console.log("data", Object.values(data))
+                                // console.log("data",Object.values(data))
                                 if (data.findIndex((obj => obj.indic == i.questionname)) > -1) {
-                                    let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme == i.thematic)));
+                                    let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme==i.thematic)));
                                     data[objIndex][i.state + "id"] = i.unique_id
                                     data[objIndex][i.state + "actual"] = i.actual
                                     data[objIndex][i.state + "target"] = i.target
@@ -170,20 +168,16 @@ function Signoffthematic() {
                         // console.log(thematicarr, data, themearr)
                     })
                     var signoffstate = response.data.data.filter(function (th) {
-                        return th.responsible_person_approved == null
+                        return th.thematichead_approved == null
                     })
                     signoffstate.length == 0?setrowdata(data):setrowdata([])
                     
                     setenablesignoff(!response.data.data.filter(function (th) {
-                        return th.thematichead_approved == "Yes"
+                        return th["m&ehead_approved"]== "Yes"
                     }).length == 0)
 
                 }
             ).catch((err) => { console.log(err) });
-    }
-
-    function isNumeric(num) {
-        return !isNaN(num)
     }
 
     function openModal(id) {
@@ -203,6 +197,10 @@ function Signoffthematic() {
         })[0])
     }
 
+    function isNumeric(num) {
+        return !isNaN(num)
+    }
+
     function editRowData() {
         const date = new Date();
 
@@ -214,7 +212,7 @@ function Signoffthematic() {
                 "username": user.username,
                 "actual": editdata.actual,
                 "comment": editdata.comments,
-                "type": "thematichead",
+                "type": "mnehead",
                 "id": editdata.unique_id,
             }
         })
@@ -236,14 +234,14 @@ function Signoffthematic() {
 
         axios({
             method: 'post',
-            url: 'http://localhost:8080/updatedata',
-            // url: 'https://service.rbmgateway.org/updatedata',
+            // url: 'http://localhost:8080/updatedata',
+            url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editrespdata.actual,
                 "comment": editrespdata.comments,
                 "respcomment": editrespdata.responsible_person_comment,
-                "type": "thematichead",
+                "type": "mnehead",
                 "id": editrespdata.unique_id,
             }
         })
@@ -261,11 +259,11 @@ function Signoffthematic() {
     }
 
     function signoffData() {
-        if (!enablesignoff && rowdata.length > 0) {
+        if (!enablesignoff) {
             axios({
                 method: 'post',
-                // url:'http://localhost:8080/resposignoff',
-                url: 'https://service.rbmgateway.org/thematicsignoff',
+                // url:'http://localhost:8080/m&esignoff',
+                url: 'https://service.rbmgateway.org/m&esignoff',
                 data: {
                     "username": user.username,
                 }
@@ -375,10 +373,9 @@ function Signoffthematic() {
                                                                 <TableCell>{data.indic}</TableCell>
                                                                 <TableCell className="numberholder">{data.targettotal}</TableCell>
                                                                 <TableCell className="numberholder" style={{
-                                                                    backgroundColor: (data["actualtotal"] ? data["actualtotal"] - data["targettotal"] >= 0 ? "#92d051" : "#ffc100" : '')
-                                                                }}>
-                                                                    {data.actualtotal}
-                                                                    {data["actualtotal"] &&
+                                                                                    backgroundColor: (data["actualtotal"] ? data["actualtotal"] - data["targettotal"] >= 0 ? "#92d051" : "#ffc100" : '')
+                                                                                }}>{data.actualtotal}
+                                                                                {data["actualtotal"] &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
@@ -404,10 +401,10 @@ function Signoffthematic() {
                                                                                                 <CommentIcon />
                                                                                             </Button>
                                                                                         </HtmlTooltip>
-                                                                                        {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
+                                                                                        {/* {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>} */}
                                                                                     </div>
                                                                                 }
-                                                                </TableCell> 
+                                                                                </TableCell>
                                                                 {states?.map(s => {
                                                                     return (
                                                                         <>
@@ -419,7 +416,7 @@ function Signoffthematic() {
                                                                             <TableCell
                                                                                 className="numberholder"
                                                                                 style={{
-                                                                                    backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 ? "#92d051" : "#ffc100" : '')
+                                                                                    backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 || data[s + "actual"].toString().toLowerCase() === data[s + "target"].toString().toLowerCase()? "#92d051" : "#ffc100" : '')
                                                                                 }}>
                                                                                 {data[s + "actual"]}
                                                                                 {/* { !data[s + "respsignedOff"] && data[s + "actual"] &&
@@ -465,22 +462,24 @@ function Signoffthematic() {
                                                                         </>
                                                                     )
                                                                 })}
-                                                                                                                           </>
+                                                                                                                                                                                             
+
+                                                            </>
                                                     }
                                                 </TableRow>
                                             )
                                         })}
                                         <TableRow>
-                                            <TableCell colSpan={states.length * 2 + 3} align="center" style={{
-                                                height: "60px"
-
-                                            }}>
-                                            </TableCell>
+                                        <TableCell colSpan={states.length * 2 + 3} align="center" style={{
+                                                                height:"60px"
+                                                                
+                                                            }}>
+                                        </TableCell>    
                                         </TableRow>
                                     </>
                                     : <TableRow>
                                         <TableCell colSpan={states.length * 2 + 3} align="center">
-                                            Awaiting Responsible Person Sign Off
+                                            Awaiting Thematic Head Sign Off
                                         </TableCell>
                                     </TableRow>}
                             </TableBody>
@@ -561,8 +560,8 @@ function Signoffthematic() {
                 {alerttxt == "success" ? <Alert severity="success">Data saved !</Alert> : alerttxt == "error" ? <Alert severity="error">Update failed !</Alert> : ''
                 }
             </Snackbar>
-
-            {!enablesignoff && rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
+            
+            {/* { !enablesignoff && rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
                 position: 'absolute',
                 bottom: 50,
                 right: 16,
@@ -576,11 +575,11 @@ function Signoffthematic() {
                 onClick={signoffData}
             >
                 Sign off
-            </Fab>}
+            </Fab> } */}
             <Footer />
         </>
 
     )
 }
 
-export default Signoffthematic;
+export default Signoffprogress;

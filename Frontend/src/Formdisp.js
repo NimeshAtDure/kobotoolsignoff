@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 
 export default function Formdisp() {
     var link = window.location.pathname.split("/")
-    console.log(link[link.length-1])
+    // console.log(link[link.length-1])
     return (
         <Box sx={{ display: 'flex' }}>
             <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />

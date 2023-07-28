@@ -214,9 +214,15 @@ class UserRepository {
 
       "respperson":"SELECT * FROM get_view_responsibleperson(:username);",
 
-      "thematichead":"SELECT * FROM get_thematichead_view (:username);",
+      // "thematichead":"SELECT * FROM get_thematichead_view (:username);",
 
-      "mnehead":"SELECT * FROM get_mehead_view (:username);",
+      "thematichead":"SELECT * FROM get_view_thematicperson (:username);",
+
+      // "mnehead":"SELECT * FROM get_mehead_view (:username);",
+
+      "mnehead":"SELECT * FROM get_view_m_e_data(:username);",
+
+      "progressov":"SELECT * FROM sis_data where form_name='SIS';",
 
       "admin":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2);",
       
@@ -243,7 +249,11 @@ class UserRepository {
 
       "statehead":	"SELECT * FROM update_data_statehead(:username,:id,:editactual,:editcomment);",
 
-      "respperson":"SELECT * FROM update_data_responsibleperson(:username,:id,:editactual,:editcomment,:respcomment);"
+      "respperson":"SELECT * FROM update_data_responsibleperson(:username,:id,:editactual,:editcomment,:respcomment);",
+
+      "thematichead":"SELECT * FROM update_data_thematicperson(:username,:id,:respcomment);",
+
+      "mnehead":"SELECT * FROM update_data_m_e_head(:username,:id,:respcomment);"
 
     }
 
@@ -269,25 +279,25 @@ class UserRepository {
     return await sequelize.query("SELECT * FROM update_flag_signoff_responsibleperson(:username)",
       { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
-        console.log("results",result)
+        // console.log("results",result)
         return result
       })
   }
 
   async thematicheadSignoff(username){
-    return await sequelize.query("SELECT * FROM custom_flag_data_update_thematic(:username)",
+    return await sequelize.query(" SELECT * FROM update_flag_signoff_thematicperson(:username)",
       { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
-        console.log("results",result)
+        // console.log("results",result)
         return result
       })
   }
 
   async MNEheadSignoff(username){
-    return await sequelize.query("SELECT * FROM custom_flag_data_update_mehead(:username)",
+    return await sequelize.query("SELECT * FROM update_flag_signoff_m_e_data(:username)",
       { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
-        console.log("results",result)
+        // console.log("results",result)
         return result
       })
   }
