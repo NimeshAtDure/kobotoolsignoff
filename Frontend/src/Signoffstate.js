@@ -297,7 +297,7 @@ function Signoffstate() {
                                                                             <TableCell
                                                                                 className="numberholder"
                                                                                 style={{
-                                                                                    backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 ? "#92d051" : "#ffc100" : '')
+                                                                                    backgroundColor: (data[s + "actual"] ? (data[s + "actual"] - data[s + "target"] >= 0 || data[s + "actual"].toLowerCase()==data[s + "target"].toLowerCase())? "#92d051" : "#ffc100" : '')
                                                                                 }}>
                                                                                 {data[s + "actual"]}
                                                                                 {  data[s + "actual"] &&

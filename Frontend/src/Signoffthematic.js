@@ -96,8 +96,14 @@ function Signoffthematic() {
                         if (filtstates.indexOf(item.state) === -1) {
                             filtstates.push(item.state);
                         }
-                        if (filtthemes.indexOf(item.thematic) === -1) {
-                            filtthemes.push(item.thematic);
+                        if(item.thematic){
+                            if (filtthemes.indexOf(item.thematic) === -1) {
+                                filtthemes.push(item.thematic);
+                            }
+                        }else{
+                            if (filtthemes.indexOf(item.form_name) === -1) {
+                                filtthemes.push(item.form_name);
+                            }
                         }
                     });
                     filtstates.sort()
@@ -110,7 +116,11 @@ function Signoffthematic() {
                     setstates(filtstates)
                     thematicarr = filtthemes.map((theme) => {
                         let newArray = response.data.data.filter(function (el) {
-                            return el.thematic == theme
+                            if(el.thematic){
+                                return el.thematic == theme
+                            }else{
+                                return el.form_name == theme
+                            }
                         }
                         );
                         return { [theme]: newArray }
@@ -419,7 +429,7 @@ function Signoffthematic() {
                                                                             <TableCell
                                                                                 className="numberholder"
                                                                                 style={{
-                                                                                    backgroundColor: (data[s + "actual"] ? data[s + "actual"] - data[s + "target"] >= 0 ? "#92d051" : "#ffc100" : '')
+                                                                                    backgroundColor: (data[s + "actual"] ? (data[s + "actual"] - data[s + "target"] >= 0 || data[s + "actual"].toLowerCase()==data[s + "target"].toLowerCase())? "#92d051" : "#ffc100" : '')
                                                                                 }}>
                                                                                 {data[s + "actual"]}
                                                                                 {/* { !data[s + "respsignedOff"] && data[s + "actual"] &&
