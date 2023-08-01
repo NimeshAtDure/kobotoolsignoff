@@ -749,6 +749,10 @@ input:-webkit-autofill:active {
   margin-top: 130px;
 }
 
+.mnesignoff table{
+  margin-top: 10px;
+}
+
 .signoffpg table th {
   padding-top: 12px;
   padding-bottom: 12px;
@@ -757,6 +761,10 @@ input:-webkit-autofill:active {
   color: white;
   text-transform: uppercase;
   font-weight: bold;
+}
+
+.signoffpg .MuiTabs-root{
+  margin-top: 100px;
 }
 
 .signoffpg thead  {

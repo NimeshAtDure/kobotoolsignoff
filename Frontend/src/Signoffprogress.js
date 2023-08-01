@@ -25,6 +25,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import { Link, useLocation } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -68,11 +71,14 @@ function Signoffprogress() {
     const [alerttxt, setalerttxt] = useState('')
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
     const [enablesignoff, setenablesignoff] = useState(true)
+    const [value, setValue] = React.useState('progressovsis');
 
 
     useEffect(() => {
-        getFormData()
-    }, [user, location.state])
+        if(value!="mneheadnr"){
+            getFormData()
+        }
+    }, [user,value])
 
     function getFormData() {
         axios({
@@ -81,7 +87,7 @@ function Signoffprogress() {
             url: 'https://service.rbmgateway.org/getdata',
             data: {
                 "username":  user.username,
-                "usertype":  "progressov"
+                "usertype":  value
             }
         })
             .then(
@@ -154,8 +160,8 @@ function Signoffprogress() {
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
                                     data[objIndex]["respcomment"] = i.responsible_person_comment?.length && i.responsible_person_comment?.length > 0 ? i.responsible_person_comment : data[objIndex]["respcomment"]
-                                    data[objIndex]["actualtotal"] = i.actual && isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"]
-                                    data[objIndex]["targettotal"] = i.target && isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"]
+                                    data[objIndex]["actualtotal"] = i.actual ? isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"] : ''
+                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : ''
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
                                 } else {
                                     var rowobj3 = {}
@@ -167,8 +173,8 @@ function Signoffprogress() {
                                     rowobj3[i.state + "target"] = i.target
                                     rowobj3[i.state + "comment"] = i.comments
                                     rowobj3["respcomment"] = i.responsible_person_comment
-                                    rowobj3["actualtotal"] = i.actual && isNumeric(i.actual) ? parseInt(i.actual) : 0
-                                    rowobj3["targettotal"] = i.target && isNumeric(i.target) ? parseInt(i.target) : 0
+                                    rowobj3["actualtotal"] = i.actual ? isNumeric(i.actual) ? parseInt(i.actual) : i.actual : ''
+                                    rowobj3["targettotal"] = i.target ? isNumeric(i.target) ? parseInt(i.target) : i.target : ''
                                     rowobj3[i.state + "respsignedOff"] = i.responsible_person_approved
                                     data.push(rowobj3)
                                 }
@@ -291,6 +297,10 @@ function Signoffprogress() {
         }
     }
 
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     const handleClose = () => {
         setOpen(false);
         setOpen2(false)
@@ -299,10 +309,24 @@ function Signoffprogress() {
 
     return (
         <>
-            <div className="App signoffpg progressoverviewpage signoff-section">
+            <div className="App signoffpg progressoverviewpage signoff-section mnesignoff">
                 <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
                 <Paper sx={{ width: '100%', overflow: 'hidden' }} >
                     <TableContainer sx={{ maxHeight: "100vh" }} className="heatmaptableholder">
+                    <Box sx={{ width: '100%' }}>
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        aria-label="label tabs example"
+                    >
+                        <Tab
+                            value="progressovsis"
+                            label="Consolidated Heat Map"
+                        />
+                        <Tab value="progressovnr" label="National Report" />
+                        <Tab value="progressovoi" label="Office Indicators" />
+                    </Tabs>
+                </Box>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
 
@@ -316,7 +340,7 @@ function Signoffprogress() {
                                     <TableCell colSpan={2}>
                                         National
                                     </TableCell>
-                                    {states?.map((column, id) => (
+                                    {value !="progressovnr" && states?.map((column, id) => (
                                         <TableCell
                                             key={column}
                                             align="center"
@@ -342,7 +366,7 @@ function Signoffprogress() {
                                     >
                                         Actual
                                     </TableCell>
-                                    {states?.map((column, id) => (
+                                    {value !="progressovnr" && states?.map((column, id) => (
                                         <>
                                             <TableCell
                                                 key={column + "target"}
@@ -415,7 +439,7 @@ function Signoffprogress() {
                                                                                     </div>
                                                                                 }
                                                                                 </TableCell>
-                                                                {states?.map(s => {
+                                                                {value !="progressovnr" && states?.map(s => {
                                                                     return (
                                                                         <>
                                                                             <TableCell
@@ -489,7 +513,7 @@ function Signoffprogress() {
                                     </>
                                     : <TableRow>
                                         <TableCell colSpan={states.length * 2 + 3} align="center">
-                                            Awaiting Thematic Head Sign Off
+                                            Awaiting M & N Head Sign Off
                                         </TableCell>
                                     </TableRow>}
                             </TableBody>

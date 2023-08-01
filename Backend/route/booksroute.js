@@ -27,6 +27,7 @@ router.post("/statesignoff",bookController.stateSignoff)
 router.post("/resposignoff",bookController.resppersonSignoff)
 router.post("/thematicsignoff",bookController.thematicheadSignoff)
 router.post("/m&esignoff",bookController.MNEheadSignoff)
+router.post("/m&esignoffoi",bookController.MNEheadSignoffoi)
 
 module.exports = router;
 
