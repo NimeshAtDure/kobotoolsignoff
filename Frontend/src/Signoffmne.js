@@ -25,6 +25,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import { Link, useLocation } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -68,20 +71,23 @@ function Signoffmne() {
     const [alerttxt, setalerttxt] = useState('')
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
     const [enablesignoff, setenablesignoff] = useState(true)
+    const [value, setValue] = React.useState('mneheadsis');
 
 
     useEffect(() => {
-        getFormData()
-    }, [user, location.state])
+        if(value!="mneheadnr"){
+            getFormData()
+        }
+    }, [user,value])
 
     function getFormData() {
         axios({
             method: 'post',
-            url:'http://localhost:8080/getdata',
+            url: 'http://localhost:8080/getdata',
             // url: 'https://service.rbmgateway.org/getdata',
             data: {
-                "username":  user.username,
-                "usertype":  "mnehead"
+                "username": user.username,
+                "usertype": value
             }
         })
             .then(
@@ -94,19 +100,19 @@ function Signoffmne() {
                         if (filtstates.indexOf(item.state) === -1) {
                             filtstates.push(item.state);
                         }
-                        if(item.thematic){
+                        if (item.thematic) {
                             if (filtthemes.indexOf(item.thematic) === -1) {
                                 filtthemes.push(item.thematic);
                             }
-                        }else{
+                        } else {
                             if (filtthemes.indexOf(item.form_name) === -1) {
                                 filtthemes.push(item.form_name);
                             }
                         }
                     });
                     filtstates.sort()
-                    if( filtstates.length>1 && filtstates.includes("Delhi")){
-                        const state = filtstates.slice(1,2)
+                    if (filtstates.length > 1 && filtstates.includes("Delhi")) {
+                        const state = filtstates.slice(1, 2)
                         filtstates.splice(1, 1);
                         filtstates.push(state)
                     }
@@ -114,11 +120,12 @@ function Signoffmne() {
                     setstates(filtstates)
                     thematicarr = filtthemes.map((theme) => {
                         let newArray = response.data.data.filter(function (el) {
-                            if(el.thematic){
+                            if (el.thematic) {
                                 return el.thematic == theme
-                            }else{
+                            } else {
                                 return el.form_name == theme
-                            }                        }
+                            }
+                        }
                         );
                         return { [theme]: newArray }
                     })
@@ -147,14 +154,14 @@ function Signoffmne() {
                             indi.forEach(i => {
                                 // console.log("data",Object.values(data))
                                 if (data.findIndex((obj => obj.indic == i.questionname)) > -1) {
-                                    let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme==i.thematic)));
+                                    let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme == i.thematic)));
                                     data[objIndex][i.state + "id"] = i.unique_id
                                     data[objIndex][i.state + "actual"] = i.actual
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
                                     data[objIndex]["respcomment"] = i.responsible_person_comment?.length && i.responsible_person_comment?.length > 0 ? i.responsible_person_comment : data[objIndex]["respcomment"]
-                                    data[objIndex]["actualtotal"] = i.actual && isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"]
-                                    data[objIndex]["targettotal"] = i.target && isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"]
+                                    data[objIndex]["actualtotal"] = i.actual ? isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"] : ''
+                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : ''
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
                                 } else {
                                     var rowobj3 = {}
@@ -166,8 +173,8 @@ function Signoffmne() {
                                     rowobj3[i.state + "target"] = i.target
                                     rowobj3[i.state + "comment"] = i.comments
                                     rowobj3["respcomment"] = i.responsible_person_comment
-                                    rowobj3["actualtotal"] = i.actual && isNumeric(i.actual) ? parseInt(i.actual) : 0
-                                    rowobj3["targettotal"] = i.target && isNumeric(i.target) ? parseInt(i.target) : 0
+                                    rowobj3["actualtotal"] = i.actual ? isNumeric(i.actual) ? parseInt(i.actual) : i.actual : ''
+                                    rowobj3["targettotal"] = i.target ? isNumeric(i.target) ? parseInt(i.target) : i.target : ''
                                     rowobj3[i.state + "respsignedOff"] = i.responsible_person_approved
                                     data.push(rowobj3)
                                 }
@@ -179,10 +186,10 @@ function Signoffmne() {
                     var signoffstate = response.data.data.filter(function (th) {
                         return th.thematichead_approved == null
                     })
-                    signoffstate.length == 0?setrowdata(data):setrowdata([])
-                    
+                    signoffstate.length == 0 ? setrowdata(data) : setrowdata([])
+
                     setenablesignoff(!response.data.data.filter(function (th) {
-                        return th["m&ehead_approved"]== "Yes"
+                        return th["m&ehead_approved"] == "Yes"
                     }).length == 0)
 
                 }
@@ -215,7 +222,7 @@ function Signoffmne() {
 
         axios({
             method: 'post',
-            url:'http://localhost:8080/updatedata',
+            url: 'http://localhost:8080/updatedata',
             // url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
@@ -269,9 +276,10 @@ function Signoffmne() {
 
     function signoffData() {
         if (!enablesignoff) {
+            var query = value=="mneheadoi"?'http://localhost:8080/m&esignoffoi':'http://localhost:8080/m&esignoff'
             axios({
                 method: 'post',
-                url:'http://localhost:8080/m&esignoff',
+                url: query,
                 // url: 'https://service.rbmgateway.org/m&esignoff',
                 data: {
                     "username": user.username,
@@ -296,12 +304,30 @@ function Signoffmne() {
         setalerttxt("")
     };
 
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     return (
         <>
-            <div className="App signoffpg progressoverviewpage signoff-section">
+            <div className="App signoffpg progressoverviewpage signoff-section mnesignoff">
                 <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
                 <Paper sx={{ width: '100%', overflow: 'hidden' }} >
                     <TableContainer sx={{ maxHeight: "100vh" }} className="heatmaptableholder">
+                    <Box sx={{ width: '100%' }}>
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        aria-label="label tabs example"
+                    >
+                        <Tab
+                            value="mneheadsis"
+                            label="Consolidated Heat Map"
+                        />
+                        <Tab value="mneheadnr" label="National Report" />
+                        <Tab value="mneheadoi" label="Office Indicators" />
+                    </Tabs>
+                </Box>
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
 
@@ -315,7 +341,7 @@ function Signoffmne() {
                                     <TableCell colSpan={2}>
                                         National
                                     </TableCell>
-                                    {states?.map((column, id) => (
+                                    {value !="mneheadnr" && states?.map((column, id) => (
                                         <TableCell
                                             key={column}
                                             align="center"
@@ -324,7 +350,7 @@ function Signoffmne() {
                                             {column}
                                         </TableCell>
                                     ))}
-                                    
+
                                 </TableRow>
                                 <TableRow>
                                     <TableCell
@@ -341,7 +367,7 @@ function Signoffmne() {
                                     >
                                         Actual
                                     </TableCell>
-                                    {states?.map((column, id) => (
+                                    {value !="mneheadnr" && states?.map((column, id) => (
                                         <>
                                             <TableCell
                                                 key={column + "target"}
@@ -362,7 +388,7 @@ function Signoffmne() {
                                         </TableCell> */}
                                         </>
                                     ))}
-                                    
+
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -382,39 +408,39 @@ function Signoffmne() {
                                                                 <TableCell>{data.indic}</TableCell>
                                                                 <TableCell className="numberholder">{data.targettotal}</TableCell>
                                                                 <TableCell className="numberholder" style={{
-                                                                                    backgroundColor: (data["actualtotal"] ? data["actualtotal"] - data["targettotal"] >= 0 ? "#92d051" : "#ffc100" : '')
-                                                                                }}>{data.actualtotal}
-                                                                                {data["actualtotal"] &&
-                                                                                    <div className="editSection">
-                                                                                        <HtmlTooltip
-                                                                                            className="Commenttooltip"
-                                                                                            title={
-                                                                                                data["respcomment"]?<React.Fragment>
-                                                                                                    
-                                                                                                    {data["respcomment"]&& <TextField
-                                                                                                        
-                                                                                                        autoFocus
-                                                                                                        margin="dense"
-                                                                                                        label="Comment"
-                                                                                                        type="text"
-                                                                                                        fullWidth
-                                                                                                        multiline
-                                                                                                        disabled
-                                                                                                        value={data["respcomment"]}
-                                                                                                        variant="standard"
-                                                                                                    />}
-                                                                                                </React.Fragment>:""
-                                                                                            }
-                                                                                        >
-                                                                                            <Button sx={{ m: 1 }}>
-                                                                                                <CommentIcon />
-                                                                                            </Button>
-                                                                                        </HtmlTooltip>
-                                                                                        {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
-                                                                                    </div>
+                                                                    backgroundColor: (data["actualtotal"] ? (data["actualtotal"] - data["targettotal"] >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
+                                                                }}>{data.actualtotal}
+                                                                    {data["actualtotal"] &&
+                                                                        <div className="editSection">
+                                                                            <HtmlTooltip
+                                                                                className="Commenttooltip"
+                                                                                title={
+                                                                                    data["respcomment"] ? <React.Fragment>
+
+                                                                                        {data["respcomment"] && <TextField
+
+                                                                                            autoFocus
+                                                                                            margin="dense"
+                                                                                            label="Comment"
+                                                                                            type="text"
+                                                                                            fullWidth
+                                                                                            multiline
+                                                                                            disabled
+                                                                                            value={data["respcomment"]}
+                                                                                            variant="standard"
+                                                                                        />}
+                                                                                    </React.Fragment> : ""
                                                                                 }
-                                                                                </TableCell> 
-                                                                {states?.map(s => {
+                                                                            >
+                                                                                <Button sx={{ m: 1 }}>
+                                                                                    <CommentIcon />
+                                                                                </Button>
+                                                                            </HtmlTooltip>
+                                                                            {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
+                                                                        </div>
+                                                                    }
+                                                                </TableCell>
+                                                                {value !="mneheadnr" && states?.map(s => {
                                                                     return (
                                                                         <>
                                                                             <TableCell
@@ -425,7 +451,7 @@ function Signoffmne() {
                                                                             <TableCell
                                                                                 className="numberholder"
                                                                                 style={{
-                                                                                    backgroundColor: (data[s + "actual"] ? (data[s + "actual"] - data[s + "target"] >= 0 || data[s + "actual"].toLowerCase()==data[s + "target"].toLowerCase())? "#92d051" : "#ffc100" : '')
+                                                                                    backgroundColor: (data[s + "actual"] ? (data[s + "actual"] - data[s + "target"] >= 0 || data[s + "actual"].toLowerCase() == data[s + "target"].toLowerCase()) ? "#92d051" : "#ffc100" : '')
                                                                                 }}>
                                                                                 {data[s + "actual"]}
                                                                                 {/* { !data[s + "respsignedOff"] && data[s + "actual"] &&
@@ -436,7 +462,7 @@ function Signoffmne() {
                                                                                         <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
                                                                                     </div>
                                                                                 } */}
-                                                                                { data[s + "actual"] &&
+                                                                                {data[s + "actual"] &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
@@ -471,7 +497,7 @@ function Signoffmne() {
                                                                         </>
                                                                     )
                                                                 })}
-                                                                                                                                                                                            
+
 
                                                             </>
                                                     }
@@ -479,11 +505,11 @@ function Signoffmne() {
                                             )
                                         })}
                                         <TableRow>
-                                        <TableCell colSpan={states.length * 2 + 3} align="center" style={{
-                                                                height:"60px"
-                                                                
-                                                            }}>
-                                        </TableCell>    
+                                            <TableCell colSpan={states.length * 2 + 3} align="center" style={{
+                                                height: "60px"
+
+                                            }}>
+                                            </TableCell>
                                         </TableRow>
                                     </>
                                     : <TableRow>
@@ -569,8 +595,8 @@ function Signoffmne() {
                 {alerttxt == "success" ? <Alert severity="success">Data saved !</Alert> : alerttxt == "error" ? <Alert severity="error">Update failed !</Alert> : ''
                 }
             </Snackbar>
-            
-            { !enablesignoff && rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
+
+            {!enablesignoff && rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
                 position: 'absolute',
                 bottom: 50,
                 right: 16,
@@ -584,7 +610,7 @@ function Signoffmne() {
                 onClick={signoffData}
             >
                 Sign off
-            </Fab> }
+            </Fab>}
             <Footer />
         </>
 
