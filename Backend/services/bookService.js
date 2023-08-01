@@ -251,6 +251,23 @@ class UserService {
       return response;  
     }
 
+    async MNEheadSignoffoi(req){
+      const response = {};
+      const { username } = req.body;
+
+      const data = await this.userRepo.MNEheadSignoffoi(username);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
 }
 
 module.exports = {

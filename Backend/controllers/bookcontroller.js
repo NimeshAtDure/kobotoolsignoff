@@ -137,3 +137,13 @@ exports.MNEheadSignoff = async (req, res, next) => {
     next(error);
   }
 }
+
+exports.MNEheadSignoffoi = async (req, res, next) => {
+  try {
+    const response = await userService.MNEheadSignoffoi(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}

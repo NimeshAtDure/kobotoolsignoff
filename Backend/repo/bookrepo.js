@@ -220,9 +220,13 @@ class UserRepository {
 
       // "mnehead":"SELECT * FROM get_mehead_view (:username);",
 
-      "mnehead":"SELECT * FROM get_view_m_e_data(:username);",
+      "mneheadsis":"SELECT * FROM get_view_m_e_data(:username);",
 
-      "progressov":"SELECT * FROM sis_data where form_name='SIS';",
+      "mneheadoi":"SELECT * FROM get_oi_view_m_e_data(:username);",
+
+      "progressovsis":"SELECT * FROM sis_data where form_name='SIS';",
+
+      "progressovoi":"SELECT * FROM sis_data where form_name <>'SIS';",
 
       "admin":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2);",
       
@@ -295,6 +299,15 @@ class UserRepository {
 
   async MNEheadSignoff(username){
     return await sequelize.query("SELECT * FROM update_flag_signoff_m_e_data(:username)",
+      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+
+  async MNEheadSignoffoi(username){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_oi_m_e_data(:username)",
       { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
