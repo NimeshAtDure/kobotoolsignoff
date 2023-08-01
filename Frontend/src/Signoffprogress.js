@@ -513,7 +513,7 @@ function Signoffprogress() {
                                     </>
                                     : <TableRow>
                                         <TableCell colSpan={states.length * 2 + 3} align="center">
-                                            Awaiting M & N Head Sign Off
+                                            Awaiting M & E Head Sign Off
                                         </TableCell>
                                     </TableRow>}
                             </TableBody>
