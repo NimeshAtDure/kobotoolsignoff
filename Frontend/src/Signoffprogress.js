@@ -407,7 +407,7 @@ function Signoffprogress() {
                                                                 <TableCell>{data.indic}</TableCell>
                                                                 <TableCell className="numberholder">{data.targettotal}</TableCell>
                                                                 <TableCell className="numberholder" style={{
-                                                                                    backgroundColor: (data["actualtotal"] ? data["actualtotal"] - data["targettotal"] >= 0 ? "#92d051" : "#ffc100" : '')
+                                                                                    backgroundColor: (String(data["actualtotal"])!='' ? parseInt(data["actualtotal"]) - parseInt(data["targettotal"]) >= 0 ? "#92d051" : "#ffc100" : '')
                                                                                 }}>{data.actualtotal}
                                                                                 {String(data["actualtotal"])!='' &&
                                                                                     <div className="editSection">
@@ -461,7 +461,7 @@ function Signoffprogress() {
                                                                                         <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
                                                                                     </div>
                                                                                 } */}
-                                                                                { String(data[s + "actual"])!='' &&
+                                                                                { String(data[s + "actual"])!='undefined' &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
