@@ -72,7 +72,7 @@ function Signoffmne() {
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
     const [enablesignoff, setenablesignoff] = useState(true)
     const [value, setValue] = React.useState('mneheadsis');
-
+    const [percarr,setpercarr] = React.useState(["% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services","% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months","Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods","Percentage of public health facilities in priority districts providing safe delivery services","Percentage of public health facilities in priority districts doing HIV screening during ANC","Percentage of public health facilities in priority districts providing safe abortion services"])
 
     useEffect(() => {
         if(value!="mneheadnr"){
@@ -406,11 +406,11 @@ function Signoffmne() {
                                                                 colSpan={states.length * 2 + 3}>{data.indic}</TableCell> :
                                                             <>
                                                                 <TableCell>{data.indic}</TableCell>
-                                                                <TableCell className="numberholder">{data.targettotal}</TableCell>
+                                                                <TableCell className="numberholder">{!percarr.includes(data.indic) && data.targettotal}</TableCell>
                                                                 <TableCell className="numberholder" style={{
-                                                                    backgroundColor: (String(data["actualtotal"])!='' ? (parseInt(data["actualtotal"]) - parseInt(data["targettotal"]) >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
-                                                                }}>{data.actualtotal}
-                                                                    {String(data["actualtotal"])!='' &&
+                                                                    backgroundColor: (!percarr.includes(data.indic) && String(data["actualtotal"])!='' ? (parseInt(data["actualtotal"]) - parseInt(data["targettotal"]) >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
+                                                                }}>{!percarr.includes(data.indic) && data.actualtotal}
+                                                                    { !percarr.includes(data.indic) && String(data["actualtotal"])!='' &&
                                                                         <div className="editSection">
                                                                             <HtmlTooltip
                                                                                 className="Commenttooltip"
