@@ -372,7 +372,6 @@ function Signoffresp() {
                             <TableBody>
                                 {rowdata.length > 0 ?
                                     <>
-                                        {console.log}
                                         {rowdata.map((data) => {
                                             return (
                                                 <TableRow>

@@ -410,7 +410,7 @@ function Signoffmne() {
                                                                 <TableCell className="numberholder" style={{
                                                                     backgroundColor: (data["actualtotal"] ? (data["actualtotal"] - data["targettotal"] >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
                                                                 }}>{data.actualtotal}
-                                                                    {data["actualtotal"] &&
+                                                                    {String(data["actualtotal"])!='' &&
                                                                         <div className="editSection">
                                                                             <HtmlTooltip
                                                                                 className="Commenttooltip"
@@ -462,7 +462,7 @@ function Signoffmne() {
                                                                                         <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
                                                                                     </div>
                                                                                 } */}
-                                                                                {data[s + "actual"] &&
+                                                                                {String(data[s + "actual"])!=''&&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
