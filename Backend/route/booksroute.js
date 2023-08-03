@@ -28,6 +28,8 @@ router.post("/resposignoff",bookController.resppersonSignoff)
 router.post("/thematicsignoff",bookController.thematicheadSignoff)
 router.post("/m&esignoff",bookController.MNEheadSignoff)
 router.post("/m&esignoffoi",bookController.MNEheadSignoffoi)
+router.post("/cmtsignoff",bookController.CMTheadSignoff)
+router.post("/cmtsignoffoi",bookController.CMTheadSignoffoi)
 
 module.exports = router;
 

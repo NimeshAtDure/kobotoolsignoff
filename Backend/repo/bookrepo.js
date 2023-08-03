@@ -224,9 +224,13 @@ class UserRepository {
 
       "mneheadoi":"SELECT * FROM get_oi_view_m_e_data(:username);",
 
-      "progressovsis":"SELECT * FROM sis_data where form_name='SIS';",
+      "cmtheadsis":"SELECT * FROM get_view_cmt_data();",
 
-      "progressovoi":"SELECT * FROM sis_data where form_name <>'SIS';",
+      "cmtheadoi":"SELECT * FROM get_view_oi_cmt_data();",
+
+      "progressovsis":"SELECT * FROM cmt_data WHERE form_name='SIS' AND cmt_approved='Yes';",
+
+      "progressovoi":"SELECT * FROM cmt_data WHERE form_name <>'SIS' AND cmt_approved='Yes';",
 
       "admin":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2);",
       
@@ -257,7 +261,9 @@ class UserRepository {
 
       "thematichead":"SELECT * FROM update_data_thematicperson(:username,:id,:respcomment);",
 
-      "mnehead":"SELECT * FROM update_data_m_e_head(:username,:id,:respcomment);"
+      "mnehead":"SELECT * FROM update_data_m_e_head(:username,:id,:respcomment);",
+
+      "cmthead":"SELECT * FROM update_data_cmt_head(:id,:respcomment);"
 
     }
 
@@ -308,6 +314,24 @@ class UserRepository {
 
   async MNEheadSignoffoi(username){
     return await sequelize.query("SELECT * FROM update_flag_signoff_oi_m_e_data(:username)",
+      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+
+  async CMTheadSignoff(username){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_cmt_data()",
+      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+
+  async CMTheadSignoffoi(username){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_oi_cmt_data()",
       { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
