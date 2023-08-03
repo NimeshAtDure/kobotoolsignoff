@@ -147,3 +147,23 @@ exports.MNEheadSignoffoi = async (req, res, next) => {
     next(error);
   }
 }
+
+exports.CMTheadSignoff = async (req, res, next) => {
+  try {
+    const response = await userService.CMTheadSignoff(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.CMTheadSignoffoi = async (req, res, next) => {
+  try {
+    const response = await userService.CMTheadSignoffoi(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}

@@ -55,7 +55,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     },
 }));
 
-function Signoffmne() {
+function Signoffcmt() {
     const location = useLocation();
 
     const [user, setuser] = useState(JSON.parse(localStorage.getItem("user")))
@@ -71,7 +71,7 @@ function Signoffmne() {
     const [alerttxt, setalerttxt] = useState('')
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
     const [enablesignoff, setenablesignoff] = useState(true)
-    const [value, setValue] = React.useState('mneheadsis');
+    const [value, setValue] = React.useState('cmtheadsis');
     const [percarr,setpercarr] = React.useState(["% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services","% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months","Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods","Percentage of public health facilities in priority districts providing safe delivery services","Percentage of public health facilities in priority districts doing HIV screening during ANC","Percentage of public health facilities in priority districts providing safe abortion services"])
 
     useEffect(() => {
@@ -81,11 +81,11 @@ function Signoffmne() {
     function getFormData() {
         axios({
             method: 'post',
-            // url:'http://localhost:8080/getdata',
-            url: 'https://service.rbmgateway.org/getdata',
+            url: 'http://localhost:8080/getdata',
+            // url: 'https://service.rbmgateway.org/getdata',
             data: {
                 "username": user.username,
-                "usertype": value=="mneheadnr"?'mneheadsis':value
+                "usertype": value
             }
         })
             .then(
@@ -182,12 +182,12 @@ function Signoffmne() {
                         // console.log(thematicarr, data, themearr)
                     })
                     var signoffstate = response.data.data.filter(function (th) {
-                        return th.thematichead_approved == null
+                        return th["m&ehead"] == null
                     })
                     signoffstate.length == 0 ? setrowdata(data) : setrowdata([])
 
                     setenablesignoff(!response.data.data.filter(function (th) {
-                        return th["m&ehead_approved"] == "Yes"
+                        return th["cmt_approved"] == "Yes"
                     }).length == 0)
 
                 }
@@ -220,8 +220,8 @@ function Signoffmne() {
 
         axios({
             method: 'post',
-            // url:'http://localhost:8080/updatedata',
-            url: 'https://service.rbmgateway.org/updatedata',
+            url: 'http://localhost:8080/updatedata',
+            // url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editdata.actual,
@@ -248,14 +248,14 @@ function Signoffmne() {
 
         axios({
             method: 'post',
-            // url: 'http://localhost:8080/updatedata',
-            url: 'https://service.rbmgateway.org/updatedata',
+            url: 'http://localhost:8080/updatedata',
+            // url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editrespdata.actual,
                 "comment": editrespdata.comments,
                 "respcomment": editrespdata.responsible_person_comment,
-                "type": "mnehead",
+                "type": "cmthead",
                 "id": editrespdata.unique_id,
             }
         })
@@ -274,7 +274,7 @@ function Signoffmne() {
 
     function signoffData() {
         if (!enablesignoff) {
-            var query = value=="mneheadoi"?'https://service.rbmgateway.org/m&esignoffoi':'https://service.rbmgateway.org/m&esignoff'
+            var query = value=="cmtheadoi"?'https://service.rbmgateway.org/cmtsignoffoi':'https://service.rbmgateway.org/cmtsignoff'
             axios({
                 method: 'post',
                 url: query,
@@ -318,12 +318,9 @@ function Signoffmne() {
                         onChange={handleChange}
                         aria-label="label tabs example"
                     >
-                        <Tab
-                            value="mneheadsis"
-                            label="Consolidated Heat Map"
-                        />
-                        <Tab value="mneheadnr" label="Program Cycle Output" />
-                        <Tab value="mneheadoi" label="Office Indicators" />
+
+                        <Tab value="cmtheadsis" label="Program Cycle Output" />
+                        <Tab value="cmtheadoi" label="Office Indicators" />
                     </Tabs>
                 </Box>
                         <Table stickyHeader aria-label="sticky table">
@@ -339,7 +336,7 @@ function Signoffmne() {
                                     <TableCell colSpan={2}>
                                         National
                                     </TableCell>
-                                    {value =="mneheadsis" && states?.map((column, id) => (
+                                    {false && states?.map((column, id) => (
                                         <TableCell
                                             key={column}
                                             align="center"
@@ -365,7 +362,7 @@ function Signoffmne() {
                                     >
                                         Actual
                                     </TableCell>
-                                    {value =="mneheadsis" && states?.map((column, id) => (
+                                    {false && states?.map((column, id) => (
                                         <>
                                             <TableCell
                                                 key={column + "target"}
@@ -438,7 +435,7 @@ function Signoffmne() {
                                                                         </div>
                                                                     }
                                                                 </TableCell>
-                                                                {value =="mneheadsis" && states?.map(s => {
+                                                                {false && states?.map(s => {
                                                                     return (
                                                                         <>
                                                                             <TableCell
@@ -512,7 +509,7 @@ function Signoffmne() {
                                     </>
                                     : <TableRow>
                                         <TableCell colSpan={states.length * 2 + 3} align="center">
-                                            Awaiting Thematic Head Sign Off
+                                            Awaiting M&E Head Sign Off
                                         </TableCell>
                                     </TableRow>}
                             </TableBody>
@@ -615,4 +612,4 @@ function Signoffmne() {
     )
 }
 
-export default Signoffmne;
+export default Signoffcmt;

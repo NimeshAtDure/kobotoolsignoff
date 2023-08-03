@@ -13,6 +13,7 @@ import Signoffresp from './Signoffresp';
 import Signoffthematic from './Signoffthematic';
 import Signoffprogress from './Signoffprogress';
 import Signoffmne from './Signoffmne';
+import Signoffcmt from './Signoffcmt';
 import Formdisp from './Formdisp';
 
 function App() {
@@ -43,6 +44,8 @@ function App() {
             return <Signoffthematic />
           case "mnesignoff": 
             return <Signoffmne />
+          case "cmtsignoff":
+            return <Signoffcmt/>
           case "formsdisp":
             return <Formdisp />
         }
@@ -96,6 +99,7 @@ function App() {
         <Route path='/respsignoff' element={getElement("respsignoff")} />
         <Route path='/thematicsignoff' element={getElement("thematicsignoff")} />
         <Route path='/mnesignoff' element={getElement("mnesignoff")} />
+        <Route path='/cmtsignoff' element={getElement("cmtsignoff")} />
         <Route path='/forms' element={getElement("forms")} />
         <Route path='/formsview/:formid' element={getElement("formsdisp")} />
         <Route path='/passreset' element={getElement("passreset")} />

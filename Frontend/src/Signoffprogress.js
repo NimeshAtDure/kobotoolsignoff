@@ -75,9 +75,7 @@ function Signoffprogress() {
     const [percarr,setpercarr] = React.useState(["% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services","% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months","Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods","Percentage of public health facilities in priority districts providing safe delivery services","Percentage of public health facilities in priority districts doing HIV screening during ANC","Percentage of public health facilities in priority districts providing safe abortion services"])
 
     useEffect(() => {
-        if(value!="mneheadnr"){
             getFormData()
-        }
     }, [user,value])
 
     function getFormData() {
@@ -87,7 +85,7 @@ function Signoffprogress() {
             url: 'https://service.rbmgateway.org/getdata',
             data: {
                 "username":  user.username,
-                "usertype":  value
+                "usertype":  value=="progressovnr"?"progressovsis":value
             }
         })
             .then(
@@ -323,7 +321,7 @@ function Signoffprogress() {
                             value="progressovsis"
                             label="Consolidated Heat Map"
                         />
-                        <Tab value="progressovnr" label="National Report" />
+                        <Tab value="progressovnr" label="Program Cycle Output" />
                         <Tab value="progressovoi" label="Office Indicators" />
                     </Tabs>
                 </Box>
@@ -340,7 +338,7 @@ function Signoffprogress() {
                                     <TableCell colSpan={2}>
                                         National
                                     </TableCell>
-                                    {value !="progressovnr" && states?.map((column, id) => (
+                                    {value =="progressovsis" && states?.map((column, id) => (
                                         <TableCell
                                             key={column}
                                             align="center"
@@ -366,7 +364,7 @@ function Signoffprogress() {
                                     >
                                         Actual
                                     </TableCell>
-                                    {value !="progressovnr" && states?.map((column, id) => (
+                                    {value =="progressovsis" && states?.map((column, id) => (
                                         <>
                                             <TableCell
                                                 key={column + "target"}
@@ -407,8 +405,8 @@ function Signoffprogress() {
                                                                 <TableCell>{data.indic}</TableCell>
                                                                 <TableCell className="numberholder">{!percarr.includes(data.indic) && data.targettotal}</TableCell>
                                                                 <TableCell className="numberholder" style={{
-                                                                                    backgroundColor: (!percarr.includes(data.indic) && String(data["actualtotal"])!='' ? parseInt(data["actualtotal"]) - parseInt(data["targettotal"]) >= 0 ? "#92d051" : "#ffc100" : '')
-                                                                                }}>{!percarr.includes(data.indic) && data.actualtotal}
+                                                                    backgroundColor: (!percarr.includes(data.indic) && String(data["actualtotal"])!='' ? (parseInt(data["actualtotal"]) - parseInt(data["targettotal"]) >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
+                                                                }}>{!percarr.includes(data.indic) && data.actualtotal}
                                                                                 {!percarr.includes(data.indic) && String(data["actualtotal"])!='' &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
@@ -439,7 +437,7 @@ function Signoffprogress() {
                                                                                     </div>
                                                                                 }
                                                                                 </TableCell>
-                                                                {value !="progressovnr" && states?.map(s => {
+                                                                {value =="progressovsis" && states?.map(s => {
                                                                     return (
                                                                         <>
                                                                             <TableCell
@@ -450,7 +448,7 @@ function Signoffprogress() {
                                                                             <TableCell
                                                                                 className="numberholder"
                                                                                 style={{
-                                                                                    backgroundColor: (data[s + "actual"] ? (data[s + "actual"] - data[s + "target"] >= 0 || data[s + "actual"].toLowerCase()==data[s + "target"].toLowerCase())? "#92d051" : "#ffc100" : '')
+                                                                                    backgroundColor: (data[s + "actual"] ? (parseInt(data[s + "actual"]) - parseInt(data[s + "target"]) >= 0 || data[s + "actual"].toLowerCase() == data[s + "target"].toLowerCase()) ? "#92d051" : "#ffc100" : '')
                                                                                 }}>
                                                                                 {data[s + "actual"]}
                                                                                 {/* { !data[s + "respsignedOff"] && data[s + "actual"] &&
@@ -513,7 +511,7 @@ function Signoffprogress() {
                                     </>
                                     : <TableRow>
                                         <TableCell colSpan={states.length * 2 + 3} align="center">
-                                            Awaiting M & E Head Sign Off
+                                            Awaiting CMT Head Sign Off
                                         </TableCell>
                                     </TableRow>}
                             </TableBody>
