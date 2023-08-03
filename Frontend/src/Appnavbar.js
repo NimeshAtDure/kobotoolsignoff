@@ -27,7 +27,7 @@ const drawerWidth = 240;
 
 export default function Appnavbar(props) {
 
-    const [signoff, setsignoff] = React.useState(["/statesignoff","/respsignoff","/thematicsignoff","/mnesignoff"].includes(window.location.pathname)?window.location.pathname:'');
+    const [signoff, setsignoff] = React.useState(["/statesignoff","/respsignoff","/thematicsignoff","/mnesignoff","/cmtsignoff"].includes(window.location.pathname)?window.location.pathname:'');
 
     const handleChange = (event) => {
         setsignoff(event.target.value);
@@ -45,7 +45,7 @@ export default function Appnavbar(props) {
     const [respsignoff, setrespsignoff] = React.useState(false)
     const [thematicsignoff, setthematicsignoff] = React.useState(false)
     const [mnesignoff, setmnesignoff] = React.useState(false)
-
+    const [cmtuser,setcmtusers] = React.useState(["sriramharidass","deepaprasad","andreamwojnar","jaydeepbiswas"])
     const [SVC, setSVC] = React.useState(false)
 
     const dispatch = useDispatch()
@@ -229,6 +229,7 @@ export default function Appnavbar(props) {
                         {respsignoff && <MenuItem value={"/respsignoff"} className='menu-item'><span variant="outlined" className={window.location.pathname == "/respsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/respsignoff" ><span>Responsible Person </span></Link></span></MenuItem>}
                         {thematicsignoff && <MenuItem value={"/thematicsignoff"} className='menu-item'><span variant="outlined" className={window.location.pathname == "/thematicsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/thematicsignoff" ><span>Thematic Head </span></Link></span></MenuItem>}
                         {mnesignoff && <MenuItem value={"/mnesignoff"} className='menu-item'><span variant="outlined" className={window.location.pathname == "/mnesignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/mnesignoff" ><span>M&E Head </span></Link></span></MenuItem>}
+                        {cmtuser.includes(user?.username) && <MenuItem value={"/cmtsignoff"} className='menu-item'><span variant="outlined" className={window.location.pathname == "/cmtsignoff" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} ><Link to="/cmtsignoff" ><span>CMT Head </span></Link></span></MenuItem>}
                     </Select>
 
                 </FormControl>
