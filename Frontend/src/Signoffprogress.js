@@ -360,15 +360,13 @@ function Signoffprogress() {
                     </Select>
 
                 </FormControl>}
-                {/* <DownloadTableExcel
+                <DownloadTableExcel
                     filename="users table"
                     sheet="users"
                     currentTableRef={tableRef.current}
                 >
-
-                   <button> Export excel </button>
-
-                </DownloadTableExcel> */}
+                <Button variant="outlined" className="exprtbtn" size="large">Export</Button>
+                </DownloadTableExcel>
                     </Tabs>
                 </Box>
                         <Table stickyHeader aria-label="sticky table" ref={tableRef}>
@@ -454,7 +452,7 @@ function Signoffprogress() {
                                                                 <TableCell className="numberholder" style={{
                                                                     backgroundColor: ( String(data["actualtotal"])!='' ? (parseInt(data["actualtotal"]) - (Object.keys(percarr).includes(data.indic) ? percarr[data.indic] :parseInt(data["targettotal"])) >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
                                                                 }}>{Object.keys(percarr).includes(data.indic) ? Math.round(data.actualtotal/3) :  data.actualtotal}
-                                                                    {  String(data["actualtotal"])!='' &&
+                                                                    {/* {  String(data["actualtotal"])!='' &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
@@ -480,9 +478,9 @@ function Signoffprogress() {
                                                                                                 <CommentIcon />
                                                                                             </Button>
                                                                                         </HtmlTooltip>
-                                                                                        {/* {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>} */}
+                                                                                        {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
                                                                                     </div>
-                                                                                }
+                                                                                } */}
                                                                                 </TableCell>
                                                                 {value =="progressovsis" && states?.map(s => {
                                                                     return (
@@ -506,7 +504,7 @@ function Signoffprogress() {
                                                                                         <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
                                                                                     </div>
                                                                                 } */}
-                                                                                { String(data[s + "actual"])!='undefined' &&
+                                                                                {/* { String(data[s + "actual"])!='undefined' &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
@@ -532,9 +530,9 @@ function Signoffprogress() {
                                                                                                 <CommentIcon />
                                                                                             </Button>
                                                                                         </HtmlTooltip>
-                                                                                        {/* <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button> */}
+                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
                                                                                     </div>
-                                                                                }
+                                                                                } */}
                                                                             </TableCell>
 
                                                                             {/* <TableCell>{data[s+"comment"]}</TableCell> */}
@@ -546,20 +544,20 @@ function Signoffprogress() {
                                                             </>
                                                     }
                                                 </TableRow>
-                                                <TableRow>
+                                                <TableRow className="progress-row"> 
                                                     {
                                                         !data.haschild && <>
-                                                        <TableCell colSpan={2} >
-                                                            <p className="cmmtholder">
+                                                        <TableCell colSpan={2} className="">
+                                                            <div className="progress-table">
                                                             {data["respcomment"]}
-                                                            </p>
+                                                            </div>
                                                         </TableCell>
                                                         {value =="progressovsis" && states?.map(s => {
-                                                                    return (<TableCell colSpan={2} > 
-                                                                    <p className="cmmtholder">
-                                                                        {data[s+"comment"]}
-                                                                    </p>
-                                                        </TableCell>)})}
+                                                                    return (<TableCell colSpan={2} className=""> 
+                                                                    <div className="progress-table">
+                                                                    {data[s+"comment"]}
+                                                                        </div>
+                                                                        </TableCell>)})}
                                                         </>
                                                     }
                                                 </TableRow>

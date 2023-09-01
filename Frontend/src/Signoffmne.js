@@ -434,7 +434,7 @@ function Signoffmne() {
                                                                                     <CommentIcon />
                                                                                 </Button>
                                                                             </HtmlTooltip>
-                                                                            {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
+                                                                            { <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
                                                                         </div>
                                                                     }
                                                                 </TableCell>

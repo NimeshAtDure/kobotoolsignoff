@@ -119,13 +119,13 @@ export default function Loginpg(props) {
                     navigate('/dashboard')                
                 }else{
                     setotperrtxt("Please enter valid OTP")
-                    setotpvis(false) 
+                    // setotpvis(false) 
                 }
                 
               }
           ).catch((err) => {console.log(err)
-            setotperrtxt("Please enter valid OTP")
-            setotpvis(false)
+            setotperrtxt(err.response.data.message)
+            // setotpvis(false)
                             });
 
             

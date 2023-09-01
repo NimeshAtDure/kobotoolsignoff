@@ -438,9 +438,9 @@ function Signoffcmt() {
                                                                             </HtmlTooltip>
                                                                             {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
                                                                         </div>
-                                                                    } */}
+                                                                    overflow-ellipsis} */}
                                                                 </TableCell>
-                                                                <TableCell><div class="overflow-ellipsis">{data["respcomment"]}</div>
+                                                                <TableCell><div class="">{data["respcomment"]}</div>
                                                                 {  String(data["actualtotal"])!='' &&
                                                                         <div className="editSection">
                                                                             {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}

@@ -64,59 +64,59 @@ function Signoff() {
                 }
             ).catch((err) => { console.log(err) });
 
-        // axios({
-        //     method: "get",
-        //     url: "https://kf.rbmgateway.org/token/?format=json",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Authorization": 'Basic ' + btoa("super_admin" + ':' + "HbSaHSlF6lhu41zvNt6J")
-        //     }
-        // })
-        //     .then((response) => {
-        //         settoken(response.data.token)
-        //         var admintoken = response.data.token
-        //         let config = {
-        //             method: 'get',
-        //             maxBodyLength: Infinity,
-        //             url: 'https://kf.rbmgateway.org/api/v2/assets.json',
-        //             headers: {
-        //                 'Authorization': 'Token ' + admintoken
-        //             }
-        //         };
+        axios({
+            method: "get",
+            url: "https://kf.rbmgateway.org/token/?format=json",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": 'Basic ' + btoa("super_admin" + ':' + "HbSaHSlF6lhu41zvNt6J")
+            }
+        })
+            .then((response) => {
+                settoken(response.data.token)
+                var admintoken = response.data.token
+                let config = {
+                    method: 'get',
+                    maxBodyLength: Infinity,
+                    url: 'https://kf.rbmgateway.org/api/v2/assets.json',
+                    headers: {
+                        'Authorization': 'Token ' + admintoken
+                    }
+                };
 
-        //         axios.request(config)
-        //             .then((response) => {
-        //                 setloading(true)
-        //                 let thm = []
-        //                 let arr = []
+                axios.request(config)
+                    .then((response) => {
+                        setloading(true)
+                        let thm = []
+                        let arr = []
 
-        //                 response.data.results.forEach(element => {
-        //                     var surname = element.name
-        //                     if (surname.includes("SIS") && surname.split("-").length == 3) {
-        //                         thm.push(surname.split("-")[1])
-        //                     } 
-        //                 });
-        //                 var filterthm = thm.filter((value, index, array) => array.indexOf(value) === index)
-        //                 console.log("themes",thm,filterthm)
-        //                 setthematic(filterthm)
-        //                 setactivetheme(filterthm[0])
-        //                 filterthm?.map((t) => {
-        //                     arr.push(response.data.results.filter((r) =>
-        //                         r.name.split("-")[1] == t))
-        //                 })
-        //                 // console.log(arr);
-        //                 setthematicdata(arr)
-        //                 setTimeout(() => {
-        //                     Configtabledata(arr[0],admintoken)
-        //                 }, 5000);
-        //             })
-        //             .catch((error) => {
-        //                 console.log(error);
-        //             });
-        //     })
-        //     .catch((error) => {
-        //         console.log("getRequest err>>", error);
-        //     });
+                        response.data.results.forEach(element => {
+                            var surname = element.name
+                            if (surname.includes("SIS") && surname.split("-").length == 3) {
+                                thm.push(surname.split("-")[1])
+                            } 
+                        });
+                        var filterthm = thm.filter((value, index, array) => array.indexOf(value) === index)
+                        console.log("themes",thm,filterthm)
+                        setthematic(filterthm)
+                        setactivetheme(filterthm[0])
+                        filterthm?.map((t) => {
+                            arr.push(response.data.results.filter((r) =>
+                                r.name.split("-")[1] == t))
+                        })
+                        // console.log(arr);
+                        setthematicdata(arr)
+                        setTimeout(() => {
+                            Configtabledata(arr[0],admintoken)
+                        }, 5000);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            })
+            .catch((error) => {
+                console.log("getRequest err>>", error);
+            });
 
     }, [user])
 
