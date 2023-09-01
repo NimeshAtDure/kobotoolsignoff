@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import Appnavbar from "./Appnavbar";
 import Footer from "./Footer";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -23,12 +23,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CommentIcon from '@mui/icons-material/Comment';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Link, useLocation } from "react-router-dom";
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -57,19 +62,23 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 
 function Signoffprogress() {
     const location = useLocation();
+    const tableRef = useRef(null);
 
     const [user, setuser] = useState(JSON.parse(localStorage.getItem("user")))
     const [tabledata, settabledata] = useState([])
     const [thematic, setthematic] = useState([])
     const [states, setstates] = useState([])
+    const [ufstates, setufstates] = useState([])
     const [columns, setcolumns] = useState([])
     const [rowdata, setrowdata] = useState([])
+    const [ufrowdata, setufrowdata] = useState([])
     const [editdata, seteditdata] = useState({})
     const [editrespdata, seteditrespdata] = useState({})
     const [open, setOpen] = useState(false)
     const [open2, setOpen2] = useState(false)
     const [alerttxt, setalerttxt] = useState('')
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
+    const [filterstate,setfilterstate] = useState('Cumulative')
     const [enablesignoff, setenablesignoff] = useState(true)
     const [value, setValue] = React.useState('progressovsis');
     const [percarr,setpercarr] = React.useState({"% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services":25,"% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months":65,"Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods":60,"Percentage of public health facilities in priority districts providing safe delivery services":60,"Percentage of public health facilities in priority districts doing HIV screening during ANC":55,"Percentage of public health facilities in priority districts providing safe abortion services":25})
@@ -116,6 +125,7 @@ function Signoffprogress() {
                     }
                     setthematic(filtthemes.sort())
                     setstates(filtstates)
+                    setufstates(filtstates)
                     thematicarr = filtthemes.map((theme) => {
                         let newArray = response.data.data.filter(function (el) {
                             if(el.thematic){
@@ -140,7 +150,7 @@ function Signoffprogress() {
                                 filtrrf.push(t.rrfname)
                             }
                         })
-                        filtrrf?.forEach(f => {
+                        filtrrf?.sort().forEach(f => {
                             var rowobj2 = {}
                             rowobj2["indic"] = f
                             rowobj2["haschild"] = true
@@ -299,6 +309,15 @@ function Signoffprogress() {
         setValue(newValue);
     };
 
+    const handleStateChange = (event,value) =>{
+        setfilterstate(event.target.value)
+        if(ufstates.includes(event.target.value)){
+            setstates([event.target.value])
+        }else{
+            setstates(ufstates)
+        }
+    }
+
     const handleClose = () => {
         setOpen(false);
         setOpen2(false)
@@ -323,9 +342,34 @@ function Signoffprogress() {
                         />
                         <Tab value="progressovnr" label="Program Cycle Output" />
                         <Tab value="progressovoi" label="Office Indicators" />
+                    {value =="progressovsis" &&<FormControl sx={{ m: 1, minWidth: 120 }} size="small" >
+                    <InputLabel id="demo-simple-select-helper-label">State Filter </InputLabel>
+                    <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        value={filterstate}
+                        
+                        label="sign off"
+                        onChange={handleStateChange}
+                    >
+
+                        <MenuItem value={"Cumulative"} >Cumulative</MenuItem>
+                        { ufstates?.map((column, id) => (
+                                        <MenuItem value={column} >{column}</MenuItem>
+                                    ))}
+                    </Select>
+
+                </FormControl>}
+                <DownloadTableExcel
+                    filename="users table"
+                    sheet="users"
+                    currentTableRef={tableRef.current}
+                >
+                <Button variant="outlined" className="exprtbtn" size="large">Export</Button>
+                </DownloadTableExcel>
                     </Tabs>
                 </Box>
-                        <Table stickyHeader aria-label="sticky table">
+                        <Table stickyHeader aria-label="sticky table" ref={tableRef}>
                             <TableHead>
 
 
@@ -393,6 +437,7 @@ function Signoffprogress() {
                                     <>
                                         {rowdata.map((data) => {
                                             return (
+                                                <>
                                                 <TableRow>
                                                     {
                                                         data.haschild ?
@@ -402,12 +447,12 @@ function Signoffprogress() {
                                                             }}
                                                                 colSpan={states.length * 2 + 3}>{data.indic}</TableCell> :
                                                             <>
-                                                                <TableCell>{data.indic}</TableCell>
+                                                                <TableCell rowSpan={2}>{data.indic}</TableCell>
                                                                 <TableCell className="numberholder">{Object.keys(percarr).includes(data.indic) ? percarr[data.indic] : data.targettotal}</TableCell>
                                                                 <TableCell className="numberholder" style={{
                                                                     backgroundColor: ( String(data["actualtotal"])!='' ? (parseInt(data["actualtotal"]) - (Object.keys(percarr).includes(data.indic) ? percarr[data.indic] :parseInt(data["targettotal"])) >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
                                                                 }}>{Object.keys(percarr).includes(data.indic) ? Math.round(data.actualtotal/3) :  data.actualtotal}
-                                                                    {  String(data["actualtotal"])!='' &&
+                                                                    {/* {  String(data["actualtotal"])!='' &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
@@ -433,9 +478,9 @@ function Signoffprogress() {
                                                                                                 <CommentIcon />
                                                                                             </Button>
                                                                                         </HtmlTooltip>
-                                                                                        {/* {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>} */}
+                                                                                        {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
                                                                                     </div>
-                                                                                }
+                                                                                } */}
                                                                                 </TableCell>
                                                                 {value =="progressovsis" && states?.map(s => {
                                                                     return (
@@ -459,7 +504,7 @@ function Signoffprogress() {
                                                                                         <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
                                                                                     </div>
                                                                                 } */}
-                                                                                { String(data[s + "actual"])!='undefined' &&
+                                                                                {/* { String(data[s + "actual"])!='undefined' &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
@@ -485,9 +530,9 @@ function Signoffprogress() {
                                                                                                 <CommentIcon />
                                                                                             </Button>
                                                                                         </HtmlTooltip>
-                                                                                        {/* <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button> */}
+                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
                                                                                     </div>
-                                                                                }
+                                                                                } */}
                                                                             </TableCell>
 
                                                                             {/* <TableCell>{data[s+"comment"]}</TableCell> */}
@@ -499,6 +544,24 @@ function Signoffprogress() {
                                                             </>
                                                     }
                                                 </TableRow>
+                                                <TableRow className="progress-row"> 
+                                                    {
+                                                        !data.haschild && <>
+                                                        <TableCell colSpan={2} className="">
+                                                            <div className="progress-table">
+                                                            {data["respcomment"]}
+                                                            </div>
+                                                        </TableCell>
+                                                        {value =="progressovsis" && states?.map(s => {
+                                                                    return (<TableCell colSpan={2} className=""> 
+                                                                    <div className="progress-table">
+                                                                    {data[s+"comment"]}
+                                                                        </div>
+                                                                        </TableCell>)})}
+                                                        </>
+                                                    }
+                                                </TableRow>
+                                                </>
                                             )
                                         })}
                                         <TableRow>

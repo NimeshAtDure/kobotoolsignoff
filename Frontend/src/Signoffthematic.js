@@ -70,7 +70,7 @@ function Signoffthematic() {
     const [alerttxt, setalerttxt] = useState('')
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
     const [enablesignoff, setenablesignoff] = useState(true)
-
+    const [percarr,setpercarr] = React.useState({"% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services":25,"% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months":65,"Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods":60,"Percentage of public health facilities in priority districts providing safe delivery services":60,"Percentage of public health facilities in priority districts doing HIV screening during ANC":55,"Percentage of public health facilities in priority districts providing safe abortion services":25})
 
     useEffect(() => {
         getFormData()
@@ -156,8 +156,8 @@ function Signoffthematic() {
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
                                     data[objIndex]["respcomment"] = i.responsible_person_comment?.length && i.responsible_person_comment?.length > 0 ? i.responsible_person_comment : data[objIndex]["respcomment"]
-                                    data[objIndex]["actualtotal"] = i.actual && isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"]
-                                    data[objIndex]["targettotal"] = i.target && isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"]
+                                    data[objIndex]["actualtotal"] = i.actual ? isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"] : ''
+                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : ''
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
                                 } else {
                                     var rowobj3 = {}
@@ -169,8 +169,8 @@ function Signoffthematic() {
                                     rowobj3[i.state + "target"] = i.target
                                     rowobj3[i.state + "comment"] = i.comments
                                     rowobj3["respcomment"] = i.responsible_person_comment
-                                    rowobj3["actualtotal"] = i.actual && isNumeric(i.actual) ? parseInt(i.actual) : 0
-                                    rowobj3["targettotal"] = i.target && isNumeric(i.target) ? parseInt(i.target) : 0
+                                    rowobj3["actualtotal"] = i.actual ? isNumeric(i.actual) ? parseInt(i.actual) : i.actual : ''
+                                    rowobj3["targettotal"] = i.target ? isNumeric(i.target) ? parseInt(i.target) : i.target : ''
                                     rowobj3[i.state + "respsignedOff"] = i.responsible_person_approved
                                     data.push(rowobj3)
                                 }
@@ -383,12 +383,11 @@ function Signoffthematic() {
                                                                 colSpan={states.length * 2 + 3}>{data.indic}</TableCell> :
                                                             <>
                                                                 <TableCell>{data.indic}</TableCell>
-                                                                <TableCell className="numberholder">{data.targettotal}</TableCell>
+                                                                <TableCell className="numberholder">{Object.keys(percarr).includes(data.indic) ? percarr[data.indic] : data.targettotal}</TableCell>
                                                                 <TableCell className="numberholder" style={{
-                                                                    backgroundColor: (String(data["actualtotal"])!='' ? parseInt(data["actualtotal"]) - parseInt(data["targettotal"]) >= 0 ? "#92d051" : "#ffc100" : '')
-                                                                }}>
-                                                                    {data.actualtotal}
-                                                                    {String(data["actualtotal"])!='' &&
+                                                                    backgroundColor: ( String(data["actualtotal"])!='' ? (parseInt(data["actualtotal"]) - (Object.keys(percarr).includes(data.indic) ? percarr[data.indic] :parseInt(data["targettotal"])) >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
+                                                                }}>{Object.keys(percarr).includes(data.indic) ? Math.round(data.actualtotal/3) :  data.actualtotal}
+                                                                    {  String(data["actualtotal"])!='' &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
@@ -429,7 +428,7 @@ function Signoffthematic() {
                                                                             <TableCell
                                                                                 className="numberholder"
                                                                                 style={{
-                                                                                    backgroundColor: (data[s + "actual"] ? (parseInt(data[s + "actual"]) - parseInt(data[s + "target"]) >= 0 || data[s + "actual"].toLowerCase()==data[s + "target"].toLowerCase())? "#92d051" : "#ffc100" : '')
+                                                                                    backgroundColor: (data[s + "actual"] ? (parseInt(data[s + "actual"]) - parseInt(data[s + "target"]) >= 0 || data[s + "actual"].toLowerCase() == data[s + "target"].toLowerCase()) ? "#92d051" : "#ffc100" : '')
                                                                                 }}>
                                                                                 {data[s + "actual"]}
                                                                                 {/* { !data[s + "respsignedOff"] && data[s + "actual"] &&

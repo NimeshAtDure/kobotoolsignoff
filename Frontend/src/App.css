@@ -906,11 +906,11 @@ input:-webkit-autofill:active {
 
 #menu- .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper,
 #menu- ul{
-  background-color: #333847 !important
+  background-color: #ffffff !important
 }
 
 #menu- a{
-  color: #fff !important;
+  color: #000000 !important;
 }
 
 .menubutton{
@@ -941,4 +941,24 @@ input:-webkit-autofill:active {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.progress-table {
+  height: 40px;
+}
+
+.progress-row{
+  height: fit-content;
+    overflow: scroll;
+}
+
+.progress-row td{
+  overflow: auto;
+    height: 170px;
+}
+
+.exprtbtn{
+  border: 1px solid #7a7a7a80 !important;
+  color: rgba(0, 0, 0, 0.87) !important;
+  margin-top: 6px !important;
 }
