@@ -307,6 +307,7 @@ function Signoffprogress() {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        setstates(ufstates)
     };
 
     const handleStateChange = (event,value) =>{
@@ -379,9 +380,9 @@ function Signoffprogress() {
                                     >
                                         Thematic area and Indicators
                                     </TableCell>
-                                    <TableCell colSpan={2}>
+                                    {(value=="progressovoi" || states.length!=1)  && <TableCell colSpan={2}>
                                         National
-                                    </TableCell>
+                                    </TableCell>}
                                     {value =="progressovsis" && states?.map((column, id) => (
                                         <TableCell
                                             key={column}
@@ -398,16 +399,16 @@ function Signoffprogress() {
                                         colSpan={1}
                                     >
                                     </TableCell>
-                                    <TableCell
+                                    {(value=="progressovoi" || states.length!=1)  &&<TableCell
                                         key={"targettotal"}
                                     >
                                         Target
-                                    </TableCell>
-                                    <TableCell
+                                    </TableCell>}
+                                    {(value=="progressovoi" || states.length!=1)  &&<TableCell
                                         key={"actualtotal"}
                                     >
                                         Actual
-                                    </TableCell>
+                                    </TableCell>}
                                     {value =="progressovsis" && states?.map((column, id) => (
                                         <>
                                             <TableCell
@@ -448,8 +449,8 @@ function Signoffprogress() {
                                                                 colSpan={states.length * 2 + 3}>{data.indic}</TableCell> :
                                                             <>
                                                                 <TableCell rowSpan={2}>{data.indic}</TableCell>
-                                                                <TableCell className="numberholder">{Object.keys(percarr).includes(data.indic) ? percarr[data.indic] : data.targettotal}</TableCell>
-                                                                <TableCell className="numberholder" style={{
+                                                                {(value=="progressovoi" || states.length!=1)   &&<TableCell className="numberholder">{Object.keys(percarr).includes(data.indic) ? percarr[data.indic] : data.targettotal}</TableCell>}
+                                                                {(value=="progressovoi" || states.length!=1)  &&<TableCell className="numberholder" style={{
                                                                     backgroundColor: ( String(data["actualtotal"])!='' ? (parseInt(data["actualtotal"]) - (Object.keys(percarr).includes(data.indic) ? percarr[data.indic] :parseInt(data["targettotal"])) >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
                                                                 }}>{Object.keys(percarr).includes(data.indic) ? Math.round(data.actualtotal/3) :  data.actualtotal}
                                                                     {/* {  String(data["actualtotal"])!='' &&
@@ -481,7 +482,7 @@ function Signoffprogress() {
                                                                                         {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
                                                                                     </div>
                                                                                 } */}
-                                                                                </TableCell>
+                                                                                </TableCell>}
                                                                 {value =="progressovsis" && states?.map(s => {
                                                                     return (
                                                                         <>
@@ -547,11 +548,11 @@ function Signoffprogress() {
                                                 <TableRow className="progress-row"> 
                                                     {
                                                         !data.haschild && <>
-                                                        <TableCell colSpan={2} className="">
+                                                        {(value=="progressovoi" || states.length!=1)  &&<TableCell colSpan={2} className="">
                                                             <div className="progress-table">
                                                             {data["respcomment"]}
                                                             </div>
-                                                        </TableCell>
+                                                        </TableCell>}
                                                         {value =="progressovsis" && states?.map(s => {
                                                                     return (<TableCell colSpan={2} className=""> 
                                                                     <div className="progress-table">

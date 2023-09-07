@@ -955,6 +955,7 @@ input:-webkit-autofill:active {
 .progress-row td{
   overflow: auto;
     height: 170px;
+    max-width: 50px !important;
 }
 
 .exprtbtn{
