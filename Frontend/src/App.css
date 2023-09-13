@@ -963,3 +963,24 @@ input:-webkit-autofill:active {
   color: rgba(0, 0, 0, 0.87) !important;
   margin-top: 6px !important;
 }
+
+.progress-row td::-webkit-scrollbar {
+  width: 7px !important;
+  height: 10px;
+}
+
+.progress-row td::-webkit-scrollbar-thumb { 
+  background: #ddd !important;  
+  border-radius: 5px;
+  border: 2px solid transparent;
+}
+
+.techrespage{
+    height: calc(100vh - 24px);
+    min-height: calc(100vh - 24px);
+    overflow: auto;
+}
+
+.contentgrid{
+  margin-top: 130px;
+}
