@@ -494,7 +494,7 @@ function TechResource() {
                             height={"200px"}
                           />
                         </a>
-                        <p>CPAP document - 2 June</p>
+                        <p>CPAP document - 2 June docx</p>
                       </Grid>
                     </Grid>
                   </CardContent>
