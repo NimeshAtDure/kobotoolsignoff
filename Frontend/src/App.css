@@ -456,6 +456,13 @@ input:-webkit-autofill:active {
   align-items: center;
   justify-content: center;
   padding-bottom: 10px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100% !important;
+  margin: 0% !important;
+  color: white;
+  text-align: center;
 }
 
 .footerlogo {
@@ -963,3 +970,98 @@ input:-webkit-autofill:active {
   color: rgba(0, 0, 0, 0.87) !important;
   margin-top: 6px !important;
 }
+
+.progress-row td::-webkit-scrollbar {
+  width: 7px !important;
+  height: 10px;
+}
+
+.progress-row td::-webkit-scrollbar-thumb { 
+  background: #ddd !important;  
+  border-radius: 5px;
+  border: 2px solid transparent;
+}
+
+.techrespage{
+    height: calc(100vh - 24px);
+    min-height: calc(100vh - 24px);
+    overflow: auto;
+}
+
+.contentgrid{
+  margin-top: 130px;
+}
+
+.contentsection{
+  margin-top: 50px;
+  
+}
+
+.contentsection h3{
+background-color: #F0F0F0;
+padding: 10px;
+font-weight: bold;
+}
+
+.contentsection p{
+  font-weight: 600;
+  text-align: center;
+  -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    width: 200px;
+    /* height: 51px; */
+    /* display: block; */
+    word-wrap: break-word;
+    margin: 5px auto 0px;
+}
+
+.contentsection.mb-20px{
+  margin-bottom: 20px;
+}
+
+.contentsection.mb-50px{
+  margin-bottom: 50px;
+}
+
+.mb-50px{
+  margin-bottom: 50px;
+}
+
+.mt-30px{
+  margin-top: 30px !important;
+}
+
+.techrespage .contentsection img{
+  border: 5px solid;
+}
+
+.card-sis{
+  /* box-shadow: 0 4px 24px #22292f1a; */
+    /* margin-left: 155px;
+    margin-right: 50px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.card-sis .card-subsection,
+.contentsection .w-75{
+  width: 75%;
+}
+
+.card-head {
+  background-color: #F0F0F0;
+padding: 10px;
+
+
+}
+
+.card-head .MuiCardHeader-title{
+  font-size: 17px;
+  font-weight: 700;
+}
+

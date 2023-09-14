@@ -15,6 +15,7 @@ import Signoffprogress from './Signoffprogress';
 import Signoffmne from './Signoffmne';
 import Signoffcmt from './Signoffcmt';
 import Formdisp from './Formdisp';
+import TechResource from './TechResource';
 
 function App() {
 
@@ -48,6 +49,8 @@ function App() {
             return <Signoffcmt/>
           case "formsdisp":
             return <Formdisp />
+          case "techresource" :
+            return <TechResource />
         }
       } else {
         return <Loginpg />
@@ -103,10 +106,8 @@ function App() {
         <Route path='/forms' element={getElement("forms")} />
         <Route path='/formsview/:formid' element={getElement("formsdisp")} />
         <Route path='/passreset' element={getElement("passreset")} />
-        <Route
-          path='/progressoverview'
-          element={getElement("progressoverview")}
-        />
+        <Route path='/progressoverview' element={getElement("progressoverview")} />
+        <Route path='/techresource' element={getElement("techresource")} />
         <Route path='*' element={<Navigate to="/login" />} />
       </Routes>
     </div>
