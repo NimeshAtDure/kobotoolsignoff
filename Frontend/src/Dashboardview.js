@@ -21,7 +21,7 @@ function Dashboardview() {
 
     useEffect(() => {
         authToken && embedDashboard({
-        id: "631bd270-0ed5-4c44-9d5b-5d243944b46f",  // given by the Superset embedding UI
+        id: "29dd17cf-0317-42bc-a242-d78d7150d7a1",  // given by the Superset embedding UI
         supersetDomain: "https://data.rbmgateway.org",
         mountPoint: document.getElementById("superset-container"), // html element in which iframe render
         fetchGuestToken: () => authToken,
@@ -81,7 +81,7 @@ function Dashboardview() {
             "resources": [
               {
                 "type": "dashboard",
-                "id": "23"
+                "id": "38"
               }
             ],
             "rls": []
