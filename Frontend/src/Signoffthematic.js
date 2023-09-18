@@ -465,7 +465,7 @@ function Signoffthematic() {
                                                                                                 <CommentIcon />
                                                                                             </Button>
                                                                                         </HtmlTooltip>
-                                                                                        {/* <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button> */}
+                                                                                        {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>}
                                                                                     </div>
                                                                                 }
                                                                             </TableCell>
@@ -526,6 +526,7 @@ function Signoffthematic() {
                         id="commentdata"
                         label="Comment"
                         type="text"
+                        disabled
                         fullWidth
                         multiline
                         value={editdata.comments}
