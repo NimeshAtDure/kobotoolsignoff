@@ -30,8 +30,7 @@ function TechResource() {
                             href="https://sites.google.com/unfpa.org/india-mymne/home"
                             target="_blank"
                         >
-                            Gateway of monitoring and evaluation of UNFPA interventions of its
-                            Ninth Country programme (2018-22) in India
+                            MyMne – Gateway to monitoring and evaluation of UNFPA interventions to the Ninth Country programme (2018-22)
                         </a>
                     </Grid>
                 </Grid>
@@ -44,7 +43,7 @@ function TechResource() {
                     className="contentsection mt-0"
                 >
                     <Grid item xs={12}>
-                        <h3>Country Prgramme 10</h3>
+                        <h3>Country Programme 10</h3>
                     </Grid>
                 </Grid>
 
