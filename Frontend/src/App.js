@@ -16,7 +16,7 @@ import Signoffmne from './Signoffmne';
 import Signoffcmt from './Signoffcmt';
 import Formdisp from './Formdisp';
 import TechResource from './TechResource';
-
+import HelpSection from './HelpSection';
 function App() {
 
   let token = useSelector((state) => state.user.token)
@@ -51,6 +51,8 @@ function App() {
             return <Formdisp />
           case "techresource" :
             return <TechResource />
+          case "helpsection" :
+            return <HelpSection />
         }
       } else {
         return <Loginpg />
@@ -108,6 +110,7 @@ function App() {
         <Route path='/passreset' element={getElement("passreset")} />
         <Route path='/progressoverview' element={getElement("progressoverview")} />
         <Route path='/techresource' element={getElement("techresource")} />
+        <Route path='/helpsection' element={getElement("helpsection")} />
         <Route path='*' element={<Navigate to="/login" />} />
       </Routes>
     </div>

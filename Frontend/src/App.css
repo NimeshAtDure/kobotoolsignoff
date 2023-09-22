@@ -663,6 +663,10 @@ input:-webkit-autofill:active {
   padding: 0px !important;
 }
 
+.secondarynavbar button{
+  padding: 5px 8px !important;
+}
+
 .resetpassmaindiv{
   align-items: center;
     justify-content: center;

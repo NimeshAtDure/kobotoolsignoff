@@ -29,7 +29,7 @@ const imgurl={
     "countryprog_toc2":require('../Assets/countryprog_toc2.png'),
     "countryprog_toc3":require('../Assets/countryprog_toc3.png'),
     "countryprog_toc4":require('../Assets/countryprog_toc4.png'),
-
+    "help_section":require('../Assets/help_section.png')
 }
 
 export default imgurl
