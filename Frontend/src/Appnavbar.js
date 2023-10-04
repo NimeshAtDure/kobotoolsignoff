@@ -188,7 +188,7 @@ export default function Appnavbar(props) {
             {props.navItems.forms && <Button variant="outlined" className={window.location.pathname == "/forms" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={() => navigate("/forms")}><span>SIS Reporting</span></Button>}
             {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/progressoverview" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/progressoverview" ><span>Progress Report</span></Link></Button>}
             {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/techresource" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/techresource" ><span>Technical Resources</span></Link></Button>}
-            {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/helpsection" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/helpsection" ><span>Help Section</span></Link></Button>}
+            {/* {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/helpsection" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/helpsection" ><span>Help Section</span></Link></Button>} */}
             {SVC && formlink.length > 0 && <Button variant="outlined" className='viewbtn mt-0 dbbutton'><Link to={"/formsview/" + formlink} target='_blank'><span>Supervision Checklist</span></Link></Button>}
             {/* {statesignoff && <Button variant="outlined" className={window.location.pathname.includes("sign") ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={openSgnoffmenu}><span>Sign off</span></Button>}
             <Menu
@@ -284,6 +284,8 @@ export default function Appnavbar(props) {
                     {/* {btnvisible && <MenuItem className='profmenubtn' onClick={()=>window.open("https://forms.rbmgateway.org/","_blank")}>Admin Panel</MenuItem>} */}
                     {/* <MenuItem className='profmenubtn' onClick={() => navigate("/signoff")}>Data Sign Off</MenuItem> */}
                     {/* <MenuItem className='profmenubtn' onClick={() => navigate("/passreset")}>Reset password</MenuItem> */}
+                    
+                    <Link to="/helpsection" ><MenuItem className='profmenubtn' >Help</MenuItem></Link>
                     <MenuItem className='profmenubtn' onClick={Logout}>Logout</MenuItem>
                 </Menu>
             </>
