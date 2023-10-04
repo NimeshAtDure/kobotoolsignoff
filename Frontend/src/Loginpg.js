@@ -31,7 +31,7 @@ export default function Loginpg(props) {
         if (name.length > 0 && pass.length > 0) {
             axios({
                 method: "get",
-                url: "https://kf.rbmgateway.org/token/?format=json",
+                url: "https://kf.uat.rbmgateway.org/token/?format=json",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": 'Basic ' + btoa(name + ':' + pass)
@@ -44,7 +44,7 @@ export default function Loginpg(props) {
                     let config = {
                         method: 'get',
                         maxBodyLength: Infinity,
-                        url: 'https://kf.rbmgateway.org/me/',
+                        url: 'https://kf.uat.rbmgateway.org/me/',
                         headers: {
                             'Authorization': 'Token ' + response.data.token
                         }
@@ -75,7 +75,7 @@ export default function Loginpg(props) {
             axios({
                 method: 'post',
                 // url: 'http://localhost:8080/generateotp',
-                url: 'https://service.rbmgateway.org/generateotp',
+                url: 'https://uat.service.rbmgateway.org/generateotp',
                 headers: {},
                 data: {
                   "email": responsedata.email,
@@ -101,7 +101,7 @@ export default function Loginpg(props) {
         axios({
             method: 'post',
             // url: 'http://localhost:8080/login',
-            url: 'https://service.rbmgateway.org/login',
+            url: 'https://uat.service.rbmgateway.org/login',
             headers: {},
             data: {
               "email": userdata.email,

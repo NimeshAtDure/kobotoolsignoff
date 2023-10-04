@@ -3,10 +3,10 @@ const { sequelize } = require('../models/book')
 const { generateOTP, sendOTP } = require("../utils/otp");
 
 const pool = new Pool({
-  user: 'kobosuperuser',
+  user: 'uatkobosuperuser',
   host: '4.213.65.67',
-  database: 'kobosuperdb',
-  password: 'Rrr1T%^$-@i8t0$',
+  database: 'uatkobosuperdb',
+  password: 'PRiJvMX8TyrT8',
   port: 5433,
 })
 class UserRepository {

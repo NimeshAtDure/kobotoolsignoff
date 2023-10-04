@@ -44,7 +44,7 @@ export default function Formview(props) {
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: 'https://kf.rbmgateway.org/api/v2/assets.json',
+            url: 'https://kf.uat.rbmgateway.org/api/v2/assets.json',
             headers: {
                 'Authorization': 'Token ' + usertoken
             }

@@ -69,7 +69,7 @@ export default function Appnavbar(props) {
                 let config = {
                     method: 'get',
                     maxBodyLength: Infinity,
-                    url: 'https://kf.rbmgateway.org/api/v2/assets.json',
+                    url: 'https://kf.uat.rbmgateway.org/api/v2/assets.json',
                     headers: {
                         'Authorization': 'Token ' + token
                     }
@@ -115,7 +115,7 @@ export default function Appnavbar(props) {
         axios({
             method: 'post',
             // url: 'http://localhost:8080/getdata',
-            url: 'https://service.rbmgateway.org/getdata',
+            url: 'https://uat.service.rbmgateway.org/getdata',
             data: {
                 "username": details?.username,
                 "usertype": "all"
@@ -280,7 +280,7 @@ export default function Appnavbar(props) {
                         </Grid>
                     </Grid>
 
-                    {btnvisible && <MenuItem className='profmenubtn' onClick={() => window.open("https://kf.rbmgateway.org/#/forms", "_blank")}>Admin Panel</MenuItem>}
+                    {btnvisible && <MenuItem className='profmenubtn' onClick={() => window.open("https://kf.uat.rbmgateway.org/#/forms", "_blank")}>Admin Panel</MenuItem>}
                     {/* {btnvisible && <MenuItem className='profmenubtn' onClick={()=>window.open("https://forms.rbmgateway.org/","_blank")}>Admin Panel</MenuItem>} */}
                     {/* <MenuItem className='profmenubtn' onClick={() => navigate("/signoff")}>Data Sign Off</MenuItem> */}
                     {/* <MenuItem className='profmenubtn' onClick={() => navigate("/passreset")}>Reset password</MenuItem> */}

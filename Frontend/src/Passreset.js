@@ -38,7 +38,7 @@ export default function Passreset(props) {
             let config = {
                 method: 'get',
                 maxBodyLength: Infinity,
-                url: 'https://kf.rbmgateway.org/me/?current_password=' + prevpass  + '&new_password=' + newpass ,
+                url: 'https://kf.uat.rbmgateway.org/me/?current_password=' + prevpass  + '&new_password=' + newpass ,
                 headers: {
                     'Authorization': 'Token' + localStorage.getItem("token")
                 }
