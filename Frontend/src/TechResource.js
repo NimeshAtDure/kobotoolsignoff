@@ -1,12 +1,30 @@
 import React from "react";
 import Footer from "./Footer";
 import Appnavbar from "./Appnavbar";
-import { Card, Grid } from "@mui/material";
+import { Button, Card, Grid } from "@mui/material";
 import imgurl from "./Assets/imgurl";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import TextField from '@mui/material/TextField';
+import serialize from "form-serialize";
 
 function TechResource() {
+
+    const [open,setopen] = React.useState(false)
+    const [fname,setfname] = React.useState('')
+    const [dname,setdname] = React.useState('')
+    const [sdname,setsdname] = React.useState('')
+
+    function uploadForm(){
+        var form = document.getElementById('inputform');
+        var obj = serialize(form, { hash: true });
+        console.log(form,obj);
+    }
+
+    const handleClose = () => setopen(false);
+
     return (
         <div className="App ">
             <Appnavbar
@@ -18,6 +36,7 @@ function TechResource() {
                 }}
             />
             <div className="techrespage">
+                
                 <Grid
                     container
                     direction="row"
@@ -32,6 +51,9 @@ function TechResource() {
                         >
                             MyMne – Gateway to monitoring and evaluation of UNFPA interventions to the Ninth Country programme (2018-22)
                         </a>
+                        <Button onClick={()=>setopen(true)}>
+                    Upload Document
+                </Button>
                     </Grid>
                 </Grid>
 
@@ -836,6 +858,62 @@ function TechResource() {
         </Grid> */}
 
             </div>
+
+            <Dialog
+                open={open}
+                onClose={handleClose}
+            >
+                <DialogContent>
+                <form id='inputform' >
+                <TextField
+                        className="editdialogtxt"
+                        autoFocus
+                        margin="dense"
+                        id="fname"
+                        label="File Name"
+                        type="text"
+                        fullWidth
+                        multiline
+                        value={fname}
+                        variant="standard"
+                        onChange={e => setfname(e.target.value )}
+                    />
+               <TextField
+                        className="editdialogtxt"
+                        autoFocus
+                        margin="dense"
+                        id="dname"
+                        label="Module Name"
+                        type="text"
+                        fullWidth
+                        multiline
+                        value={dname}
+                        variant="standard"
+                        onChange={e => setdname( e.target.value )}
+                    />
+                <TextField
+                    className="editdialogtxt"
+                    autoFocus
+                    margin="dense"
+                    id="sdname"
+                    label="SubModule Name"
+                    type="text"
+                    fullWidth
+                    multiline
+                    value={sdname}
+                    variant="standard"
+                    onChange={e => setsdname(e.target.value )}
+                    />
+                <input type="file" id="file" name="file"/>
+                <div>
+                <Button onClick={uploadForm}>
+                    Submit 
+                </Button>
+                </div>
+                </form>
+                </DialogContent>
+            </Dialog>
+
             <Footer />
         </div>
     );

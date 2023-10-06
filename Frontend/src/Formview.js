@@ -71,7 +71,13 @@ export default function Formview(props) {
                 // setofcindc(ofcindc)
                 setloading(true)
                 let linkarr = []
+                let formname= []
                 response.data.results.forEach(f => {
+
+                    // if (formname.indexOf(f.name.split('-')[0]) === -1) {
+                    //     formname.push(f.name.split('-')[0]);
+                    // }
+                    console.log("formname",formname);
                     if(f.name !="Supervision Checklist for Health Facility"){
                         let config2 = {
                             method: 'get',
