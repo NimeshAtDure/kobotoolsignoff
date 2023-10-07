@@ -4,7 +4,7 @@ const { generateOTP, sendOTP } = require("../utils/otp");
 
 const pool = new Pool({
   user: 'uatkobosuperuser',
-  host: '4.213.65.67',
+  host: '20.219.28.160',
   database: 'uatkobosuperdb',
   password: 'PRiJvMX8TyrT8',
   port: 5433,

@@ -7,10 +7,10 @@ const dbconfig = require('../config/databaseconfig');
 //   dialect: 'postgres'
 // });
 
-const sequelize = new Sequelize("uatkobosuperdb", "newuatunfpauser", "c41z%xIxUAT]E)UNFP", {
+const sequelize = new Sequelize("uatkobosuperdb", "uatkobosuperuser", "PRiJvMX8TyrT8", {
   host: "20.219.28.160",
   dialect: "postgres",
-  port:22,
+  port:5433,
   operatorsAliases: false,
   pool: {
       max: 10,
