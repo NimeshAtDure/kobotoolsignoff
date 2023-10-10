@@ -13,7 +13,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Dialog from '@mui/material/Dialog';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MenuItem from '@mui/material/MenuItem';
 import { useNavigate, Link } from "react-router-dom";
 import { Oval } from "react-loader-spinner"
 import axios from "axios";
@@ -31,11 +31,14 @@ export default function Formview(props) {
     const [usertoken, setusertoken] = React.useState(localStorage.getItem("token"))
     const [open, setopen] = React.useState(false)
     const [links, setlinks] = React.useState([])
+    const [filtlinks, setfiltlinks] = React.useState([])
     const [oilinks, setoilinks] = React.useState([])
     const [dense, setDense] = React.useState(false);
     const [loading, setloading] = React.useState(false)
     const [formlink, setformlink] = React.useState("")
     const [expanded, setExpanded] = React.useState(false);
+    const [value, setValue] = React.useState('');
+    const [formname, setformname] = React.useState([]);
 
     const navigate = useNavigate();
 
@@ -69,49 +72,92 @@ export default function Formview(props) {
                 // setthematic(thematicdata.filter((value, index, array) => array.indexOf(value) === index))
                 // setstatedata(statedata.filter((value, index, array) => array.indexOf(value) === index))
                 // setofcindc(ofcindc)
-                setloading(true)
-                let linkarr = []
+                // setloading(true)
                 let formname= []
                 response.data.results.forEach(f => {
 
-                    // if (formname.indexOf(f.name.split('-')[0]) === -1) {
-                    //     formname.push(f.name.split('-')[0]);
-                    // }
-                    console.log("formname",formname);
-                    if(f.name !="Supervision Checklist for Health Facility"){
-                        let config2 = {
-                            method: 'get',
-                            maxBodyLength: Infinity,
-                            url: f.url,
-                            headers: {
-                                'Authorization': 'Token ' + usertoken
-                            }
-                        };
-    
-                        axios.request(config2)
-                            .then((response) => {
-                                var link = response.data.deployment__links.offline_url.split("/")
-                                let linkobj = {
-                                    name: response.data.name,
-                                    formlink: link[link.length - 1]
-                                }
-                                linkarr.push(linkobj)
-                                // setlinks(linkarr)
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
+                    if (formname.indexOf(f.name.split('-')[0]) === -1 && f.name.split('-')[0]!="Supervision Checklist for Health Facility") {
+                        formname.push(f.name.split('-')[0]);
                     }
+                    setformname(formname)
+                    setValue(formname[0])
+                    // if(f.name !="Supervision Checklist for Health Facility" ){
+                    //     let config2 = {
+                    //         method: 'get',
+                    //         maxBodyLength: Infinity,
+                    //         url: f.url,
+                    //         headers: {
+                    //             'Authorization': 'Token ' + usertoken
+                    //         }
+                    //     };
+    
+                    //     axios.request(config2)
+                    //         .then((response) => {
+                    //             var link = response.data.deployment__links.offline_url.split("/")
+                    //             let linkobj = {
+                    //                 name: response.data.name,
+                    //                 formlink: link[link.length - 1]
+                    //             }
+                    //             linkarr.push(linkobj)
+                    //             setlinks(linkarr)
+                    //         })
+                    //         .catch((error) => {
+                    //             console.log(error);
+                    //         });
+                    // }
                 })
-                setTimeout(() => {
-                    setlinks(linkarr)
-                    setloading(false)
-                }, 6000);
+                
             })
             .catch((error) => {
                 console.log(error);
             });
     }, [])
+
+    React.useEffect(()=>{
+        getforms()
+    },[value])
+
+    const getforms=()=>{
+        let linkarr = []
+        setloading(true)
+        let filassest = assets.filter(function(item)
+        {
+             return item.name.split('-')[0]==value;
+        });  
+        console.log(filassest,value);
+        filassest.forEach(f => {
+
+            
+            if(f.name !="Supervision Checklist for Health Facility" ){
+                let config2 = {
+                    method: 'get',
+                    maxBodyLength: Infinity,
+                    url: f.url,
+                    headers: {
+                        'Authorization': 'Token ' + usertoken
+                    }
+                };
+
+                axios.request(config2)
+                    .then((response) => {
+                        var link = response.data.deployment__links.offline_url?.split("/")
+                        let linkobj = {
+                            name: response.data.name,
+                            formlink: link[link.length - 1]
+                        }
+                        linkarr.push(linkobj)
+                        // setlinks(linkarr)
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        })
+        setTimeout(() => {
+            setlinks(linkarr)
+            setloading(false)
+        }, 3000);
+    }
 
     // const handleChange = (event) => {
     //     setactivestate(event.target.value)
@@ -195,11 +241,30 @@ export default function Formview(props) {
         setExpanded(isExpanded ? panel : false);
     };
 
+    const handleStateChange = (event,value) =>{
+        setValue(event.target.value)
+        getforms()
+    }   
+
     return (
         <Box sx={{ display: 'flex' }}>
             <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
             <Box component="main" className='MainContainer' sx={{ p: 0, width: '100%' }}>
                 <Toolbar />
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small" >
+                    <Select
+                        abelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={value}  
+                        
+                        defaultValue={formname && formname[0]}
+                        onChange={handleStateChange}
+                    >
+                        { formname?.map((f) => (
+                                        <MenuItem value={f} >{f}</MenuItem>
+                                    ))}
+                    </Select>
+                    </FormControl>
                 <Grid container spacing={2}>
 
                     <Grid item xs={12} className='formviewmaindiv'>
