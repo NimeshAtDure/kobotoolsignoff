@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "./Footer";
 import Appnavbar from "./Appnavbar";
 import { Button, Card, Grid } from "@mui/material";
@@ -9,6 +9,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import serialize from "form-serialize";
+import axios from "axios";
 
 function TechResource() {
 
@@ -16,11 +17,76 @@ function TechResource() {
     const [fname,setfname] = React.useState('')
     const [dname,setdname] = React.useState('')
     const [sdname,setsdname] = React.useState('')
+    const [file,setfile] = React.useState({})
+    const [tbnail,settbnail] = React.useState({})
+    const [fdata,setfdata] = React.useState({})
 
-    function uploadForm(){
-        var form = document.getElementById('inputform');
-        var obj = serialize(form, { hash: true });
-        console.log(form,obj);
+    useEffect(()=>{
+        axios({
+            method: 'get',
+            url: 'http://localhost:8080/getfile',
+            headers: {}
+          })
+          .then(
+              response => {
+                  let filesdata={}
+                  response.data.data?.map((f)=>{
+                        if(!filesdata.hasOwnProperty(f.dir)){
+                            filesdata[f.dir]={files:[],"child":{}}
+                        }
+                        if(f.sdir.length==0){
+                            filesdata[f.dir].files.push(f)
+                        }else{
+                            if(!filesdata[f.dir]["child"].hasOwnProperty(f.sdir)){
+                                filesdata[f.dir]["child"][f.sdir]=[f]
+                            }else{
+                                filesdata[f.dir]["child"][f.sdir].push(f)
+                            }
+                        }
+                    })
+                    console.log(filesdata,Object.entries(filesdata));
+                    Object.entries(filesdata)?.map((fd)=>{
+                        Object.entries(fd[1])?.map((f)=>{
+                            console.log(f);
+                            if(f[0]=="files"){
+                                f[1]?.map(fls=>{
+                                    console.log("files",fls);
+                                })
+                            }else{
+
+                                console.log("child",Object.entries(f[1]));
+                            }
+                        })
+                    })
+                    setfdata(filesdata)
+              }
+          ).catch((error) => {
+            console.log(error);
+            });
+    },[])
+
+    function uploadForm(){       
+        console.log(fname,dname,sdname,file,);
+        
+        const formData = new FormData();
+        formData.append("file",file);
+        formData.append("tbnail",tbnail)
+        formData.append("fname", fname)
+        formData.append("dname", dname)
+        formData.append("sdname", sdname)
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/uploadfile',
+            headers: {'Content-Type': 'multipart/form-data'},
+            data: formData
+          })
+          .then(
+              response => {
+                console.log(response);
+              }
+          ).catch((error) => {
+            console.log(error);
+            });
     }
 
     const handleClose = () => setopen(false);
@@ -51,13 +117,111 @@ function TechResource() {
                         >
                             MyMne – Gateway to monitoring and evaluation of UNFPA interventions to the Ninth Country programme (2018-22)
                         </a>
-                        <Button onClick={()=>setopen(true)}>
-                    Upload Document
-                </Button>
+                        
+
+                <Button variant="outlined" className='viewbtn uplbtn mt-0' onClick={()=>setopen(true)}>Upload Document</Button>
+
                     </Grid>
                 </Grid>
+                {
+                    Object.entries(fdata)?.map(fd=>{
+                        return <>
+                        
+                        <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    className="contentsection mt-0 "
+                    >
+                    <Grid item xs={12}>
+                        <h3>{fd[0]}</h3>
+                    </Grid>
+                    </Grid>
 
-                <Grid
+
+                    
+                    {
+                        Object.entries(fd[1])?.map(f=>{
+                            return f[0]=="files"?
+                            <Grid
+                    container
+                    spacing={5}
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    className="contentsection mt-0 mb-50px"
+                    >
+                            {f[1]?.map(fls=>{
+                                return <Grid item spacing={2}>
+                                <a
+                                    href={fls.file}
+                                    target="_blank"
+                                >
+                                    <img
+                                        src={fls.tbnail}
+                                        alt=""
+                                        width={"200px"}
+                                        height={"200px"}
+                                    />
+                                </a>
+                                <p>{fls.name}</p>
+                                </Grid>
+                            })}
+                            </Grid>
+                            :<>
+                            {Object.entries(f[1])?.map(fls=>{
+                                return <Grid
+                                container
+                                spacing={5}
+                                direction="row"
+                                justifyContent="center"
+                                alignItems="center"
+                                className="contentsection mt-0 mb-50px"
+                                >
+                                    <div className="mt-30px mb-50px w-75">
+                                <Card className="card-subsection">
+                                    <CardHeader className="card-head" title={fls[0]} />
+                                    <CardContent>
+                                        <Grid
+                                            container
+                                            spacing={6}
+                                            direction="row"
+                                            justifyContent="center"
+                                            alignItems="center"
+                                            className="contentsection mt-0 mb-50px"
+                                        >
+                                            {fls[1]?.map(fl=>{
+                                                return <Grid item spacing={3}>
+                                                <a
+                                                    href={fl.file}
+                                                    target="_blank"
+                                                >
+                                                    <img
+                                                        src={fl.tbnail}
+                                                        alt=""
+                                                        width={"200px"}
+                                                        height={"200px"}
+                                                    />
+                                                </a>
+                                                <p>{fl.name}</p>
+                                            </Grid>
+                                            })}
+                                            
+                                        </Grid>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                            </Grid>
+                            })}
+                            </>
+                        })
+                    }
+                    
+                        </>
+                    })
+                }
+                {/* <Grid
                     container
                     direction="row"
                     justifyContent="center"
@@ -67,9 +231,9 @@ function TechResource() {
                     <Grid item xs={12}>
                         <h3>Country Programme 10</h3>
                     </Grid>
-                </Grid>
+                </Grid> */}
 
-                <Grid
+                {/* <Grid
                     container
                     spacing={5}
                     direction="row"
@@ -148,121 +312,7 @@ function TechResource() {
                         <p>India CP10 - Final</p>
                     </Grid>
 
-                    {/* <div className="card-sis mt-10px">
-            <Card className="card-subsection">
-              <CardHeader className="card-head" title="CP9 Evaluation" />
-              <CardContent>
-                <Grid
-                  container
-                  spacing={5}
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  className="contentsection mt-0"
-                >
-                  <Grid item spacing={3}>
-                    <a
-                      href="https://docs.google.com/spreadsheets/d/1U8_iiYPLLbqlNITmCNKqzbqLfreR9W2K/edit?usp=drive_link&ouid=103835026252578494410&rtpof=true&sd=true"
-                      target="_blank"
-                    >
-                      <img
-                        src={imgurl.countryprog_cpxl1}
-                        alt=""
-                        width={"200px"}
-                        height={"200px"}
-                      />
-                    </a>
-                    <p>Copy of India CPE management response_CHO_GD_june 21</p>
-                  </Grid>
-                  <Grid item spacing={3}>
-                    <a
-                      href="https://docs.google.com/spreadsheets/d/1TujxKrLPb0SfIYehjaBl3CD4qg-ZLIrl/edit?usp=drive_link&ouid=103835026252578494410&rtpof=true&sd=true"
-                      target="_blank"
-                    >
-                      <img
-                        src={imgurl.countryprog_cpxl2}
-                        alt=""
-                        width={"200px"}
-                        height={"200px"}
-                      />
-                    </a>
-                    <p>India CPE management response_Oct 19</p>
-                  </Grid>
-                  <Grid item spacing={3}>
-                    <a
-                      href="https://docs.google.com/spreadsheets/d/1TgdIpyzWol8LD2MsurE_PA9IawsMpSza/edit?usp=drive_link&ouid=103835026252578494410&rtpof=true&sd=true"
-                      target="_blank"
-                    >
-                      <img
-                        src={imgurl.countryprog_cpxl3}
-                        alt=""
-                        width={"200px"}
-                        height={"200px"}
-                      />
-                    </a>
-                    <p>India CPE management response_Sept 13</p>
-                  </Grid>
-                  <Grid item spacing={3}>
-                    <a
-                      href="https://docs.google.com/spreadsheets/d/1TG1PxD0SwV6Myd9ciWzuSDtJOrhfCu9e/edit?usp=drive_link&ouid=103835026252578494410&rtpof=true&sd=true"
-                      target="_blank"
-                    >
-                      <img
-                        src={imgurl.countryprog_cpxl4}
-                        alt=""
-                        width={"200px"}
-                        height={"200px"}
-                      />
-                    </a>
-                    <p>Update on management responses to CPE, June 2023</p>
-                  </Grid>
-                  <Grid item spacing={4}>
-                    <a
-                      href="https://drive.google.com/file/d/1U73ssJwZPfbVxbkfShFxBz-uZ7ND_WoD/view?usp=drive_link"
-                      target="_blank"
-                    >
-                      <img
-                        src={imgurl.countryprog_cppdf1}
-                        alt=""
-                        width={"200px"}
-                        height={"200px"}
-                      />
-                    </a>
-                    <p>CPE9_India_Final ReportMay102022</p>
-                  </Grid>
-                  <Grid item spacing={4}>
-                    <a
-                      href="https://drive.google.com/file/d/1U13mudegLY3Ut68DdZJCQjCTaV7SMdUg/view?usp=drive_link"
-                      target="_blank"
-                    >
-                      <img
-                        src={imgurl.countryprog_cppdf2}
-                        alt=""
-                        width={"200px"}
-                        height={"200px"}
-                      />
-                    </a>
-                    <p>India CP9 Final Evaluation_Second Draft_07_March_2022</p>
-                  </Grid>
-                  <Grid item spacing={4}>
-                    <a
-                      href="https://drive.google.com/file/d/1TGtTDblGL-nPCn7wwy9vEKavMKUePpnq/view?usp=drive_link"
-                      target="_blank"
-                    >
-                      <img
-                        src={imgurl.countryprog_cppdf3}
-                        alt=""
-                        width={"200px"}
-                        height={"200px"}
-                      />
-                    </a>
-                    <p>UNFPA EQA India CPE 3-July-22</p>
-                  </Grid>
-                  
-                </Grid>
-              </CardContent>
-            </Card>
-          </div> */}
+                    
 
                     <div className="mt-30px mb-50px w-75">
                         <Card className="card-subsection">
@@ -276,7 +326,7 @@ function TechResource() {
                                     alignItems="center"
                                     className="contentsection mt-0"
                                 >
-                                    {/* <Grid item xs={12}>SIS Guidance Document</Grid> */}
+                                    <Grid item xs={12}>SIS Guidance Document</Grid>
                                     <Grid item spacing={3}>
                                         <a
                                             href="https://docs.google.com/presentation/d/1UU-1iJnveWhtiZyX0GWzyoRBTHbt4_In/edit?usp=drive_link&ouid=103835026252578494410&rtpof=true&sd=true"
@@ -346,41 +396,7 @@ function TechResource() {
                         alignItems="center"
                         className="contentsection mt-30px w-75 mb-20px"
                     >
-                        {/* <Grid item spacing xs={4}>
-              <div className="mt-10px">
-                <Card className="card-subsection">
-                  <CardHeader
-                    className="card-head"
-                    title="Country Programme Action Plan"
-                  />
-                  <CardContent>
-                    <Grid
-                      container
-                      spacing={5}
-                      direction="row"
-                      justifyContent="center"
-                      alignItems="center"
-                      className="contentsection mt-0"
-                    >
-                      <Grid item spacing xs={12}>
-                        <a
-                          href="https://drive.google.com/file/d/1UVfguizUBPrfPdOkVUUq0FofqUsCtAYO/view?usp=drive_link"
-                          target="_blank"
-                        >
-                          <img
-                            src={imgurl.countryprog_cpap}
-                            alt=""
-                            width={"200px"}
-                            height={"200px"}
-                          />
-                        </a>
-                        <p>CPAP document - 2 June docx</p>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </div>
-            </Grid> */}
+                        
                         <Grid item spacing xs={12}>
                             <div className="mt-10px">
                                 <Card className="card-subsection">
@@ -433,8 +449,8 @@ function TechResource() {
                     </Grid>
 
 
-                </Grid>
-
+                </Grid> */}
+{/* 
                 <Grid
                     container
                     direction="row"
@@ -445,9 +461,9 @@ function TechResource() {
                     <Grid item xs={12}>
                         <h3>Country Programme Action Plan</h3>
                     </Grid>
-                </Grid>
+                </Grid> */}
 
-                <Grid
+                {/* <Grid
                     container
                     spacing={5}
                     direction="row"
@@ -469,9 +485,9 @@ function TechResource() {
                         </a>
                         <p>CPAP document - 2 June docx</p>
                     </Grid>
-                </Grid>
+                </Grid> */}
 
-                <Grid
+                {/* <Grid
                     container
                     direction="row"
                     justifyContent="center"
@@ -481,9 +497,9 @@ function TechResource() {
                     <Grid item xs={12}>
                         <h3>CP9 Evaluation</h3>
                     </Grid>
-                </Grid>
+                </Grid> */}
 
-                <Grid
+                {/* <Grid
                     container
                     spacing={5}
                     direction="row"
@@ -591,9 +607,9 @@ function TechResource() {
                     </Grid>
 
 
-                </Grid>
+                </Grid> */}
 
-                <div className="card-sis mt-10px">
+                {/* <div className="card-sis mt-10px">
                     <Card className="card-subsection">
                         <CardHeader className="card-head" title="Management Response to CPE" />
                         <CardContent>
@@ -636,9 +652,9 @@ function TechResource() {
                             </Grid>
                         </CardContent>
                     </Card>
-                </div>
+                </div> */}
 
-                <Grid
+                {/* <Grid
                     container
                     direction="row"
                     justifyContent="center"
@@ -806,56 +822,9 @@ function TechResource() {
                         <p>SIS_Sustainable management practices and reduction of GHG emissions (2023)</p>
                     </Grid>
 
-                </Grid>
+                </Grid> */}
 
-                {/* <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          className="contentsection mt-0"
-        >
-          <Grid item xs={12}>
-            <h3>Management Response to CPE</h3>
-          </Grid>
-        </Grid> */}
-                {/* <Grid
-          container
-          spacing={5}
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          className="contentsection mt-0 mb-20px"
-        >
-          <Grid item spacing={6}>
-            <a
-              href="https://docs.google.com/spreadsheets/d/1SRrBmXcYjXqYk2lbSrOaj2hwiB7mqTXZ/edit?usp=drive_link&ouid=103835026252578494410&rtpof=true&sd=true"
-              target="_blank"
-            >
-              <img
-                src={imgurl.Management_Response_to_CPE_xls1}
-                alt=""
-                width={"200px"}
-                height={"200px"}
-              />
-            </a>
-            <p>India CPE management response_Oct 19</p>
-          </Grid>
-          <Grid item spacing={6}>
-            <a
-              href="https://docs.google.com/spreadsheets/d/1SACWPRI93Bg4LtIqGrHZlyBHBgRML0hs/edit?usp=drive_link&ouid=103835026252578494410&rtpof=true&sd=true"
-              target="_blank"
-            >
-              <img
-                src={imgurl.Management_Response_to_CPE_xls2}
-                alt=""
-                width={"200px"}
-                height={"200px"}
-              />
-            </a>
-            <p>Update on management responses to CPE, June 2023</p>
-          </Grid>
-        </Grid> */}
+                
 
             </div>
 
@@ -864,7 +833,7 @@ function TechResource() {
                 onClose={handleClose}
             >
                 <DialogContent>
-                <form id='inputform' >
+                <form id='inputform'>
                 <TextField
                         className="editdialogtxt"
                         autoFocus
@@ -904,7 +873,8 @@ function TechResource() {
                     variant="standard"
                     onChange={e => setsdname(e.target.value )}
                     />
-                <input type="file" id="file" name="file"/>
+                <input type="file" id="file" name="file" onChange={e=>setfile(e.target.files[0])}/>
+                <input type="file" id="tbnail" name="tbnail" onChange={e=>settbnail(e.target.files[0])}/>
                 <div>
                 <Button onClick={uploadForm}>
                     Submit 

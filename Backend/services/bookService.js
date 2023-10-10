@@ -302,6 +302,38 @@ class UserService {
       return response;  
     }
 
+    async uploadfile(req){
+      const response = {};
+      
+      const data = await this.userRepo.uploadfile(req);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response; 
+    }
+
+    async getfile(req){
+      const response = {};
+      
+      const data = await this.userRepo.getfile(req);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response; 
+    }
+
 }
 
 module.exports = {

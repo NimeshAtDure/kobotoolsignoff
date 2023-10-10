@@ -1,7 +1,7 @@
 const Pool = require('pg').Pool
 const { sequelize } = require('../models/book')
 const { generateOTP, sendOTP } = require("../utils/otp");
-
+const path = require('path')
 const pool = new Pool({
   user: 'kobosuperuser',
   host: '4.213.65.67',
@@ -330,9 +330,50 @@ class UserRepository {
       })
   }
 
-  async CMTheadSignoffoi(username){
-    return await sequelize.query("SELECT * FROM update_flag_signoff_oi_cmt_data()",
-      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+  async uploadfile(req){
+    try{
+      let sampleFile,thumbnail;
+      let uploadPath,tuploadPath;
+      console.log(req);
+      if (!req.files || Object.keys(req.files).length === 0) {
+        return ''
+      }
+
+      sampleFile = req.files.file
+      thumbnail = req.files.tbnail
+      uploadPath = path.join(__dirname, '../') + 'Documents/' + sampleFile.name.replace(/\s/g, "");
+      tuploadPath = path.join(__dirname, '../') + 'Thumbnails/' + thumbnail.name.replace(/\s/g, "");
+
+      console.log(req,uploadPath);
+      sampleFile.mv(uploadPath, function(err) {
+        if (err){
+          return ''
+        }
+      });
+
+      thumbnail.mv(tuploadPath, function(err) {
+        if (err){
+          return ''
+        }
+      });
+
+      return await sequelize.query("INSERT INTO documents(name,dir,sdir,file,tbnail) VALUES (:name,:dir,:sdir,:fname,:tbnail)",
+      { replacements: { name:req.body.fname,dir:req.body.dname,sdir:req.body.sdname,fname:uploadPath,tbnail:tuploadPath }, type: sequelize.QueryTypes.INSERT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+      // return "file uploaded"
+      
+    }catch(err){
+      console.log(err);
+      return ''
+    }
+  }
+
+  async getfile(){
+    return await sequelize.query("SELECT * FROM documents d",
+      { replacements: {  }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
         return result

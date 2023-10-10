@@ -30,6 +30,8 @@ router.post("/m&esignoff",bookController.MNEheadSignoff)
 router.post("/m&esignoffoi",bookController.MNEheadSignoffoi)
 router.post("/cmtsignoff",bookController.CMTheadSignoff)
 router.post("/cmtsignoffoi",bookController.CMTheadSignoffoi)
+router.post("/uploadfile",bookController.uploadfile)
+router.get("/getfile",bookController.getfile)
 
 module.exports = router;
 
