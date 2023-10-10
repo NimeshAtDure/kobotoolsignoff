@@ -8,8 +8,13 @@ import CardHeader from "@mui/material/CardHeader";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
-import serialize from "form-serialize";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import axios from "axios";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function TechResource() {
 
@@ -20,8 +25,13 @@ function TechResource() {
     const [file,setfile] = React.useState({})
     const [tbnail,settbnail] = React.useState({})
     const [fdata,setfdata] = React.useState({})
+    const [alerttxt, setalerttxt] = React.useState('')
 
     useEffect(()=>{
+        getFiles()
+    },[])
+
+    function getFiles(){
         axios({
             method: 'get',
             url: 'http://localhost:8080/getfile',
@@ -63,7 +73,7 @@ function TechResource() {
           ).catch((error) => {
             console.log(error);
             });
-    },[])
+    }
 
     function uploadForm(){       
         console.log(fname,dname,sdname,file,);
@@ -83,9 +93,19 @@ function TechResource() {
           .then(
               response => {
                 console.log(response);
+                setopen(false)
+                setalerttxt("success")
+                setfname("")
+                setdname("")
+                setsdname("")
+                setfile("")
+                settbnail("")
+                getFiles()
               }
           ).catch((error) => {
             console.log(error);
+            setopen(false)
+            setalerttxt("success")
             });
     }
 
@@ -110,17 +130,18 @@ function TechResource() {
                     alignItems="center"
                     className="contentgrid"
                 >
-                    <Grid item xs={12}>
+                    <Grid item xs={2}></Grid>
+                    <Grid item xs={8}>
                         <a
                             href="https://sites.google.com/unfpa.org/india-mymne/home"
                             target="_blank"
                         >
                             MyMne – Gateway to monitoring and evaluation of UNFPA interventions to the Ninth Country programme (2018-22)
                         </a>
-                        
 
-                <Button variant="outlined" className='viewbtn uplbtn mt-0' onClick={()=>setopen(true)}>Upload Document</Button>
-
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Button variant="outlined" className='viewbtn mt-0' onClick={()=>setopen(true)}>Upload Document</Button>
                     </Grid>
                 </Grid>
                 {
@@ -221,7 +242,7 @@ function TechResource() {
                         </>
                     })
                 }
-                {/* <Grid
+                <Grid
                     container
                     direction="row"
                     justifyContent="center"
@@ -231,9 +252,9 @@ function TechResource() {
                     <Grid item xs={12}>
                         <h3>Country Programme 10</h3>
                     </Grid>
-                </Grid> */}
+                </Grid>
 
-                {/* <Grid
+                <Grid
                     container
                     spacing={5}
                     direction="row"
@@ -449,8 +470,8 @@ function TechResource() {
                     </Grid>
 
 
-                </Grid> */}
-{/* 
+                </Grid>
+
                 <Grid
                     container
                     direction="row"
@@ -461,9 +482,9 @@ function TechResource() {
                     <Grid item xs={12}>
                         <h3>Country Programme Action Plan</h3>
                     </Grid>
-                </Grid> */}
+                </Grid>
 
-                {/* <Grid
+                <Grid
                     container
                     spacing={5}
                     direction="row"
@@ -485,9 +506,9 @@ function TechResource() {
                         </a>
                         <p>CPAP document - 2 June docx</p>
                     </Grid>
-                </Grid> */}
+                </Grid>
 
-                {/* <Grid
+                <Grid
                     container
                     direction="row"
                     justifyContent="center"
@@ -497,9 +518,9 @@ function TechResource() {
                     <Grid item xs={12}>
                         <h3>CP9 Evaluation</h3>
                     </Grid>
-                </Grid> */}
+                </Grid> 
 
-                {/* <Grid
+                <Grid
                     container
                     spacing={5}
                     direction="row"
@@ -607,9 +628,9 @@ function TechResource() {
                     </Grid>
 
 
-                </Grid> */}
+                </Grid>
 
-                {/* <div className="card-sis mt-10px">
+                <div className="card-sis mt-10px">
                     <Card className="card-subsection">
                         <CardHeader className="card-head" title="Management Response to CPE" />
                         <CardContent>
@@ -652,9 +673,9 @@ function TechResource() {
                             </Grid>
                         </CardContent>
                     </Card>
-                </div> */}
+                </div>
 
-                {/* <Grid
+                <Grid
                     container
                     direction="row"
                     justifyContent="center"
@@ -822,7 +843,7 @@ function TechResource() {
                         <p>SIS_Sustainable management practices and reduction of GHG emissions (2023)</p>
                     </Grid>
 
-                </Grid> */}
+                </Grid>
 
                 
 
@@ -831,9 +852,10 @@ function TechResource() {
             <Dialog
                 open={open}
                 onClose={handleClose}
+                className="dialog-main"
             >
                 <DialogContent>
-                <form id='inputform'>
+                <form id='inputform' className="uplaodform">
                 <TextField
                         className="editdialogtxt"
                         autoFocus
@@ -861,7 +883,7 @@ function TechResource() {
                         onChange={e => setdname( e.target.value )}
                     />
                 <TextField
-                    className="editdialogtxt"
+                    className="editdialogtxt lasttext"
                     autoFocus
                     margin="dense"
                     id="sdname"
@@ -873,17 +895,22 @@ function TechResource() {
                     variant="standard"
                     onChange={e => setsdname(e.target.value )}
                     />
-                <input type="file" id="file" name="file" onChange={e=>setfile(e.target.files[0])}/>
+                    <label>Document : </label>
+                <input type="file" id="file" name="file" onChange={e=>setfile(e.target.files[0])}/><br/>
+                <div className="mt-10px">
+                <label>Thumbnail : </label>
                 <input type="file" id="tbnail" name="tbnail" onChange={e=>settbnail(e.target.files[0])}/>
-                <div>
-                <Button onClick={uploadForm}>
-                    Submit 
-                </Button>
+                </div>
+                <div className="uplbtndiv">
+                <Button variant="outlined" className='viewbtn mt-0' onClick={uploadForm}>Submit</Button>
                 </div>
                 </form>
                 </DialogContent>
             </Dialog>
-
+            <Snackbar open={alerttxt.length > 0} autoHideDuration={6000} onClose={handleClose}>
+                {alerttxt == "success" ? <Alert severity="success">Document uploaded !</Alert> : alerttxt == "error" ? <Alert severity="error">Upload failed !</Alert> : ''
+                }
+            </Snackbar>
             <Footer />
         </div>
     );
