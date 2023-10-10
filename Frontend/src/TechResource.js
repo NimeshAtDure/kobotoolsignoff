@@ -26,6 +26,7 @@ function TechResource() {
     const [tbnail,settbnail] = React.useState({})
     const [fdata,setfdata] = React.useState({})
     const [alerttxt, setalerttxt] = React.useState('')
+    const [user, setuser] = React.useState(JSON.parse(localStorage.getItem("user")))
 
     useEffect(()=>{
         getFiles()
@@ -141,7 +142,7 @@ function TechResource() {
 
                     </Grid>
                     <Grid item xs={2}>
-                        <Button variant="outlined" className='viewbtn mt-0' onClick={()=>setopen(true)}>Upload Document</Button>
+                        {user.username.includes("kaushik") && <Button variant="outlined" className='viewbtn mt-0' onClick={()=>setopen(true)}>Upload Document</Button>}
                     </Grid>
                 </Grid>
                 {
