@@ -82,7 +82,7 @@ function Signoffmne() {
         axios({
             method: 'post',
             // url:'http://localhost:8080/getdata',
-            url: 'https://uat.service.rbmgateway.org/getdata',
+            url: 'https://uatservice.rbmgateway.org/getdata',
             data: {
                 "username": user.username,
                 "usertype": value=="mneheadnr"?'mneheadsis':value
@@ -221,7 +221,7 @@ function Signoffmne() {
         axios({
             method: 'post',
             // url:'http://localhost:8080/updatedata',
-            url: 'https://uat.service.rbmgateway.org/updatedata',
+            url: 'https://uatservice.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editdata.actual,
@@ -249,7 +249,7 @@ function Signoffmne() {
         axios({
             method: 'post',
             // url: 'http://localhost:8080/updatedata',
-            url: 'https://uat.service.rbmgateway.org/updatedata',
+            url: 'https://uatservice.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editrespdata.actual,
@@ -274,7 +274,7 @@ function Signoffmne() {
 
     function signoffData() {
         if (!enablesignoff) {
-            var query = value=="mneheadoi"?'https://uat.service.rbmgateway.org/m&esignoffoi':'https://uat.service.rbmgateway.org/m&esignoff'
+            var query = value=="mneheadoi"?'https://uatservice.rbmgateway.org/m&esignoffoi':'https://uatservice.rbmgateway.org/m&esignoff'
             axios({
                 method: 'post',
                 url: query,

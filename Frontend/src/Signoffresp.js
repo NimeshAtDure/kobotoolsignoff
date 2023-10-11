@@ -79,7 +79,7 @@ function Signoffresp() {
         axios({
             method: 'post',
             // url:'http://localhost:8080/getdata',
-            url: 'https://uat.service.rbmgateway.org/getdata',
+            url: 'https://uatservice.rbmgateway.org/getdata',
             data: {
                 "username": user.username,
                 "usertype": "respperson"
@@ -219,7 +219,7 @@ function Signoffresp() {
         axios({
             method: 'post',
             // url:'http://localhost:8080/updatedata',
-            url: 'https://uat.service.rbmgateway.org/updatedata',
+            url: 'https://uatservice.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editdata.actual,
@@ -248,7 +248,7 @@ function Signoffresp() {
         axios({
             method: 'post',
             // url:'http://localhost:8080/updatedata',
-            url: 'https://uat.service.rbmgateway.org/updatedata',
+            url: 'https://uatservice.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editrespdata.actual,
@@ -276,7 +276,7 @@ function Signoffresp() {
             axios({
                 method: 'post',
                 // url:'http://localhost:8080/resposignoff',
-                url: 'https://uat.service.rbmgateway.org/resposignoff',
+                url: 'https://uatservice.rbmgateway.org/resposignoff',
                 data: {
                     "username": user.username,
                 }

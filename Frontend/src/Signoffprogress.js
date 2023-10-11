@@ -91,7 +91,7 @@ function Signoffprogress() {
         axios({
             method: 'post',
             // url:'http://localhost:8080/getdata',
-            url: 'https://uat.service.rbmgateway.org/getdata',
+            url: 'https://uatservice.rbmgateway.org/getdata',
             data: {
                 "username":  user.username,
                 "usertype":  value=="progressovnr"?"progressovsis":value
@@ -231,7 +231,7 @@ function Signoffprogress() {
         axios({
             method: 'post',
             // url:'http://localhost:8080/updatedata',
-            url: 'https://uat.service.rbmgateway.org/updatedata',
+            url: 'https://uatservice.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editdata.actual,
@@ -259,7 +259,7 @@ function Signoffprogress() {
         axios({
             method: 'post',
             // url: 'http://localhost:8080/updatedata',
-            url: 'https://uat.service.rbmgateway.org/updatedata',
+            url: 'https://uatservice.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
                 "actual": editrespdata.actual,
@@ -287,7 +287,7 @@ function Signoffprogress() {
             axios({
                 method: 'post',
                 // url:'http://localhost:8080/m&esignoff',
-                url: 'https://uat.service.rbmgateway.org/m&esignoff',
+                url: 'https://uatservice.rbmgateway.org/m&esignoff',
                 data: {
                     "username": user.username,
                 }

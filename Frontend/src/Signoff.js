@@ -41,7 +41,7 @@ function Signoff() {
 
         axios({
             method: 'post',
-            url: 'https://uat.service.rbmgateway.org/getdata',
+            url: 'https://uatservice.rbmgateway.org/getdata',
             data: {
                 "username": user.username
             }

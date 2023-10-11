@@ -75,7 +75,7 @@ export default function Loginpg(props) {
             axios({
                 method: 'post',
                 // url: 'http://localhost:8080/generateotp',
-                url: 'https://uat.service.rbmgateway.org/generateotp',
+                url: 'https://uatservice.rbmgateway.org/generateotp',
                 headers: {},
                 data: {
                   "email": responsedata.email,
@@ -101,7 +101,7 @@ export default function Loginpg(props) {
         axios({
             method: 'post',
             // url: 'http://localhost:8080/login',
-            url: 'https://uat.service.rbmgateway.org/login',
+            url: 'https://uatservice.rbmgateway.org/login',
             headers: {},
             data: {
               "email": userdata.email,
