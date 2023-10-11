@@ -9,6 +9,8 @@ const bookRoutes = require('./route/booksroute');
 const defaultroute = require("./route/defaultroute")
 const app = express();
 
+app.use('/documents', express.static(__dirname + '/public/documents'));
+app.use('/thumbnails', express.static(__dirname + '/public/thumbnails'));
 app.use(bodyParser.json());
 var allowedOrigins = ['http://localhost:3000',
                       'https://rbmgateway.org'];

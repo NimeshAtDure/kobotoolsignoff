@@ -341,10 +341,10 @@ class UserRepository {
 
       sampleFile = req.files.file
       thumbnail = req.files.tbnail
-      uploadPath = path.join(__dirname, '../') + 'Documents/' + sampleFile.name.replace(/\s/g, "");
-      tuploadPath = path.join(__dirname, '../') + 'Thumbnails/' + thumbnail.name.replace(/\s/g, "");
+      uploadPath = 'http://localhost:8080/documents/' + sampleFile.name.replace(/\s/g, "");
+      tuploadPath = 'http://localhost:8080/thumbnails/' + thumbnail.name.replace(/\s/g, "");
 
-      console.log(req,uploadPath);
+      console.log(req,uploadPath,tuploadPath);
       sampleFile.mv(uploadPath, function(err) {
         if (err){
           return ''

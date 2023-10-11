@@ -36,6 +36,7 @@ function TechResource() {
         axios({
             method: 'get',
             url: 'http://localhost:8080/getfile',
+            // url: 'https://uatservice.rbmgateway.org/getfile',
             headers: {}
           })
           .then(
@@ -77,40 +78,51 @@ function TechResource() {
     }
 
     function uploadForm(){       
-        console.log(fname,dname,sdname,file,);
-        
-        const formData = new FormData();
-        formData.append("file",file);
-        formData.append("tbnail",tbnail)
-        formData.append("fname", fname)
-        formData.append("dname", dname)
-        formData.append("sdname", sdname)
-        axios({
-            method: 'post',
-            url: 'http://localhost:8080/uploadfile',
-            headers: {'Content-Type': 'multipart/form-data'},
-            data: formData
-          })
-          .then(
-              response => {
-                console.log(response);
+        console.log(fname,dname,sdname,file,tbnail,file.name,tbnail.name);
+        if( file.name && tbnail.name){
+
+            const formData = new FormData();
+            formData.append("file",file);
+            formData.append("tbnail",tbnail)
+            formData.append("fname", fname)
+            formData.append("dname", dname)
+            formData.append("sdname", sdname)
+            axios({
+                method: 'post',
+                url: 'http://localhost:8080/uploadfile',
+                // url: 'https://uatservice.rbmgateway.org/uploadfile',
+                headers: {'Content-Type': 'multipart/form-data'},
+                data: formData
+              })
+              .then(
+                  response => {
+                    console.log(response);
+                    setopen(false)
+                    setalerttxt("success")
+                    setfname("")
+                    setdname("")
+                    setsdname("")
+                    setfile("")
+                    settbnail("")
+                    getFiles()
+                  }
+              ).catch((error) => {
+                console.log(error);
                 setopen(false)
                 setalerttxt("success")
-                setfname("")
-                setdname("")
-                setsdname("")
-                setfile("")
-                settbnail("")
-                getFiles()
-              }
-          ).catch((error) => {
-            console.log(error);
-            setopen(false)
-            setalerttxt("success")
-            });
+                });
+        }else{
+            setalerttxt("Document and Thumbnail are mandatory")
+        }
     }
 
-    const handleClose = () => setopen(false);
+    const handleClose = () => {
+            setalerttxt("")
+    }
+
+    const handleCloseDialog = () =>{
+        setopen(false)
+    }
 
     return (
         <div className="App ">
@@ -852,7 +864,7 @@ function TechResource() {
 
             <Dialog
                 open={open}
-                onClose={handleClose}
+                onClose={handleCloseDialog}
                 className="dialog-main"
             >
                 <DialogContent>
@@ -909,7 +921,7 @@ function TechResource() {
                 </DialogContent>
             </Dialog>
             <Snackbar open={alerttxt.length > 0} autoHideDuration={6000} onClose={handleClose}>
-                {alerttxt == "success" ? <Alert severity="success">Document uploaded !</Alert> : alerttxt == "error" ? <Alert severity="error">Upload failed !</Alert> : ''
+                {alerttxt == "success" ? <Alert severity="success">Document uploaded !</Alert> : alerttxt == "error" ? <Alert severity="error">Upload failed !</Alert> : alerttxt == "Document and Thumbnail are mandatory" ? <Alert severity="error">Document and Thumbnail are mandatory !</Alert> :''
                 }
             </Snackbar>
             <Footer />
