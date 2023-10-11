@@ -333,7 +333,7 @@ class UserRepository {
   async uploadfile(req){
     try{
       let sampleFile,thumbnail;
-      let uploadPath,tuploadPath;
+      let uploadPath,tuploadPath,movePath,tmovePath;
       console.log(req);
       if (!req.files || Object.keys(req.files).length === 0) {
         return ''
@@ -341,18 +341,22 @@ class UserRepository {
 
       sampleFile = req.files.file
       thumbnail = req.files.tbnail
+      movePath = path.join(__dirname,"../public/documents/")+ sampleFile.name.replace(/\s/g, "");
+      tmovePath = path.join(__dirname,"../public/thumbnails/")+ thumbnail.name.replace(/\s/g, "");
       uploadPath = 'http://localhost:8080/documents/' + sampleFile.name.replace(/\s/g, "");
       tuploadPath = 'http://localhost:8080/thumbnails/' + thumbnail.name.replace(/\s/g, "");
 
-      console.log(req,uploadPath,tuploadPath);
-      sampleFile.mv(uploadPath, function(err) {
+      // console.log(req,uploadPath,tuploadPath,movePath);
+      sampleFile.mv(movePath, function(err) {
         if (err){
+          console.log(err);
           return ''
         }
       });
 
-      thumbnail.mv(tuploadPath, function(err) {
+      thumbnail.mv(tmovePath, function(err) {
         if (err){
+          console.log(err);
           return ''
         }
       });
