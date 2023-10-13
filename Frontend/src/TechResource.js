@@ -35,8 +35,8 @@ function TechResource() {
     function getFiles(){
         axios({
             method: 'get',
-            url: 'http://localhost:8080/getfile',
-            // url: 'https://uatservice.rbmgateway.org/getfile',
+            // url: 'http://localhost:8080/getfile',
+            url: 'https://uatservice.rbmgateway.org/getfile',
             headers: {}
           })
           .then(
@@ -89,8 +89,8 @@ function TechResource() {
             formData.append("sdname", sdname)
             axios({
                 method: 'post',
-                url: 'http://localhost:8080/uploadfile',
-                // url: 'https://uatservice.rbmgateway.org/uploadfile',
+                // url: 'http://localhost:8080/uploadfile',
+                url: 'https://uatservice.rbmgateway.org/uploadfile',
                 headers: {'Content-Type': 'multipart/form-data'},
                 data: formData
               })
@@ -154,7 +154,7 @@ function TechResource() {
 
                     </Grid>
                     <Grid item xs={2}>
-                        {user.username.includes("kaushik") && <Button variant="outlined" className='viewbtn mt-0' onClick={()=>setopen(true)}>Upload Document</Button>}
+                        {(user.username.includes("kaushik") || user.username.includes("super_admin"))&& <Button variant="outlined" className='viewbtn mt-0' onClick={()=>setopen(true)}>Upload Document</Button>}
                     </Grid>
                 </Grid>
                 {

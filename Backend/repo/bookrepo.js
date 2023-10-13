@@ -343,8 +343,8 @@ class UserRepository {
       thumbnail = req.files.tbnail
       movePath = path.join(__dirname,"../public/documents/")+ sampleFile.name.replace(/\s/g, "");
       tmovePath = path.join(__dirname,"../public/thumbnails/")+ thumbnail.name.replace(/\s/g, "");
-      uploadPath = 'http://localhost:8080/documents/' + sampleFile.name.replace(/\s/g, "");
-      tuploadPath = 'http://localhost:8080/thumbnails/' + thumbnail.name.replace(/\s/g, "");
+      uploadPath = 'https://uatservice.rbmgateway.org/documents/' + sampleFile.name.replace(/\s/g, "");
+      tuploadPath = 'https://uatservice.rbmgateway.org/thumbnails/' + thumbnail.name.replace(/\s/g, "");
 
       // console.log(req,uploadPath,tuploadPath,movePath);
       sampleFile.mv(movePath, function(err) {
