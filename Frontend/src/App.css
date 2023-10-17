@@ -1094,3 +1094,24 @@ padding: 10px;
   border: 2px solid #ffb764 !important;;
 }
 
+.signoffselect{
+  display: flex ;
+  margin-left: 50px ;
+}
+
+.signoffselect .MuiInputBase-root,.signoffselect svg,.signoffselect .MuiOutlinedInput-notchedOutline{
+  color: white;
+  /* border-color: white; */
+}
+
+.signoffselect .MuiInputBase-root{
+  height: 40px;
+}
+
+.signoffheader{
+  margin-top: 10px !important;
+}
+
+.signoffselect .menubutton{
+  margin: 0px 8px !important;
+}

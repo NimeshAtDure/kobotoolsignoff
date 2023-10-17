@@ -154,7 +154,7 @@ function TechResource() {
 
                     </Grid>
                     <Grid item xs={2}>
-                        {(user.username.includes("kaushik") || user.username.includes("super_admin"))&& <Button variant="outlined" className='viewbtn mt-0' onClick={()=>setopen(true)}>Upload Document</Button>}
+                        {(user.username.includes("kaushik") ||user.username.includes("admin")) && <Button variant="outlined" className='viewbtn mt-0' onClick={()=>setopen(true)}>Upload Document</Button>}
                     </Grid>
                 </Grid>
                 {
