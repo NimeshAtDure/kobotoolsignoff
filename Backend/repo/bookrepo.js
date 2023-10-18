@@ -232,9 +232,9 @@ class UserRepository {
 
       "mneheadoi":"SELECT * FROM get_oi_view_m_e_data(:username,:quarter,:year);",
 
-      "cmtheadsis":"SELECT * FROM get_view_cmt_data();",
+      "cmtheadsis":"SELECT * FROM get_view_cmt_data(:quarter,:year);",
 
-      "cmtheadoi":"SELECT * FROM get_view_oi_cmt_data();",
+      "cmtheadoi":"SELECT * FROM get_view_oi_cmt_data(:quarter,:year);",
 
       "progressovsis":"SELECT * FROM cmt_data WHERE form_name='SIS' AND cmt_approved='Yes';",
 
@@ -329,9 +329,18 @@ class UserRepository {
       })
   }
 
-  async CMTheadSignoff(username){
-    return await sequelize.query("SELECT * FROM update_flag_signoff_cmt_data()",
-      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+  async CMTheadSignoff(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_cmt_data(:quarter,:year)",
+      { replacements: { username: username,quarter:quarter,year:year }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+
+  async CMTheadSignoffoi(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_oi_cmt_data(:quarter,:year)",
+      { replacements: { username: username,quarter:quarter,year:year }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
         return result

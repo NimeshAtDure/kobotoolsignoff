@@ -29,6 +29,9 @@ import MenuItem from '@mui/material/MenuItem';
 import { Grid } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import { Link, useLocation } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -239,31 +242,12 @@ function Signoffstate() {
                 <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
                 <Paper sx={{ width: '100%', overflow: 'hidden' }} >
                     <TableContainer sx={{ maxHeight: "100vh" }} className="heatmaptableholder">
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-
-
-                                <TableRow>
-                                    <TableCell
-                                        key="indic"
-                                    >
-                                        Thematic area and Indicators
-                                    </TableCell>
-                                    {states?.map((column, id) => (
-                                        <TableCell
-                                            key={column}
-                                            align="center"
-                                            colSpan={2}
-                                        >
-                                            {column}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={1}
-                                    >
-                                        <Grid container>
+                    <Box sx={{ width: '100%' }}>
+                    <Tabs
+                        
+                        aria-label="label tabs example"
+                    >
+                        <Grid container>
                                         <Grid item xs={3}></Grid>
                                         <Grid item xs={9}>
                                         <div className="signoffselect">
@@ -306,6 +290,34 @@ function Signoffstate() {
                                         </div>
                                         </Grid>
                                         </Grid>
+                        
+                    </Tabs>
+                </Box>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+
+
+                                <TableRow>
+                                    <TableCell
+                                        key="indic"
+                                    >
+                                        Thematic area and Indicators
+                                    </TableCell>
+                                    {states?.map((column, id) => (
+                                        <TableCell
+                                            key={column}
+                                            align="center"
+                                            colSpan={2}
+                                        >
+                                            {column}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={1}
+                                    >
+                                        
                                     </TableCell>
                                     {states?.map((column, id) => (
                                         <>
