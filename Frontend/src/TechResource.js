@@ -35,8 +35,8 @@ function TechResource() {
     function getFiles(){
         axios({
             method: 'get',
-            url: 'http://localhost:8080/getfile',
-            // url: 'https://uatservice.rbmgateway.org/getfile',
+            // url: 'http://localhost:8080/getfile',
+            url: 'https://service.rbmgateway.org/getfile',
             headers: {}
           })
           .then(
@@ -89,8 +89,8 @@ function TechResource() {
             formData.append("sdname", sdname)
             axios({
                 method: 'post',
-                url: 'http://localhost:8080/uploadfile',
-                // url: 'https://uatservice.rbmgateway.org/uploadfile',
+                // url: 'http://localhost:8080/uploadfile',
+                url: 'https://service.rbmgateway.org/uploadfile',
                 headers: {'Content-Type': 'multipart/form-data'},
                 data: formData
               })

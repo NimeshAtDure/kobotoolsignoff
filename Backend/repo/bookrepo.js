@@ -2,21 +2,21 @@ const Pool = require('pg').Pool
 const { sequelize } = require('../models/book')
 const { generateOTP, sendOTP } = require("../utils/otp");
 const path = require('path')
-// const pool = new Pool({
-//   user: 'kobosuperuser',
-//   host: '4.213.65.67',
-//   database: 'kobosuperdb',
-//   password: 'Rrr1T%^$-@i8t0$',
-//   port: 5433,
-// })
-
 const pool = new Pool({
-  user: 'uatkobosuperuser',
-  host: '20.219.28.160',
-  database: 'uatkobosuperdb',
-  password: 'PRiJvMX8TyrT8',
+  user: 'kobosuperuser',
+  host: '4.213.65.67',
+  database: 'kobosuperdb',
+  password: 'Rrr1T%^$-@i8t0$',
   port: 5433,
 })
+
+// const pool = new Pool({
+//   user: 'uatkobosuperuser',
+//   host: '20.219.28.160',
+//   database: 'uatkobosuperdb',
+//   password: 'PRiJvMX8TyrT8',
+//   port: 5433,
+// })
 class UserRepository {
 
   constructor(User) {
@@ -351,8 +351,8 @@ class UserRepository {
       thumbnail = req.files.tbnail
       movePath = path.join(__dirname,"../public/documents/")+ sampleFile.name.replace(/\s/g, "");
       tmovePath = path.join(__dirname,"../public/thumbnails/")+ thumbnail.name.replace(/\s/g, "");
-      uploadPath = 'http://localhost:8080/documents/' + sampleFile.name.replace(/\s/g, "");
-      tuploadPath = 'http://localhost:8080/thumbnails/' + thumbnail.name.replace(/\s/g, "");
+      uploadPath = 'https://service.rbmgateway.org/documents/' + sampleFile.name.replace(/\s/g, "");
+      tuploadPath = 'https://service.rbmgateway.org/thumbnails/' + thumbnail.name.replace(/\s/g, "");
 
       // console.log(req,uploadPath,tuploadPath,movePath);
       sampleFile.mv(movePath, function(err) {
