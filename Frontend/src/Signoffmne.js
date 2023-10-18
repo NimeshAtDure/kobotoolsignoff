@@ -343,37 +343,8 @@ function Signoffmne() {
                         />
                         <Tab value="mneheadnr" label="Program Cycle Output" />
                         <Tab value="mneheadoi" label="Office Indicators" />
-                    </Tabs>
-                </Box>
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
 
-
-                                <TableRow>
-                                    <TableCell
-                                        key="indic"
-                                    >
-                                        Thematic area and Indicators
-                                    </TableCell>
-                                    <TableCell colSpan={2}>
-                                        National
-                                    </TableCell>
-                                    {value =="mneheadsis" && states?.map((column, id) => (
-                                        <TableCell
-                                            key={column}
-                                            align="center"
-                                            colSpan={2}
-                                        >
-                                            {column}
-                                        </TableCell>
-                                    ))}
-
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell
-                                        colSpan={1}
-                                    >
-                                        <Grid container>
+                        <Grid container>
                                         <Grid item xs={3}></Grid>
                                         <Grid item xs={9}>
                                         <div className="signoffselect">
@@ -416,6 +387,37 @@ function Signoffmne() {
                                         </div>
                                         </Grid>
                                         </Grid>
+                    </Tabs>
+                </Box>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+
+
+                                <TableRow>
+                                    <TableCell
+                                        key="indic"
+                                    >
+                                        Thematic area and Indicators
+                                    </TableCell>
+                                    <TableCell colSpan={2}>
+                                        National
+                                    </TableCell>
+                                    {value =="mneheadsis" && states?.map((column, id) => (
+                                        <TableCell
+                                            key={column}
+                                            align="center"
+                                            colSpan={2}
+                                        >
+                                            {column}
+                                        </TableCell>
+                                    ))}
+
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell
+                                        colSpan={1}
+                                    >
+                                        
                                     </TableCell>
                                     <TableCell
                                         key={"targettotal"}

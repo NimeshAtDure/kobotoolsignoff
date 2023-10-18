@@ -20,6 +20,19 @@ const sequelize = new Sequelize("uatkobosuperdb", "uatkobosuperuser", "PRiJvMX8T
   }
 });
 
+// const sequelize = new Sequelize("uatkobosuperdb", "uatkobosuperuser", "PRiJvMX8TyrT8", {
+//   host: "20.219.28.160",
+//   dialect: "postgres",
+//   port:5433,
+//   operatorsAliases: false,
+//   pool: {
+//       max: 10,
+//       min: 0,
+//       acquire: 20000,
+//       idle: 5000
+//   }
+// });
+
 sequelize.authenticate().then(() => {
     console.log('Connection has been established successfully.');
 })
