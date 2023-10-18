@@ -25,6 +25,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import { Grid } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 import { Link, useLocation } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -70,10 +75,12 @@ function Signoffresp() {
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
     const [enablesignoff, setenablesignoff] = useState(true)
     const [percarr,setpercarr] = React.useState({"% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services":25,"% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months":65,"Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods":60,"Percentage of public health facilities in priority districts providing safe delivery services":60,"Percentage of public health facilities in priority districts doing HIV screening during ANC":55,"Percentage of public health facilities in priority districts providing safe abortion services":25})
+    const [quarter,setquarter] = useState('Q2')
+    const [year,setyear] = useState('2023')
 
     useEffect(() => {
         getFormData()
-    }, [user, location.state])
+    }, [user, location.state,quarter,year])
 
     function getFormData() {
         axios({
@@ -82,7 +89,9 @@ function Signoffresp() {
             url: 'https://service.rbmgateway.org/getdata',
             data: {
                 "username": user.username,
-                "usertype": "respperson"
+                "usertype": "respperson",
+                "quarter":quarter,
+                "year":year
             }
         })
             .then(
@@ -279,6 +288,8 @@ function Signoffresp() {
                 url: 'https://service.rbmgateway.org/resposignoff',
                 data: {
                     "username": user.username,
+                    "quarter":quarter,
+                    "year":year
                 }
             })
                 .then(
@@ -293,6 +304,14 @@ function Signoffresp() {
                 });
         }
     }
+
+    const handleyearchange = (event,value) =>{
+        setyear(event.target.value)
+      }
+      
+    const handlequarterchange = (event,value) =>{
+        setquarter(event.target.value)
+      }
 
     const handleClose = () => {
         setOpen(false);
@@ -334,6 +353,49 @@ function Signoffresp() {
                                     <TableCell
                                         colSpan={1}
                                     >
+                                        <Grid container>
+                                        <Grid item xs={3}></Grid>
+                                        <Grid item xs={9}>
+                                        <div className="signoffselect">
+
+                                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                        <InputLabel id="demo-simple-select-helper-label">Year</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-helper-label"
+                                            id="demo-simple-select-helper"
+                                            className='select-user'
+                                            label="sign off"
+                                            value={year}  
+                                            defaultValue={year}
+                                            onChange={handleyearchange}
+                                        >
+
+                                        <MenuItem value={"2023"} >2023</MenuItem>
+                                        </Select>
+
+                                    </FormControl>
+
+                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                        <InputLabel id="demo-simple-select-helper-label">Quarter</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-helper-label"
+                                            id="demo-simple-select-helper"
+                                            className='select-user'
+                                            label="sign off"
+                                            value={quarter}  
+                                            defaultValue={quarter}
+                                            onChange={handlequarterchange}
+                                        >
+
+                                            <MenuItem value={"Q1"} >Q1</MenuItem> 
+                                            <MenuItem value={"Q2"} >Q2</MenuItem>    
+                                            <MenuItem value={"Q3"} >Q3</MenuItem> 
+                                        </Select>
+
+                                    </FormControl>
+                                        </div>
+                                        </Grid>
+                                        </Grid>
                                     </TableCell>
                                     <TableCell
                                         key={"targettotal"}

@@ -151,9 +151,9 @@ class UserService {
 
     async getData(req){
       const response = {};
-      const { username, usertype } = req.body;
+      const { username, usertype,quarter,year  } = req.body;
 
-      const data = await this.userRepo.getData(username,usertype);
+      const data = await this.userRepo.getData(username,usertype,quarter,year);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;
@@ -185,9 +185,9 @@ class UserService {
 
     async stateSignoff(req){
       const response = {};
-      const { username } = req.body;
+      const { username,quarter,year } = req.body;
 
-      const data = await this.userRepo.stateSignoff(username);
+      const data = await this.userRepo.stateSignoff(username,quarter,year);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;
@@ -202,9 +202,9 @@ class UserService {
 
     async resppersonSignoff(req){
       const response = {};
-      const { username } = req.body;
+      const { username ,quarter,year} = req.body;
 
-      const data = await this.userRepo.resppersonSignoff(username);
+      const data = await this.userRepo.resppersonSignoff(username,quarter,year);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;
@@ -219,9 +219,9 @@ class UserService {
 
     async thematicheadSignoff(req){
       const response = {};
-      const { username } = req.body;
+      const { username ,quarter,year} = req.body;
 
-      const data = await this.userRepo.thematicheadSignoff(username);
+      const data = await this.userRepo.thematicheadSignoff(username,quarter,year);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;
@@ -236,9 +236,9 @@ class UserService {
 
     async MNEheadSignoff(req){
       const response = {};
-      const { username } = req.body;
+      const { username,quarter,year } = req.body;
 
-      const data = await this.userRepo.MNEheadSignoff(username);
+      const data = await this.userRepo.MNEheadSignoff(username,quarter,year);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;
@@ -253,9 +253,9 @@ class UserService {
 
     async MNEheadSignoffoi(req){
       const response = {};
-      const { username } = req.body;
+      const { username ,quarter,year} = req.body;
 
-      const data = await this.userRepo.MNEheadSignoffoi(username);
+      const data = await this.userRepo.MNEheadSignoffoi(username,quarter,year);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;
@@ -300,6 +300,38 @@ class UserService {
       response.data = data;
       response.statusCode = customResourceResponse.success.statusCode;
       return response;  
+    }
+
+    async uploadfile(req){
+      const response = {};
+      
+      const data = await this.userRepo.uploadfile(req);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response; 
+    }
+
+    async getfile(req){
+      const response = {};
+      
+      const data = await this.userRepo.getfile(req);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response; 
     }
 
 }

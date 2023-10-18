@@ -24,6 +24,11 @@ import CommentIcon from '@mui/icons-material/Comment';
 import EditIcon from '@mui/icons-material/Edit';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import { Grid } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 import { Link, useLocation } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -52,11 +57,12 @@ function Signoffstate() {
     const [open, setOpen] = useState(false)
     const [alerttxt, setalerttxt] = useState('')
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
-
+    const [quarter,setquarter] = useState('Q2')
+    const [year,setyear] = useState('2023')
 
     useEffect(() => {
         getFormData()
-    }, [user])
+    }, [user,quarter,year])
 
     function getFormData() {
         axios({
@@ -65,7 +71,9 @@ function Signoffstate() {
             url: 'https://service.rbmgateway.org/getdata',
             data: {
                 "username": user.username,
-                "usertype": "statehead"
+                "usertype": "statehead",
+                "quarter":quarter,
+                "year":year
             }
         })
             .then(
@@ -195,6 +203,8 @@ function Signoffstate() {
                 url: 'https://service.rbmgateway.org/stateSignoff',
                 data: {
                     "username": user.username,
+                    "quarter":quarter,
+                    "year":year
                 }
             })
                 .then(
@@ -210,7 +220,13 @@ function Signoffstate() {
         }
     }
 
-    
+    const handleyearchange = (event,value) =>{
+        setyear(event.target.value)
+      }
+      
+    const handlequarterchange = (event,value) =>{
+        setquarter(event.target.value)
+      }
 
     const handleClose = () => {
         setOpen(false);
@@ -247,6 +263,49 @@ function Signoffstate() {
                                     <TableCell
                                         colSpan={1}
                                     >
+                                        <Grid container>
+                                        <Grid item xs={3}></Grid>
+                                        <Grid item xs={9}>
+                                        <div className="signoffselect">
+
+                                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                        <InputLabel id="demo-simple-select-helper-label">Year</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-helper-label"
+                                            id="demo-simple-select-helper"
+                                            className='select-user'
+                                            label="sign off"
+                                            value={year}  
+                                            defaultValue={year}
+                                            onChange={handleyearchange}
+                                        >
+
+                                        <MenuItem value={"2023"} >2023</MenuItem>
+                                        </Select>
+
+                                    </FormControl>
+
+                                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                        <InputLabel id="demo-simple-select-helper-label">Quarter</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-helper-label"
+                                            id="demo-simple-select-helper"
+                                            className='select-user'
+                                            label="sign off"
+                                            value={quarter}  
+                                            defaultValue={quarter}
+                                            onChange={handlequarterchange}
+                                        >
+
+                                            <MenuItem value={"Q1"} >Q1</MenuItem> 
+                                            <MenuItem value={"Q2"} >Q2</MenuItem>    
+                                            <MenuItem value={"Q3"} >Q3</MenuItem> 
+                                        </Select>
+
+                                    </FormControl>
+                                        </div>
+                                        </Grid>
+                                        </Grid>
                                     </TableCell>
                                     {states?.map((column, id) => (
                                         <>

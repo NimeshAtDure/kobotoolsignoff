@@ -1,29 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 var cors = require('cors')
+const fileUpload = require('express-fileupload');
+const path = require('path')
 
 const customResourceResponse = require('./utils/constant');
 const bookRoutes = require('./route/booksroute');
 const defaultroute = require("./route/defaultroute")
 const app = express();
 
+app.use('/documents', express.static(__dirname + '/public/documents'));
+app.use('/thumbnails', express.static(__dirname + '/public/thumbnails'));
 app.use(bodyParser.json());
 var allowedOrigins = ['http://localhost:3000',
                       'https://rbmgateway.org'];
 app.use(cors());
-// {
-//   origin: function(origin, callback){
-    // allow requests with no origin 
-    // (like mobile apps or curl requests)
-//     if(!origin) return callback(null, true);
-//     if(allowedOrigins.indexOf(origin) === -1){
-//       var msg = 'The CORS policy for this site does not ' +
-//                 'allow access from the specified Origin.';
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true);
-//   }
-// }
+app.use(fileUpload());
 app.use('/', bookRoutes);
 // app.use('/',defaultroute)
 
@@ -48,7 +40,7 @@ app.use((error, req, res, next) => {
 // const port = 8080;
 const port = 6000;
 
-app.listen(port, () => console.log('Book server started and listening on port ' + port));
+app.listen(port, () => console.log('Server started and listening on port ' + port));
 
 
 

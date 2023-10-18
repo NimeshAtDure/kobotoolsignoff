@@ -1,12 +1,20 @@
 const Pool = require('pg').Pool
 const { sequelize } = require('../models/book')
 const { generateOTP, sendOTP } = require("../utils/otp");
+const path = require('path')
+// const pool = new Pool({
+//   user: 'kobosuperuser',
+//   host: '4.213.65.67',
+//   database: 'kobosuperdb',
+//   password: 'Rrr1T%^$-@i8t0$',
+//   port: 5433,
+// })
 
 const pool = new Pool({
-  user: 'kobosuperuser',
-  host: '4.213.65.67',
-  database: 'kobosuperdb',
-  password: 'Rrr1T%^$-@i8t0$',
+  user: 'uatkobosuperuser',
+  host: '20.219.28.160',
+  database: 'uatkobosuperdb',
+  password: 'PRiJvMX8TyrT8',
   port: 5433,
 })
 class UserRepository {
@@ -190,7 +198,7 @@ class UserRepository {
     }
   }
 
-  async getData(username,usertype) {
+  async getData(username,usertype,quarter,year) {
     // var queries = { 
     //   "statehead":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM srh_dataset_final sdf UNION SELECT * FROM pd_dataset_final pdf )main WHERE main.statehead=:username;",
 
@@ -206,23 +214,23 @@ class UserRepository {
 
       // "statehead":"SELECT * FROM get_statehead_view(:username);",
 
-      "statehead":"SELECT * FROM get_view_statehead(:username);",
+      "statehead":"SELECT * FROM get_view_statehead(:username,:quarter,:year);",
 
       // "respperson":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2 WHERE responsible_person =:username)and statehead_approved='Yes';",
 
       // "respperson":"SELECT * FROM get_responsiblepersion_view(:username);",
 
-      "respperson":"SELECT * FROM get_view_responsibleperson(:username);",
+      "respperson":"SELECT * FROM get_view_responsibleperson(:username,:quarter,:year);",
 
       // "thematichead":"SELECT * FROM get_thematichead_view (:username);",
 
-      "thematichead":"SELECT * FROM get_view_thematicperson (:username);",
+      "thematichead":"SELECT * FROM get_view_thematicperson (:username,:quarter,:year);",
 
       // "mnehead":"SELECT * FROM get_mehead_view (:username);",
 
-      "mneheadsis":"SELECT * FROM get_view_m_e_data(:username);",
+      "mneheadsis":"SELECT * FROM get_view_m_e_data(:username,:quarter,:year);",
 
-      "mneheadoi":"SELECT * FROM get_oi_view_m_e_data(:username);",
+      "mneheadoi":"SELECT * FROM get_oi_view_m_e_data(:username,:quarter,:year);",
 
       "cmtheadsis":"SELECT * FROM get_view_cmt_data();",
 
@@ -240,7 +248,7 @@ class UserRepository {
     }
     
     return sequelize.query(queries[usertype],
-        { replacements: { username: username }, type: sequelize.QueryTypes.SELECT }).then(result => {
+        { replacements: { username: username,quarter:quarter,year:year }, type: sequelize.QueryTypes.SELECT }).then(result => {
           return result
         })
   }
@@ -276,45 +284,45 @@ class UserRepository {
       })
   }
 
-  async stateSignoff(username){
-    return await sequelize.query("SELECT * FROM update_flag_signoff_statehead(:username);",
-      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+  async stateSignoff(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_statehead(:username,:quarter,:year);",
+      { replacements: { username: username,quarter:quarter,year:year  }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
         return result
       })
   }
 
-  async resppersonSignoff(username){
-    return await sequelize.query("SELECT * FROM update_flag_signoff_responsibleperson(:username)",
-      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+  async resppersonSignoff(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_responsibleperson(:username,:quarter,:year)",
+      { replacements: { username: username,quarter:quarter,year:year  }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
         return result
       })
   }
 
-  async thematicheadSignoff(username){
-    return await sequelize.query(" SELECT * FROM update_flag_signoff_thematicperson(:username)",
-      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+  async thematicheadSignoff(username,quarter,year){
+    return await sequelize.query(" SELECT * FROM update_flag_signoff_thematicperson(:username,:quarter,:year)",
+      { replacements: { username: username,quarter:quarter,year:year  }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
         return result
       })
   }
 
-  async MNEheadSignoff(username){
-    return await sequelize.query("SELECT * FROM update_flag_signoff_m_e_data(:username)",
-      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+  async MNEheadSignoff(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_m_e_data(:username,:quarter,:year)",
+      { replacements: { username: username,quarter:quarter,year:year  }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
         return result
       })
   }
 
-  async MNEheadSignoffoi(username){
-    return await sequelize.query("SELECT * FROM update_flag_signoff_oi_m_e_data(:username)",
-      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+  async MNEheadSignoffoi(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_oi_m_e_data(:username,:quarter,:year)",
+      { replacements: { username: username,quarter:quarter,year:year  }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
         return result
@@ -330,9 +338,54 @@ class UserRepository {
       })
   }
 
-  async CMTheadSignoffoi(username){
-    return await sequelize.query("SELECT * FROM update_flag_signoff_oi_cmt_data()",
-      { replacements: { username: username }, type: sequelize.QueryTypes.SELECT })
+  async uploadfile(req){
+    try{
+      let sampleFile,thumbnail;
+      let uploadPath,tuploadPath,movePath,tmovePath;
+      console.log(req);
+      if (!req.files || Object.keys(req.files).length === 0) {
+        return ''
+      }
+
+      sampleFile = req.files.file
+      thumbnail = req.files.tbnail
+      movePath = path.join(__dirname,"../public/documents/")+ sampleFile.name.replace(/\s/g, "");
+      tmovePath = path.join(__dirname,"../public/thumbnails/")+ thumbnail.name.replace(/\s/g, "");
+      uploadPath = 'http://localhost:8080/documents/' + sampleFile.name.replace(/\s/g, "");
+      tuploadPath = 'http://localhost:8080/thumbnails/' + thumbnail.name.replace(/\s/g, "");
+
+      // console.log(req,uploadPath,tuploadPath,movePath);
+      sampleFile.mv(movePath, function(err) {
+        if (err){
+          console.log(err);
+          return ''
+        }
+      });
+
+      thumbnail.mv(tmovePath, function(err) {
+        if (err){
+          console.log(err);
+          return ''
+        }
+      });
+
+      return await sequelize.query("INSERT INTO documents(name,dir,sdir,file,tbnail) VALUES (:name,:dir,:sdir,:fname,:tbnail)",
+      { replacements: { name:req.body.fname,dir:req.body.dname,sdir:req.body.sdname,fname:uploadPath,tbnail:tuploadPath }, type: sequelize.QueryTypes.INSERT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+      // return "file uploaded"
+      
+    }catch(err){
+      console.log(err);
+      return ''
+    }
+  }
+
+  async getfile(){
+    return await sequelize.query("SELECT * FROM documents d",
+      { replacements: {  }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)
         return result
