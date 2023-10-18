@@ -270,9 +270,9 @@ class UserService {
 
     async CMTheadSignoff(req){
       const response = {};
-      const { username } = req.body;
+      const { username,quarter,year } = req.body;
 
-      const data = await this.userRepo.CMTheadSignoff(username);
+      const data = await this.userRepo.CMTheadSignoff(username,quarter,year);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;
@@ -287,9 +287,9 @@ class UserService {
 
     async CMTheadSignoffoi(req){
       const response = {};
-      const { username } = req.body;
+      const { username,quarter,year } = req.body;
 
-      const data = await this.userRepo.CMTheadSignoffoi(username);
+      const data = await this.userRepo.CMTheadSignoffoi(username,quarter,year);
       if (!data) {
         response.message = customResourceResponse.recordNotFound.message;
         response.statusCode = customResourceResponse.recordNotFound.statusCode;

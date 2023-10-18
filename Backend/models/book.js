@@ -7,21 +7,8 @@ const dbconfig = require('../config/databaseconfig');
 //   dialect: 'postgres'
 // });
 
-// const sequelize = new Sequelize("kobosuperdb", "kobosuperuser", "Rrr1T%^$-@i8t0$", {
-//   host: "4.213.65.67",
-//   dialect: "postgres",
-//   port:5433,
-//   operatorsAliases: false,
-//   pool: {
-//       max: 10,
-//       min: 0,
-//       acquire: 20000,
-//       idle: 5000
-//   }
-// });
-
-const sequelize = new Sequelize("uatkobosuperdb", "uatkobosuperuser", "PRiJvMX8TyrT8", {
-  host: "20.219.28.160",
+const sequelize = new Sequelize("kobosuperdb", "kobosuperuser", "Rrr1T%^$-@i8t0$", {
+  host: "4.213.65.67",
   dialect: "postgres",
   port:5433,
   operatorsAliases: false,
@@ -32,6 +19,19 @@ const sequelize = new Sequelize("uatkobosuperdb", "uatkobosuperuser", "PRiJvMX8T
       idle: 5000
   }
 });
+
+// const sequelize = new Sequelize("uatkobosuperdb", "uatkobosuperuser", "PRiJvMX8TyrT8", {
+//   host: "20.219.28.160",
+//   dialect: "postgres",
+//   port:5433,
+//   operatorsAliases: false,
+//   pool: {
+//       max: 10,
+//       min: 0,
+//       acquire: 20000,
+//       idle: 5000
+//   }
+// });
 
 sequelize.authenticate().then(() => {
     console.log('Connection has been established successfully.');

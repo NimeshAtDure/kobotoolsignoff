@@ -757,7 +757,7 @@ input:-webkit-autofill:active {
 }
 
 .signoffpg table{
-  margin-top: 130px;
+  margin-top: 10px;
 }
 
 .mnesignoff table{
@@ -910,7 +910,7 @@ input:-webkit-autofill:active {
 }
 
 .select-user .MuiSvgIcon-root{
-  color: #fff !important;
+  color: #1a1c24 !important;
   /* right: 77px !important; */
 }
 
@@ -1097,11 +1097,13 @@ padding: 10px;
 .signoffselect{
   display: flex ;
   margin-left: 50px ;
+  margin-top: 10px;
+  justify-content: end;
 }
 
 .signoffselect .MuiInputBase-root,.signoffselect svg,.signoffselect .MuiOutlinedInput-notchedOutline{
-  color: white;
-  /* border-color: white; */
+  color: #1a1c24 !important;
+  border-color: #1a1c24 !important;
 }
 
 .signoffselect .MuiInputBase-root{
@@ -1114,4 +1116,8 @@ padding: 10px;
 
 .signoffselect .menubutton{
   margin: 0px 8px !important;
+}
+
+.signoffselect .menubutton label{
+  color: #1a1c24 !important;
 }
