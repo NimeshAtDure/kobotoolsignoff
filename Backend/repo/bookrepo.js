@@ -2,21 +2,21 @@ const Pool = require('pg').Pool
 const { sequelize } = require('../models/book')
 const { generateOTP, sendOTP } = require("../utils/otp");
 const path = require('path')
-const pool = new Pool({
-  user: 'kobosuperuser',
-  host: '4.213.65.67',
-  database: 'kobosuperdb',
-  password: 'Rrr1T%^$-@i8t0$',
-  port: 5433,
-})
-
 // const pool = new Pool({
-//   user: 'uatkobosuperuser',
-//   host: '20.219.28.160',
-//   database: 'uatkobosuperdb',
-//   password: 'PRiJvMX8TyrT8',
+//   user: 'kobosuperuser',
+//   host: '4.213.65.67',
+//   database: 'kobosuperdb',
+//   password: 'Rrr1T%^$-@i8t0$',
 //   port: 5433,
 // })
+
+const pool = new Pool({
+  user: 'uatkobosuperuser',
+  host: '20.219.28.160',
+  database: 'uatkobosuperdb',
+  password: 'PRiJvMX8TyrT8',
+  port: 5433,
+})
 class UserRepository {
 
   constructor(User) {
