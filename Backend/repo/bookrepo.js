@@ -236,9 +236,9 @@ class UserRepository {
 
       "cmtheadoi":"SELECT * FROM get_view_oi_cmt_data(:quarter,:year);",
 
-      "progressovsis":"SELECT * FROM cmt_data WHERE form_name='SIS' AND cmt_approved='Yes';",
+      "progressovsis":"SELECT * FROM cmt_data WHERE form_name='SIS' AND cmt_approved='Yes' AND quarter =:quarter AND year=:year;",
 
-      "progressovoi":"SELECT * FROM cmt_data WHERE form_name <>'SIS' AND cmt_approved='Yes';",
+      "progressovoi":"SELECT * FROM cmt_data WHERE form_name <>'SIS' AND cmt_approved='Yes'AND quarter =:quarter AND year=:year;",
 
       "admin":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2);",
       
