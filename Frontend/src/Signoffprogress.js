@@ -16,6 +16,7 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import Fab from '@mui/material/Fab';
+import { Grid } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -78,23 +79,27 @@ function Signoffprogress() {
     const [open2, setOpen2] = useState(false)
     const [alerttxt, setalerttxt] = useState('')
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
-    const [filterstate,setfilterstate] = useState('Cumulative')
+    const [filterstate, setfilterstate] = useState('Cumulative')
     const [enablesignoff, setenablesignoff] = useState(true)
     const [value, setValue] = React.useState('progressovsis');
-    const [percarr,setpercarr] = React.useState({"% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services":25,"% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months":65,"Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods":60,"Percentage of public health facilities in priority districts providing safe delivery services":60,"Percentage of public health facilities in priority districts doing HIV screening during ANC":55,"Percentage of public health facilities in priority districts providing safe abortion services":25})
+    const [percarr, setpercarr] = React.useState({ "% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services": 25, "% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months": 65, "Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods": 60, "Percentage of public health facilities in priority districts providing safe delivery services": 60, "Percentage of public health facilities in priority districts doing HIV screening during ANC": 55, "Percentage of public health facilities in priority districts providing safe abortion services": 25 })
+    const [quarter, setquarter] = useState('Q3')
+    const [year, setyear] = useState('2023')
 
     useEffect(() => {
-            getFormData()
-    }, [user,value])
+        getFormData()
+    }, [user, value, quarter, year])
 
     function getFormData() {
         axios({
             method: 'post',
-            url:'http://localhost:8080/getdata',
+            url: 'http://localhost:8080/getdata',
             // url: 'https://service.rbmgateway.org/getdata',
             data: {
-                "username":  user.username,
-                "usertype":  value=="progressovnr"?"progressovsis":value
+                "username": user.username,
+                "usertype": value == "progressovnr" ? "progressovsis" : value,
+                "quarter": quarter,
+                "year": year
             }
         })
             .then(
@@ -107,19 +112,19 @@ function Signoffprogress() {
                         if (filtstates.indexOf(item.state) === -1) {
                             filtstates.push(item.state);
                         }
-                        if(item.thematic){
+                        if (item.thematic) {
                             if (filtthemes.indexOf(item.thematic) === -1) {
                                 filtthemes.push(item.thematic);
                             }
-                        }else{
+                        } else {
                             if (filtthemes.indexOf(item.form_name) === -1) {
                                 filtthemes.push(item.form_name);
                             }
                         }
                     });
                     filtstates.sort()
-                    if( filtstates.length>1 && filtstates.includes("Delhi")){
-                        const state = filtstates.slice(1,2)
+                    if (filtstates.length > 1 && filtstates.includes("Delhi")) {
+                        const state = filtstates.slice(1, 2)
                         filtstates.splice(1, 1);
                         filtstates.push(state)
                     }
@@ -128,9 +133,9 @@ function Signoffprogress() {
                     setufstates(filtstates)
                     thematicarr = filtthemes.map((theme) => {
                         let newArray = response.data.data.filter(function (el) {
-                            if(el.thematic){
+                            if (el.thematic) {
                                 return el.thematic == theme
-                            }else{
+                            } else {
                                 return el.form_name == theme
                             }
                         }
@@ -162,7 +167,7 @@ function Signoffprogress() {
                             indi.forEach(i => {
                                 // console.log("data",Object.values(data))
                                 if (data.findIndex((obj => obj.indic == i.questionname)) > -1) {
-                                    let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme==i.thematic)));
+                                    let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme == i.thematic)));
                                     data[objIndex][i.state + "id"] = i.unique_id
                                     data[objIndex][i.state + "actual"] = i.actual
                                     data[objIndex][i.state + "target"] = i.target
@@ -194,10 +199,10 @@ function Signoffprogress() {
                     var signoffstate = response.data.data.filter(function (th) {
                         return th.thematichead_approved == null
                     })
-                    signoffstate.length == 0?setrowdata(data):setrowdata([])
-                    
+                    signoffstate.length == 0 ? setrowdata(data) : setrowdata([])
+
                     setenablesignoff(!response.data.data.filter(function (th) {
-                        return th["m&ehead_approved"]== "Yes"
+                        return th["m&ehead_approved"] == "Yes"
                     }).length == 0)
 
                 }
@@ -230,7 +235,7 @@ function Signoffprogress() {
 
         axios({
             method: 'post',
-            url:'http://localhost:8080/updatedata',
+            url: 'http://localhost:8080/updatedata',
             // url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
@@ -286,7 +291,7 @@ function Signoffprogress() {
         if (!enablesignoff) {
             axios({
                 method: 'post',
-                url:'http://localhost:8080/m&esignoff',
+                url: 'http://localhost:8080/m&esignoff',
                 // url: 'https://service.rbmgateway.org/m&esignoff',
                 data: {
                     "username": user.username,
@@ -310,13 +315,21 @@ function Signoffprogress() {
         setstates(ufstates)
     };
 
-    const handleStateChange = (event,value) =>{
+    const handleStateChange = (event, value) => {
         setfilterstate(event.target.value)
-        if(ufstates.includes(event.target.value)){
+        if (ufstates.includes(event.target.value)) {
             setstates([event.target.value])
-        }else{
+        } else {
             setstates(ufstates)
         }
+    }
+
+    const handleyearchange = (event, value) => {
+        setyear(event.target.value)
+    }
+
+    const handlequarterchange = (event, value) => {
+        setquarter(event.target.value)
     }
 
     const handleClose = () => {
@@ -331,45 +344,87 @@ function Signoffprogress() {
                 <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
                 <Paper sx={{ width: '100%', overflow: 'hidden' }} >
                     <TableContainer sx={{ maxHeight: "100vh" }} className="heatmaptableholder">
-                    <Box sx={{ width: '100%' }}>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        aria-label="label tabs example"
-                    >
-                        <Tab
-                            value="progressovsis"
-                            label="Consolidated Heat Map"
-                        />
-                        <Tab value="progressovnr" label="Program Cycle Output" />
-                        <Tab value="progressovoi" label="Office Indicators" />
-                    {value =="progressovsis" &&<FormControl sx={{ m: 1, minWidth: 120 }} size="small" >
-                    <InputLabel id="demo-simple-select-helper-label">State Filter </InputLabel>
-                    <Select
-                        labelId="demo-simple-select-helper-label"
-                        id="demo-simple-select-helper"
-                        value={filterstate}
-                        
-                        label="sign off"
-                        onChange={handleStateChange}
-                    >
+                        <Box sx={{ width: '100%' }}>
+                            <Tabs
+                                value={value}
+                                onChange={handleChange}
+                                aria-label="label tabs example"
+                            >
+                                <Tab
+                                    value="progressovsis"
+                                    label="Consolidated Heat Map"
+                                />
+                                <Tab value="progressovnr" label="Program Cycle Output" />
+                                <Tab value="progressovoi" label="Office Indicators" />
 
-                        <MenuItem value={"Cumulative"} >Cumulative</MenuItem>
-                        { ufstates?.map((column, id) => (
-                                        <MenuItem value={column} >{column}</MenuItem>
-                                    ))}
-                    </Select>
+                                <DownloadTableExcel
+                                    filename="users table"
+                                    sheet="users"
+                                    currentTableRef={tableRef.current}
+                                >
+                                    <Button variant="outlined" className="exprtbtn" size="large">Export</Button>
+                                </DownloadTableExcel>
+                                <Grid container>
+                                    <Grid item xs={12}>
+                                        <div className="signoffselect">
+                                            {value == "progressovsis" && <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                                <InputLabel id="demo-simple-select-helper-label">State Filter </InputLabel>
+                                                <Select
+                                                    labelId="demo-simple-select-helper-label"
+                                                    id="demo-simple-select-helper"
+                                                    value={filterstate}
 
-                </FormControl>}
-                <DownloadTableExcel
-                    filename="users table"
-                    sheet="users"
-                    currentTableRef={tableRef.current}
-                >
-                <Button variant="outlined" className="exprtbtn" size="large">Export</Button>
-                </DownloadTableExcel>
-                    </Tabs>
-                </Box>
+                                                    label="sign off"
+                                                    onChange={handleStateChange}
+                                                >
+
+                                                    <MenuItem value={"Cumulative"} >Cumulative</MenuItem>
+                                                    {ufstates?.map((column, id) => (
+                                                        <MenuItem value={column} >{column}</MenuItem>
+                                                    ))}
+                                                </Select>
+
+                                            </FormControl>}
+                                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                                <InputLabel id="demo-simple-select-helper-label">Year</InputLabel>
+                                                <Select
+                                                    labelId="demo-simple-select-helper-label"
+                                                    id="demo-simple-select-helper"
+                                                    className='select-user'
+                                                    label="sign off"
+                                                    value={year}
+                                                    defaultValue={year}
+                                                    onChange={handleyearchange}
+                                                >
+
+                                                    <MenuItem value={"2023"} >2023</MenuItem>
+                                                </Select>
+
+                                            </FormControl>
+
+                                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                                <InputLabel id="demo-simple-select-helper-label">Quarter</InputLabel>
+                                                <Select
+                                                    labelId="demo-simple-select-helper-label"
+                                                    id="demo-simple-select-helper"
+                                                    className='select-user'
+                                                    label="sign off"
+                                                    value={quarter}
+                                                    defaultValue={quarter}
+                                                    onChange={handlequarterchange}
+                                                >
+
+                                                    <MenuItem value={"Q1"} >Q1</MenuItem>
+                                                    <MenuItem value={"Q2"} >Q2</MenuItem>
+                                                    <MenuItem value={"Q3"} >Q3</MenuItem>
+                                                </Select>
+
+                                            </FormControl>
+                                        </div>
+                                    </Grid>
+                                </Grid>
+                            </Tabs>
+                        </Box>
                         <Table stickyHeader aria-label="sticky table" ref={tableRef}>
                             <TableHead>
 
@@ -380,10 +435,10 @@ function Signoffprogress() {
                                     >
                                         Thematic area and Indicators
                                     </TableCell>
-                                    {(value=="progressovoi" || states.length!=1)  && <TableCell colSpan={2}>
+                                    {(value == "progressovoi" || states.length != 1) && <TableCell colSpan={2}>
                                         National
                                     </TableCell>}
-                                    {value =="progressovsis" && states?.map((column, id) => (
+                                    {value == "progressovsis" && states?.map((column, id) => (
                                         <TableCell
                                             key={column}
                                             align="center"
@@ -392,24 +447,24 @@ function Signoffprogress() {
                                             {column}
                                         </TableCell>
                                     ))}
-                                    
+
                                 </TableRow>
                                 <TableRow>
                                     <TableCell
                                         colSpan={1}
                                     >
                                     </TableCell>
-                                    {(value=="progressovoi" || states.length!=1)  &&<TableCell
+                                    {(value == "progressovoi" || states.length != 1) && <TableCell
                                         key={"targettotal"}
                                     >
                                         Target
                                     </TableCell>}
-                                    {(value=="progressovoi" || states.length!=1)  &&<TableCell
+                                    {(value == "progressovoi" || states.length != 1) && <TableCell
                                         key={"actualtotal"}
                                     >
                                         Actual
                                     </TableCell>}
-                                    {value =="progressovsis" && states?.map((column, id) => (
+                                    {value == "progressovsis" && states?.map((column, id) => (
                                         <>
                                             <TableCell
                                                 key={column + "target"}
@@ -430,7 +485,7 @@ function Signoffprogress() {
                                         </TableCell> */}
                                         </>
                                     ))}
-                                    
+
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -439,21 +494,21 @@ function Signoffprogress() {
                                         {rowdata.map((data) => {
                                             return (
                                                 <>
-                                                <TableRow>
-                                                    {
-                                                        data.haschild ?
-                                                            <TableCell style={{
-                                                                color: "#eb7e00",
-                                                                fontWeight: 700
-                                                            }}
-                                                                colSpan={states.length * 2 + 3}>{data.indic}</TableCell> :
-                                                            <>
-                                                                <TableCell rowSpan={2}>{data.indic}</TableCell>
-                                                                {(value=="progressovoi" || states.length!=1)   &&<TableCell className="numberholder">{Object.keys(percarr).includes(data.indic) ? percarr[data.indic] : data.targettotal}</TableCell>}
-                                                                {(value=="progressovoi" || states.length!=1)  &&<TableCell className="numberholder" style={{
-                                                                    backgroundColor: ( String(data["actualtotal"])!='' ? (parseInt(data["actualtotal"]) - (Object.keys(percarr).includes(data.indic) ? percarr[data.indic] :parseInt(data["targettotal"])) >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
-                                                                }}>{Object.keys(percarr).includes(data.indic) ? Math.round(data.actualtotal/3) :  data.actualtotal}
-                                                                    {/* {  String(data["actualtotal"])!='' &&
+                                                    <TableRow>
+                                                        {
+                                                            data.haschild ?
+                                                                <TableCell style={{
+                                                                    color: "#eb7e00",
+                                                                    fontWeight: 700
+                                                                }}
+                                                                    colSpan={states.length * 2 + 3}>{data.indic}</TableCell> :
+                                                                <>
+                                                                    <TableCell rowSpan={2}>{data.indic}</TableCell>
+                                                                    {(value == "progressovoi" || states.length != 1) && <TableCell className="numberholder">{Object.keys(percarr).includes(data.indic) ? percarr[data.indic] : data.targettotal}</TableCell>}
+                                                                    {(value == "progressovoi" || states.length != 1) && <TableCell className="numberholder" style={{
+                                                                        backgroundColor: (String(data["actualtotal"]) != '' ? (parseInt(data["actualtotal"]) - (Object.keys(percarr).includes(data.indic) ? percarr[data.indic] : parseInt(data["targettotal"])) >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
+                                                                    }}>{Object.keys(percarr).includes(data.indic) ? Math.round(data.actualtotal / 3) : data.actualtotal}
+                                                                        {/* {  String(data["actualtotal"])!='' &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
@@ -482,22 +537,22 @@ function Signoffprogress() {
                                                                                         {!enablesignoff && <Button sx={{ m: 1 }} onClick={() => openModal2(data["indic"])}><AddIcon /></Button>}
                                                                                     </div>
                                                                                 } */}
-                                                                                </TableCell>}
-                                                                {value =="progressovsis" && states?.map(s => {
-                                                                    return (
-                                                                        <>
-                                                                            <TableCell
-                                                                                className="numberholder"
+                                                                    </TableCell>}
+                                                                    {value == "progressovsis" && states?.map(s => {
+                                                                        return (
+                                                                            <>
+                                                                                <TableCell
+                                                                                    className="numberholder"
 
 
-                                                                            >{data[s + "target"]}</TableCell>
-                                                                            <TableCell
-                                                                                className="numberholder"
-                                                                                style={{
-                                                                                    backgroundColor: (data[s + "actual"] ? (parseInt(data[s + "actual"]) - parseInt(data[s + "target"]) >= 0 || data[s + "actual"].toLowerCase() == data[s + "target"].toLowerCase()) ? "#92d051" : "#ffc100" : '')
-                                                                                }}>
-                                                                                {data[s + "actual"]}
-                                                                                {/* { !data[s + "respsignedOff"] && data[s + "actual"] &&
+                                                                                >{data[s + "target"]}</TableCell>
+                                                                                <TableCell
+                                                                                    className="numberholder"
+                                                                                    style={{
+                                                                                        backgroundColor: (data[s + "actual"] ? (parseInt(data[s + "actual"]) - parseInt(data[s + "target"]) >= 0 || data[s + "actual"].toLowerCase() == data[s + "target"].toLowerCase()) ? "#92d051" : "#ffc100" : '')
+                                                                                    }}>
+                                                                                    {data[s + "actual"]}
+                                                                                    {/* { !data[s + "respsignedOff"] && data[s + "actual"] &&
                                                                                     <div className="editSection">
                                                                                         <CustomWidthTooltip title={data[s + "comment"]}>
                                                                                             <Button sx={{ m: 1 }}><CommentIcon /></Button>
@@ -505,7 +560,7 @@ function Signoffprogress() {
                                                                                         <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
                                                                                     </div>
                                                                                 } */}
-                                                                                {/* { String(data[s + "actual"])!='undefined' &&
+                                                                                    {/* { String(data[s + "actual"])!='undefined' &&
                                                                                     <div className="editSection">
                                                                                         <HtmlTooltip
                                                                                             className="Commenttooltip"
@@ -534,43 +589,44 @@ function Signoffprogress() {
                                                                                         <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
                                                                                     </div>
                                                                                 } */}
-                                                                            </TableCell>
+                                                                                </TableCell>
 
-                                                                            {/* <TableCell>{data[s+"comment"]}</TableCell> */}
-                                                                        </>
-                                                                    )
-                                                                })}
-                                                                                                                                                                                             
+                                                                                {/* <TableCell>{data[s+"comment"]}</TableCell> */}
+                                                                            </>
+                                                                        )
+                                                                    })}
 
-                                                            </>
-                                                    }
-                                                </TableRow>
-                                                <TableRow className="progress-row"> 
-                                                    {
-                                                        !data.haschild && <>
-                                                        {(value=="progressovoi" || states.length!=1)  &&<TableCell colSpan={2} className="">
-                                                            <div className="progress-table">
-                                                            {data["respcomment"]}
-                                                            </div>
-                                                        </TableCell>}
-                                                        {value =="progressovsis" && states?.map(s => {
-                                                                    return (<TableCell colSpan={2} className=""> 
+
+                                                                </>
+                                                        }
+                                                    </TableRow>
+                                                    <TableRow className="progress-row">
+                                                        {
+                                                            !data.haschild && <>
+                                                                {(value == "progressovoi" || states.length != 1) && <TableCell colSpan={2} className="">
                                                                     <div className="progress-table">
-                                                                    {data[s+"comment"]}
+                                                                        {data["respcomment"]}
+                                                                    </div>
+                                                                </TableCell>}
+                                                                {value == "progressovsis" && states?.map(s => {
+                                                                    return (<TableCell colSpan={2} className="">
+                                                                        <div className="progress-table">
+                                                                            {data[s + "comment"]}
                                                                         </div>
-                                                                        </TableCell>)})}
-                                                        </>
-                                                    }
-                                                </TableRow>
+                                                                    </TableCell>)
+                                                                })}
+                                                            </>
+                                                        }
+                                                    </TableRow>
                                                 </>
                                             )
                                         })}
                                         <TableRow>
-                                        <TableCell colSpan={states.length * 2 + 3} align="center" style={{
-                                                                height:"60px"
-                                                                
-                                                            }}>
-                                        </TableCell>    
+                                            <TableCell colSpan={states.length * 2 + 3} align="center" style={{
+                                                height: "60px"
+
+                                            }}>
+                                            </TableCell>
                                         </TableRow>
                                     </>
                                     : <TableRow>
@@ -656,7 +712,7 @@ function Signoffprogress() {
                 {alerttxt == "success" ? <Alert severity="success">Data saved !</Alert> : alerttxt == "error" ? <Alert severity="error">Update failed !</Alert> : ''
                 }
             </Snackbar>
-            
+
             {/* { !enablesignoff && rowdata.length > 0 && <Fab variant="extended" size="medium" sx={{
                 position: 'absolute',
                 bottom: 50,

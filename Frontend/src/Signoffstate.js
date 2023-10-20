@@ -60,7 +60,7 @@ function Signoffstate() {
     const [open, setOpen] = useState(false)
     const [alerttxt, setalerttxt] = useState('')
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
-    const [quarter,setquarter] = useState('Q2')
+    const [quarter,setquarter] = useState('Q3')
     const [year,setyear] = useState('2023')
 
     useEffect(() => {
