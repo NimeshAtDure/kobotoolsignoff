@@ -32,7 +32,7 @@ function ProgressOverview() {
     const [activetheme, setactivetheme] = useState("Consolidated Heatmap")
 
     const [age, setAge] = useState('2023');
-    const [quarter, setQuarter] = useState('Q2');
+    const [quarter, setQuarter] = useState('Q3');
 
     const handleChange = (event) => {
       setAge(event.target.value);
