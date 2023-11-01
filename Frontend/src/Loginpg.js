@@ -51,13 +51,18 @@ export default function Loginpg(props) {
                     };
 
                     axios.request(config)
-                        .then((response) => {
+                        .then((response1) => {
                             // console.log("me",response.data)
                             // sessionStorage.setItem("user",JSON.stringify(response.data))
                             // dispatch(setdata(JSON.stringify(response.data)))
                             //     navigate('/dashboard')
-                            setuserdata(response.data)
-                            sendOTP(response.data)
+                            setuserdata(response1.data)
+                            localStorage.setItem('token', response.data.token)
+                            dispatch(settoken(response.data.token))
+                            localStorage.setItem("user", JSON.stringify(response1.data))
+                            dispatch(setdata(JSON.stringify(response1.data)))
+                            navigate('/dashboard')  
+                            // sendOTP(response.data)
                         })
                         .catch((error) => {
                             console.log(error);
