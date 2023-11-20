@@ -236,9 +236,13 @@ class UserRepository {
 
       "cmtheadoi":"SELECT * FROM get_view_oi_cmt_data(:quarter,:year);",
 
-      "progressovsis":"SELECT * FROM cmt_data WHERE form_name='SIS' AND cmt_approved='Yes' AND quarter =:quarter AND year=:year;",
+      // "progressovsis":"SELECT * FROM cmt_data WHERE form_name='SIS' AND cmt_approved='Yes' AND quarter =:quarter AND year=:year;",
 
-      "progressovoi":"SELECT * FROM cmt_data WHERE form_name <>'SIS' AND cmt_approved='Yes'AND quarter =:quarter AND year=:year;",
+      // "progressovoi":"SELECT * FROM cmt_data WHERE form_name <>'SIS' AND cmt_approved='Yes'AND quarter =:quarter AND year=:year;",
+
+      "progressovsis":"select * from get_progress_view_sis(:year,:quarter)",
+
+      "progressovoi":"select * from get_progress_view_oi(:year,:quarter )",
 
       "admin":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2);",
       
@@ -267,7 +271,7 @@ class UserRepository {
 
       "respperson":"SELECT * FROM update_data_responsibleperson(:username,:id,:editactual,:editcomment,:respcomment);",
 
-      "thematichead":"SELECT * FROM update_data_thematicperson(:username,:id,:respcomment);",
+      "thematichead":"SELECT * FROM update_data_thematicperson(:username,:id,:editactual,:respcomment);",
 
       "mnehead":"SELECT * FROM update_data_m_e_head(:username,:id,:respcomment);",
 

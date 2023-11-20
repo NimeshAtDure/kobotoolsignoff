@@ -10,7 +10,7 @@ export default function Formdisp() {
         <Box sx={{ display: 'flex' }}>
             <Appnavbar navItems={{ "forms": true, "supchck": true, "dashboard": true, "progoverview": true }} />
             <Box component="main" className='MainContainer' sx={{ p: 0, width: '100%' }}>
-                {link.length>0?<iframe src={"https://ee.rbmgateway.org/x/"+link[link.length-1]} width="100%" height="100%" />:""}
+                {link.length>0?<iframe src={"https://ee.rbmgateway.org/i/"+link[link.length-1]} width="100%" height="100%" />:""}
                 <Footer />
             </Box>
         </Box>
