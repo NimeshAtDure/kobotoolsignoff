@@ -143,7 +143,7 @@ export default function Formview(props) {
                         var link = response.data.deployment__links.offline_url?.split("/")
                         let linkobj = {
                             name: response.data.name,
-                            formlink: link[link.length - 1]
+                            formlink: response.data.deployment__links.offline_url
                         }
                         linkarr.push(linkobj)
                         // setlinks(linkarr)
@@ -322,8 +322,8 @@ export default function Formview(props) {
                                                                     xs={3}
                                                                     className='vert-center'
                                                                 >
-                                                                    {/* <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button> */}
-                                                                    <Link to={"/formsview/" + l.formlink} target='_blank'>
+                                                                    <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">Open</a></Button>
+                                                                    {/* <Link to={"/formsview/" + l.formlink} target='_blank'>
                                                                         <Button
                                                                             variant='outlined'
                                                                             className='viewbtn mt-0'
@@ -335,7 +335,7 @@ export default function Formview(props) {
                                                                         >
                                                                             Open
                                                                         </Button>
-                                                                    </Link>
+                                                                    </Link> */}
                                                                 </Grid>
                                                             </Grid>
                                                         )}
@@ -357,8 +357,8 @@ export default function Formview(props) {
                                                                 </p>
                                                             </Grid>
                                                             <Grid item xs={3} className='vert-center'>
-                                                                {/* <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">View Form</a></Button> */}
-                                                                <Button variant="outlined" className='viewbtn mt-0' onClick={() => openForm(l.formlink)}>Open</Button>
+                                                                <Button variant="outlined" className='viewbtn mt-0'><a href={l.formlink} target="_blank">Open</a></Button>
+                                                                {/* <Button variant="outlined" className='viewbtn mt-0' onClick={() => openForm(l.formlink)}>Open</Button> */}
                                                             </Grid>
 
                                                         </Grid>}
