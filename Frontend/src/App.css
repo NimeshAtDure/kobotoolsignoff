@@ -415,6 +415,10 @@ input:-webkit-autofill:active {
 #superset-container iframe {
   width: 100%;
   height: calc(100vh - 150px);
+  /* margin-top: 110px; */
+}
+
+.dashboardNav{
   margin-top: 110px;
 }
 
