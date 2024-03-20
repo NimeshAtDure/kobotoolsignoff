@@ -78,8 +78,8 @@ function Signoffresp() {
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
     const [enablesignoff, setenablesignoff] = useState(true)
     const [percarr,setpercarr] = React.useState({"% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services":25,"% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months":65,"Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods":60,"Percentage of public health facilities in priority districts providing safe delivery services":60,"Percentage of public health facilities in priority districts doing HIV screening during ANC":55,"Percentage of public health facilities in priority districts providing safe abortion services":25})
-    const [quarter,setquarter] = useState('Q3')
-    const [year,setyear] = useState('2023')
+    const [quarter,setquarter] = useState("Q"+Math.floor((new Date().getMonth() + 3) / 3).toString())
+    const [year,setyear] = useState(new Date().getFullYear().toString())
 
     useEffect(() => {
         getFormData()
@@ -167,8 +167,8 @@ function Signoffresp() {
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
                                     data[objIndex]["respcomment"] = i.responsible_person_comment?.length && i.responsible_person_comment?.length > 0 ? i.responsible_person_comment : data[objIndex]["respcomment"]
-                                    data[objIndex]["actualtotal"] = i.actual ? isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"] : data[objIndex]["actualtotal"]
-                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : data[objIndex]["targettotal"]
+                                    data[objIndex]["actualtotal"] = i.actual ? isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"] : 0
+                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : 0
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
                                 } else {
                                     var rowobj3 = {}
@@ -351,6 +351,7 @@ function Signoffresp() {
                                         >
 
                                         <MenuItem value={"2023"} >2023</MenuItem>
+                                        <MenuItem value={"2024"} >2024</MenuItem>
                                         </Select>
 
                                     </FormControl>

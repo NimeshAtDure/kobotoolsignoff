@@ -11,7 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
+import { alpha,styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -33,6 +33,8 @@ import MuiAlert from '@mui/material/Alert';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Menu from '@mui/material/Menu';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Link, useLocation } from "react-router-dom";
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 
@@ -83,8 +85,10 @@ function Signoffprogress() {
     const [enablesignoff, setenablesignoff] = useState(true)
     const [value, setValue] = React.useState('progressovsis');
     const [percarr, setpercarr] = React.useState({ "% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services": 25, "% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months": 65, "Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods": 60, "Percentage of public health facilities in priority districts providing safe delivery services": 60, "Percentage of public health facilities in priority districts doing HIV screening during ANC": 55, "Percentage of public health facilities in priority districts providing safe abortion services": 25 })
-    const [quarter, setquarter] = useState('Q3')
-    const [year, setyear] = useState('2023')
+    const [quarter, setquarter] = useState("Q" + Math.floor((new Date().getMonth() + 3) / 3).toString())
+    const [year, setyear] = useState(new Date().getFullYear().toString())
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const openfilter = Boolean(anchorEl);
 
     useEffect(() => {
         getFormData()
@@ -166,15 +170,16 @@ function Signoffprogress() {
                             })
                             indi.forEach(i => {
                                 // console.log("data",Object.values(data))
+                                let actval = i.actual ? i.actual : i.percent ? i.percent : i.numerator
                                 if (data.findIndex((obj => obj.indic == i.questionname)) > -1) {
                                     let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme == i.thematic)));
                                     data[objIndex][i.state + "id"] = i.unique_id
-                                    data[objIndex][i.state + "actual"] = i.actual
+                                    data[objIndex][i.state + "actual"] = actval
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
                                     data[objIndex]["respcomment"] = i.responsible_person_comment?.length && i.responsible_person_comment?.length > 0 ? i.responsible_person_comment : data[objIndex]["respcomment"]
-                                    data[objIndex]["actualtotal"] = i.actual ? isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"] : data[objIndex]["actualtotal"]
-                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : data[objIndex]["targettotal"]
+                                    data[objIndex]["actualtotal"] = actval ? isNumeric(actval) ? data[objIndex]["actualtotal"] + parseInt(actval) : data[objIndex]["actualtotal"] : 0
+                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : 0
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
                                 } else {
                                     var rowobj3 = {}
@@ -182,11 +187,11 @@ function Signoffprogress() {
                                     rowobj3["indic"] = i.questionname
                                     rowobj3["theme"] = i.thematic
                                     rowobj3["haschild"] = false
-                                    rowobj3[i.state + "actual"] = i.actual
+                                    rowobj3[i.state + "actual"] = i.actual ? i.actual : i.percent ? i.percent : i.numerator
                                     rowobj3[i.state + "target"] = i.target
                                     rowobj3[i.state + "comment"] = i.comments
                                     rowobj3["respcomment"] = i.responsible_person_comment
-                                    rowobj3["actualtotal"] = i.actual ? isNumeric(i.actual) ? parseInt(i.actual) : i.actual : 0
+                                    rowobj3["actualtotal"] = actval ? isNumeric(actval) ? parseInt(actval) : actval : 0
                                     rowobj3["targettotal"] = i.target ? isNumeric(i.target) ? parseInt(i.target) : i.target : 0
                                     rowobj3[i.state + "respsignedOff"] = i.responsible_person_approved
                                     data.push(rowobj3)
@@ -338,6 +343,54 @@ function Signoffprogress() {
         setalerttxt("")
     };
 
+    const handleFilterClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleFilterClose = () => {
+        setAnchorEl(null);
+    };
+
+    const StyledMenu = styled((props) => (
+        <Menu
+            elevation={0}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+            }}
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            {...props}
+        />
+    ))(({ theme }) => ({
+        '& .MuiPaper-root': {
+            borderRadius: 6,
+            marginTop: theme.spacing(1),
+            minWidth: 180,
+            color:
+                theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+            boxShadow:
+                'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+            '& .MuiMenu-list': {
+                padding: '4px 0',
+            },
+            '& .MuiMenuItem-root': {
+                '& .MuiSvgIcon-root': {
+                    fontSize: 18,
+                    color: theme.palette.text.secondary,
+                    marginRight: theme.spacing(1.5),
+                },
+                '&:active': {
+                    backgroundColor: alpha(
+                        theme.palette.primary.main,
+                        theme.palette.action.selectedOpacity,
+                    ),
+                },
+            },
+        },
+    }));
+
     return (
         <>
             <div className="App signoffpg progressoverviewpage signoff-section mnesignoff">
@@ -356,15 +409,118 @@ function Signoffprogress() {
                                 />
                                 <Tab value="progressovnr" label="Program Cycle Output" />
                                 <Tab value="progressovoi" label="Office Indicators" />
+                                <Tab value="progressovcpap" label="CPAP" />
+                                <Tab value="progressovrrf" label="RRF" />
+                                
+                                <Grid container className="options-buttondiv">
+                                    <Grid item xs={6}></Grid>
+                                    <Grid item xs={3}>
+                                    <Button
+                                    id="demo-customized-button"
+                                    aria-controls={openfilter ? 'demo-customized-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={openfilter ? 'true' : undefined}
+                                    variant="contained"
+                                    disableElevation
+                                    onClick={handleFilterClick}
+                                    endIcon={<KeyboardArrowDownIcon />}
+                                    className="options-button"
+                                >
+                                    Filters
+                                </Button>
+                                <StyledMenu
+                                    id="demo-customized-menu"
+                                    MenuListProps={{
+                                        'aria-labelledby': 'demo-customized-button',
+                                    }}
+                                    anchorEl={anchorEl}
+                                    open={openfilter}
+                                    onClose={handleFilterClose}
+                                > 
+                                 <MenuItem  className='filtermenu' disableRipple>
+                                 <div className="signoffselect">
+                                 {value == "progressovsis" && <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                        <InputLabel id="demo-simple-select-helper-label">State Filter </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-helper-label"
+                                            id="demo-simple-select-helper"
+                                            value={filterstate}
 
-                                <DownloadTableExcel
+                                            label="sign off"
+                                            onChange={handleStateChange}
+                                        >
+
+                                            <MenuItem value={"Cumulative"} >Cumulative</MenuItem>
+                                            {ufstates?.map((column, id) => (
+                                                <MenuItem value={column} >{column}</MenuItem>
+                                            ))}
+                                        </Select>
+
+                                    </FormControl>}
+                                        </div>
+                                    </MenuItem>
+                                    
+                                     <MenuItem  className='filtermenu' disableRipple>
+                                     <div className="signoffselect">
+                                     <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                        <InputLabel id="demo-simple-select-helper-label">Year</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-helper-label"
+                                            id="demo-simple-select-helper"
+                                            className='select-user'
+                                            label="sign off"
+                                            value={year}
+                                            defaultValue={year}
+                                            onChange={handleyearchange}
+                                        >
+
+                                            <MenuItem value={"2023"} >2023</MenuItem>
+                                            <MenuItem value={"2024"} >2024</MenuItem>
+                                        </Select>
+
+                                    </FormControl>
+                                        </div>
+                                    </MenuItem>  
+
+                                     <MenuItem className='filtermenu' disableRipple>
+                                     <div className="signoffselect">
+                                     <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                        <InputLabel id="demo-simple-select-helper-label">Quarter</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-helper-label"
+                                            id="demo-simple-select-helper"
+                                            className='select-user'
+                                            label="sign off"
+                                            value={quarter}
+                                            defaultValue={quarter}
+                                            onChange={handlequarterchange}
+                                        >
+
+                                            <MenuItem value={"Q1"} >Q1</MenuItem>
+                                            <MenuItem value={"Q2"} >Q2</MenuItem>
+                                            <MenuItem value={"Q3"} >Q3</MenuItem>
+                                            <MenuItem value={"Q4"} >Q4</MenuItem>
+                                        </Select>
+
+                                    </FormControl>
+                                        </div>
+                                    </MenuItem>    
+                </StyledMenu>
+                                    
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                
+                                    <DownloadTableExcel
                                     filename="users table"
                                     sheet="users"
                                     currentTableRef={tableRef.current}
                                 >
                                     <Button variant="outlined" className="exprtbtn" size="large">Export</Button>
                                 </DownloadTableExcel>
-                                <Grid container>
+                                    </Grid>
+                                    </Grid>
+
+                                {/* <Grid container>
                                     <Grid item xs={12}>
                                         <div className="signoffselect">
                                             {value == "progressovsis" && <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
@@ -398,6 +554,7 @@ function Signoffprogress() {
                                                 >
 
                                                     <MenuItem value={"2023"} >2023</MenuItem>
+                                                    <MenuItem value={"2024"} >2024</MenuItem>
                                                 </Select>
 
                                             </FormControl>
@@ -423,7 +580,7 @@ function Signoffprogress() {
                                             </FormControl>
                                         </div>
                                     </Grid>
-                                </Grid>
+                                </Grid> */}
                             </Tabs>
                         </Box>
                         <Table stickyHeader aria-label="sticky table" ref={tableRef}>
@@ -436,7 +593,7 @@ function Signoffprogress() {
                                     >
                                         Thematic area and Indicators
                                     </TableCell>
-                                    {(value == "progressovoi" || states.length != 1) && <TableCell colSpan={2}>
+                                    {(["progressovoi", "progressovcpap", "progressovrrf"].includes(value) || states.length != 1) && <TableCell colSpan={2}>
                                         National
                                     </TableCell>}
                                     {value == "progressovsis" && states?.map((column, id) => (
@@ -455,12 +612,12 @@ function Signoffprogress() {
                                         colSpan={1}
                                     >
                                     </TableCell>
-                                    {(value == "progressovoi" || states.length != 1) && <TableCell
+                                    {(["progressovoi", "progressovcpap", "progressovrrf"].includes(value) || states.length != 1) && <TableCell
                                         key={"targettotal"}
                                     >
                                         Target
                                     </TableCell>}
-                                    {(value == "progressovoi" || states.length != 1) && <TableCell
+                                    {(["progressovoi", "progressovcpap", "progressovrrf"].includes(value) || states.length != 1) && <TableCell
                                         key={"actualtotal"}
                                     >
                                         Actual
@@ -505,8 +662,8 @@ function Signoffprogress() {
                                                                     colSpan={states.length * 2 + 3}>{data.indic}</TableCell> :
                                                                 <>
                                                                     <TableCell rowSpan={2}>{data.indic}</TableCell>
-                                                                    {(value == "progressovoi" || states.length != 1) && <TableCell className="numberholder">{Object.keys(percarr).includes(data.indic) ? percarr[data.indic] : data.targettotal}</TableCell>}
-                                                                    {(value == "progressovoi" || states.length != 1) && <TableCell className="numberholder" style={{
+                                                                    {(["progressovoi", "progressovcpap", "progressovrrf"].includes(value) || states.length != 1) && <TableCell className="numberholder">{Object.keys(percarr).includes(data.indic) ? percarr[data.indic] : data.targettotal}</TableCell>}
+                                                                    {(["progressovoi", "progressovcpap", "progressovrrf"].includes(value) || states.length != 1) && <TableCell className="numberholder" style={{
                                                                         backgroundColor: (String(data["actualtotal"]) != '' ? (parseInt(data["actualtotal"]) - (Object.keys(percarr).includes(data.indic) ? percarr[data.indic] : parseInt(data["targettotal"])) >= 0 || String(data["actualtotal"]).toLowerCase() == String(data["targettotal"]).toLowerCase()) ? "#92d051" : "#ffc100" : '')
                                                                     }}>{Object.keys(percarr).includes(data.indic) ? Math.round(data.actualtotal / 3) : data.actualtotal}
                                                                         {/* {  String(data["actualtotal"])!='' &&
@@ -604,7 +761,7 @@ function Signoffprogress() {
                                                     <TableRow className="progress-row">
                                                         {
                                                             !data.haschild && <>
-                                                                {(value == "progressovoi" || states.length != 1) && <TableCell colSpan={2} className="">
+                                                                {(["progressovoi", "progressovcpap", "progressovrrf"].includes(value) || states.length != 1) && <TableCell colSpan={2} className="">
                                                                     <div className="progress-table">
                                                                         {data["respcomment"]}
                                                                     </div>

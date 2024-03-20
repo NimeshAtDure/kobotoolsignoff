@@ -236,6 +236,18 @@ class UserRepository {
 
       "cmtheadoi":"SELECT * FROM get_view_oi_cmt_data(:quarter,:year);",
 
+      "cpapstate":"SELECT * FROM get_view_cpap_statehead(:username,:year)",
+
+      "cpapthematic":"SELECT * FROM get_view_cpap_thematicperson(:username,:year)",
+
+      "cpapmne":"SELECT * FROM get_view_cpap_m_e_data(:username,:year)",
+
+      "rrfstate":"SELECT * FROM get_view_rrf_statehead(:username,:year)",
+
+      "rrfthematic":"SELECT * FROM get_view_rrf_thematicperson(:username,:year)",
+
+      "rrfmne":"SELECT * FROM get_view_rrf_m_e_data(:username,:year)",
+
       // "progressovsis":"SELECT * FROM cmt_data WHERE form_name='SIS' AND cmt_approved='Yes' AND quarter =:quarter AND year=:year;",
 
       // "progressovoi":"SELECT * FROM cmt_data WHERE form_name <>'SIS' AND cmt_approved='Yes'AND quarter =:quarter AND year=:year;",
@@ -243,6 +255,10 @@ class UserRepository {
       "progressovsis":"select * from get_progress_view_sis(:year,:quarter)",
 
       "progressovoi":"select * from get_progress_view_oi(:year,:quarter )",
+
+      'progressovcpap':"SELECT * from get_progress_view_cpap(:year)",
+
+      'progressovrrf':"SELECT * from get_progress_view_rrf(:year)",
 
       "admin":"SELECT * FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 WHERE _id IN (SELECT _id FROM (SELECT MAX(_id) AS _id,quarter,questionname,state,thematic FROM (SELECT * FROM ay_dataset_final adf UNION SELECT * FROM gender_dataset_final gdf UNION SELECT * FROM pd_dataset_final pdf UNION SELECT * FROM srh_dataset_final sdf )AS t1 GROUP BY quarter,questionname,state,thematic)t2);",
       
@@ -275,11 +291,24 @@ class UserRepository {
 
       "mnehead":"SELECT * FROM update_data_m_e_head(:username,:id,:respcomment);",
 
-      "cmthead":"SELECT * FROM update_data_cmt_head(:id,:respcomment);"
+      "cmthead":"SELECT * FROM update_data_cmt_head(:id,:respcomment);",
+
+      "cpapstate":"SELECT * FROM update_data_cpap_statehead(:username,:id,:editactual,:editcomment)",
+
+      "cpapthematic":"SELECT * FROM update_data_cpap_thematicperson(:username,:id,:editactual,:respcomment)",
+
+      "cpapmne":"SELECT * FROM update_data_cpap_m_e_head(:username,:id,:respcomment);",
+
+      "rrfstate":"SELECT * FROM update_data_rrf_statehead(:username,:id,:editactual,:editcomment)",
+
+      "rrfthematic":"SELECT * FROM update_data_rrf_thematicperson(:username,:id,:editactual,:respcomment)",
+
+      "rrfmne":"SELECT * FROM update_data_rrf_m_e_head(:username,:id,:respcomment);"
 
     }
 
-    // console.log("data",username, actual, comment, theme,id,stateupdttime,respupdttime)
+    console.log("data",username,id,actual,comment,respcomment,type)
+    // console.log(queries[usertype]);
     return await sequelize.query(queries[type],
       { replacements: { username: username, editactual:actual, editcomment:comment,respcomment:respcomment, id:id }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
@@ -335,6 +364,60 @@ class UserRepository {
 
   async CMTheadSignoff(username,quarter,year){
     return await sequelize.query("SELECT * FROM update_flag_signoff_cmt_data(:quarter,:year)",
+      { replacements: { username: username,quarter:quarter,year:year }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+
+  async stateheadSignOffcpap(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_cpap_statehead(:username,:year)",
+      { replacements: { username: username,quarter:quarter,year:year }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+
+  async thematicheadSignOffcpap(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_cpap_thematicperson(:username,:year)",
+      { replacements: { username: username,quarter:quarter,year:year }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+
+  async mneSignOffcpap(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_cpap_m_e_data(:username,:year)",
+      { replacements: { username: username,quarter:quarter,year:year }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+  
+  async stateheadSignOffrrf(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_rrf_statehead(:username,:year)",
+      { replacements: { username: username,quarter:quarter,year:year }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+
+  async thematicheadSignOffrrf(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_rrf_thematicperson(:username,:year)",
+      { replacements: { username: username,quarter:quarter,year:year }, type: sequelize.QueryTypes.SELECT })
+      .then(result => {
+        // console.log("results",result)
+        return result
+      })
+  }
+
+  async mneSignOffrrf(username,quarter,year){
+    return await sequelize.query("SELECT * FROM update_flag_signoff_rrf_m_e_data(:username,:year)",
       { replacements: { username: username,quarter:quarter,year:year }, type: sequelize.QueryTypes.SELECT })
       .then(result => {
         // console.log("results",result)

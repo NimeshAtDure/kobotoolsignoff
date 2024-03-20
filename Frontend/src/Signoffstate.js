@@ -60,12 +60,13 @@ function Signoffstate() {
     const [open, setOpen] = useState(false)
     const [alerttxt, setalerttxt] = useState('')
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
-    const [quarter,setquarter] = useState('Q3')
-    const [year,setyear] = useState('2023')
+    const [quarter,setquarter] = useState("Q"+Math.floor((new Date().getMonth() + 3) / 3).toString())
+    const [year,setyear] = useState(new Date().getFullYear().toString())
+    const [formtype,setformtype] = useState('statehead')
 
     useEffect(() => {
         getFormData()
-    }, [user,quarter,year])
+    }, [user,formtype,quarter,year])
 
     function getFormData() {
         axios({
@@ -74,7 +75,7 @@ function Signoffstate() {
             url: 'https://service.rbmgateway.org/getdata',
             data: {
                 "username": user.username,
-                "usertype": "statehead",
+                "usertype": formtype,
                 "quarter":quarter,
                 "year":year
             }
@@ -129,7 +130,7 @@ function Signoffstate() {
                                 if (data.findIndex((obj => obj.indic == i.questionname)) > -1) {
                                     let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme==i.thematic)));
                                     data[objIndex][i.state + "id"] = i.unique_id
-                                    data[objIndex][i.state + "actual"] = i.actual
+                                    data[objIndex][i.state + "actual"] = i.actual?i.actual:i.percent?i.percent:i.numerator
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
                                     data[objIndex][i.state + "statesignedOff"] = i.statehead_approved
@@ -139,7 +140,7 @@ function Signoffstate() {
                                     rowobj3["indic"] = i.questionname
                                     rowobj3["theme"] = i.thematic
                                     rowobj3["haschild"] = false
-                                    rowobj3[i.state + "actual"] = i.actual
+                                    rowobj3[i.state + "actual"] = i.actual?i.actual:i.percent?i.percent:i.numerator
                                     rowobj3[i.state + "target"] = i.target
                                     rowobj3[i.state + "comment"] = i.comments
                                     rowobj3[i.state + "statesignedOff"] = i.statehead_approved
@@ -177,10 +178,10 @@ function Signoffstate() {
             url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
-                "actual": editdata.actual,
+                "actual": editdata.actual?editdata.actual:editdata.percent?editdata.percent:editdata.numerator,
                 "comment": editdata.comments,
                 "respcomment":editdata.responsible_person_comment,
-                "type": "statehead",
+                "type": formtype,
                 "respcomment":'',
                 "id": editdata.unique_id,
             }
@@ -200,10 +201,15 @@ function Signoffstate() {
 
     function signoffDataState() {
         if (!enablesignoffstate && rowdata.length > 0) {
+            let urls={
+                "statehead" :'https://service.rbmgateway.org/stateSignoff',
+                "cpapstate" : 'https://service.rbmgateway.org/stateheadSignOffcpap',
+                "rrfstate" : 'https://service.rbmgateway.org/stateheadSignOffrrf'
+            }
             axios({
                 method: 'post',
-                // url:'http://localhost:8080/stateSignoff',
-                url: 'https://service.rbmgateway.org/stateSignoff',
+                url:urls[formtype],
+                // url: 'https://service.rbmgateway.org/stateSignoff',
                 data: {
                     "username": user.username,
                     "quarter":quarter,
@@ -231,6 +237,10 @@ function Signoffstate() {
         setquarter(event.target.value)
       }
 
+    const handleformchange = (event,value) =>{
+        setformtype(value)
+      }
+
     const handleClose = () => {
         setOpen(false);
         setalerttxt("")
@@ -244,9 +254,13 @@ function Signoffstate() {
                     <TableContainer sx={{ maxHeight: "100vh" }} className="heatmaptableholder">
                     <Box sx={{ width: '100%' }}>
                     <Tabs
-                        
+                        value={formtype}
+                        onChange={handleformchange}
                         aria-label="label tabs example"
                     >
+                        <Tab value="statehead" label="SIS" />
+                        <Tab value="cpapstate" label="CPAP" />
+                        <Tab value="rrfstate" label="RRF" />
                         <Grid container>
                                         <Grid item xs={3}></Grid>
                                         <Grid item xs={9}>
@@ -265,6 +279,7 @@ function Signoffstate() {
                                         >
 
                                         <MenuItem value={"2023"} >2023</MenuItem>
+                                        <MenuItem value={"2024"} >2024</MenuItem>
                                         </Select>
 
                                     </FormControl>
@@ -276,7 +291,8 @@ function Signoffstate() {
                                             id="demo-simple-select-helper"
                                             className='select-user'
                                             label="sign off"
-                                            value={quarter}  
+                                            value={quarter}
+                                            // disabled={formtype!="statehead"}
                                             defaultValue={quarter}
                                             onChange={handlequarterchange}
                                         >
