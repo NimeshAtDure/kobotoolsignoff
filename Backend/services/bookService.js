@@ -302,6 +302,108 @@ class UserService {
       return response;  
     }
 
+    async stateheadSignOffcpap(req){
+      const response = {};
+      const { username,quarter,year } = req.body;
+
+      const data = await this.userRepo.stateheadSignOffcpap(username,quarter,year);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
+    async thematicheadSignOffcpap(req){
+      const response = {};
+      const { username,quarter,year } = req.body;
+
+      const data = await this.userRepo.thematicheadSignOffcpap(username,quarter,year);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
+    async mneSignOffcpap(req){
+      const response = {};
+      const { username,quarter,year } = req.body;
+
+      const data = await this.userRepo.mneSignOffcpap(username,quarter,year);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
+    async stateheadSignOffrrf(req){
+      const response = {};
+      const { username,quarter,year } = req.body;
+
+      const data = await this.userRepo.stateheadSignOffrrf(username,quarter,year);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
+    async thematicheadSignOffrrf(req){
+      const response = {};
+      const { username,quarter,year } = req.body;
+
+      const data = await this.userRepo.thematicheadSignOffrrf(username,quarter,year);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
+    async mneSignOffrrf(req){
+      const response = {};
+      const { username,quarter,year } = req.body;
+
+      const data = await this.userRepo.mneSignOffrrf(username,quarter,year);
+      if (!data) {
+        response.message = customResourceResponse.recordNotFound.message;
+        response.statusCode = customResourceResponse.recordNotFound.statusCode;
+        return response;
+      }
+  
+      response.message = customResourceResponse.success.message;
+      response.data = data;
+      response.statusCode = customResourceResponse.success.statusCode;
+      return response;  
+    }
+
     async uploadfile(req){
       const response = {};
       

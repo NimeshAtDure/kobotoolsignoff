@@ -168,6 +168,66 @@ exports.CMTheadSignoffoi = async (req, res, next) => {
   }
 }
 
+exports.stateheadSignOffcpap = async (req, res, next) => {
+  try {
+    const response = await userService.stateheadSignOffcpap(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.thematicheadSignOffcpap = async (req, res, next) => {
+  try {
+    const response = await userService.thematicheadSignOffcpap(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.mneSignOffcpap = async (req, res, next) => {
+  try {
+    const response = await userService.mneSignOffcpap(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.stateheadSignOffrrf = async (req, res, next) => {
+  try {
+    const response = await userService.stateheadSignOffrrf(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.thematicheadSignOffrrf = async (req, res, next) => {
+  try {
+    const response = await userService.thematicheadSignOffrrf(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+exports.mneSignOffrrf = async (req, res, next) => {
+  try {
+    const response = await userService.mneSignOffrrf(req);
+    res.statusCode = response.statusCode;
+    return res.json({ message: response.message, data: response.data });
+  } catch (error) {
+    next(error);
+  }
+}
+
 exports.uploadfile = async (req, res, next) => {
   try {
     const response = await userService.uploadfile(req);
