@@ -78,12 +78,13 @@ function Signoffthematic() {
     const [enablesignoffstate, setenablesignoffstate] = useState(true)
     const [enablesignoff, setenablesignoff] = useState(true)
     const [percarr,setpercarr] = React.useState({"% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services":25,"% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months":65,"Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods":60,"Percentage of public health facilities in priority districts providing safe delivery services":60,"Percentage of public health facilities in priority districts doing HIV screening during ANC":55,"Percentage of public health facilities in priority districts providing safe abortion services":25})
-    const [quarter,setquarter] = useState('Q3')
-    const [year,setyear] = useState('2023')
+    const [quarter,setquarter] = useState("Q"+Math.floor((new Date().getMonth() + 3) / 3).toString())
+    const [year,setyear] = useState(new Date().getFullYear().toString())
+    const [formtype,setformtype] = useState('thematichead')
 
     useEffect(() => {
         getFormData()
-    }, [user, location.state,quarter,year])
+    }, [user, formtype,location.state,quarter,year])
 
     function getFormData() {
         axios({
@@ -92,7 +93,7 @@ function Signoffthematic() {
             // url: 'https://service.rbmgateway.org/getdata',
             data: {
                 "username": user.username,
-                "usertype": "thematichead",
+                "usertype": formtype,
                 "quarter":quarter,
                 "year":year
             }
@@ -160,15 +161,16 @@ function Signoffthematic() {
                             })
                             indi.forEach(i => {
                                 // console.log("data", Object.values(data))
+                                let actval = i.actual?i.actual:i.percent?i.percent:i.numerator
                                 if (data.findIndex((obj => obj.indic == i.questionname)) > -1) {
                                     let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme == i.thematic)));
                                     data[objIndex][i.state + "id"] = i.unique_id
-                                    data[objIndex][i.state + "actual"] = i.actual
+                                    data[objIndex][i.state + "actual"] = actval
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
                                     data[objIndex]["respcomment"] = i.responsible_person_comment?.length && i.responsible_person_comment?.length > 0 ? i.responsible_person_comment : data[objIndex]["respcomment"]
-                                    data[objIndex]["actualtotal"] = i.actual ? isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"] : ''
-                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : ''
+                                    data[objIndex]["actualtotal"] = actval ? isNumeric(actval) ? data[objIndex]["actualtotal"] + parseInt(actval) : data[objIndex]["actualtotal"] : 0
+                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : 0
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
                                 } else {
                                     var rowobj3 = {}
@@ -176,12 +178,12 @@ function Signoffthematic() {
                                     rowobj3["indic"] = i.questionname
                                     rowobj3["theme"] = i.thematic
                                     rowobj3["haschild"] = false
-                                    rowobj3[i.state + "actual"] = i.actual
+                                    rowobj3[i.state + "actual"] = i.actual?i.actual:i.percent?i.percent:i.numerator
                                     rowobj3[i.state + "target"] = i.target
                                     rowobj3[i.state + "comment"] = i.comments
                                     rowobj3["respcomment"] = i.responsible_person_comment
-                                    rowobj3["actualtotal"] = i.actual ? isNumeric(i.actual) ? parseInt(i.actual) : i.actual : ''
-                                    rowobj3["targettotal"] = i.target ? isNumeric(i.target) ? parseInt(i.target) : i.target : ''
+                                    rowobj3["actualtotal"] = actval ? isNumeric(actval) ? parseInt(actval) : actval : 0
+                                    rowobj3["targettotal"] = i.target ? isNumeric(i.target) ? parseInt(i.target) : i.target : 0
                                     rowobj3[i.state + "respsignedOff"] = i.responsible_person_approved
                                     data.push(rowobj3)
                                 }
@@ -226,16 +228,17 @@ function Signoffthematic() {
 
     function editRowData() {
         const date = new Date();
-
+        console.log(editdata,formtype);
         axios({
             method: 'post',
             url: 'http://localhost:8080/updatedata',
             // url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
-                "actual": editdata.actual,
+                "actual": editdata.actual?editdata.actual:editdata.percent?editdata.percent:editdata.numerator,
                 "comment": editdata.comments,
-                "type": "thematichead",
+                "respcomment":editdata.responsible_person_comment,
+                "type": formtype,
                 "id": editdata.unique_id,
             }
         })
@@ -261,10 +264,10 @@ function Signoffthematic() {
             // url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
-                "actual": editrespdata.actual,
+                "actual": editrespdata.actual?editrespdata.actual:editrespdata.percent?editrespdata.percent:editrespdata.numerator,
                 "comment": editrespdata.comments,
                 "respcomment": editrespdata.responsible_person_comment,
-                "type": "thematichead",
+                "type": formtype,
                 "id": editrespdata.unique_id,
             }
         })
@@ -283,9 +286,15 @@ function Signoffthematic() {
 
     function signoffData() {
         if (!enablesignoff && rowdata.length > 0) {
+            let urls={
+                "thematichead" :'http://localhost:8080/thematicsignoff',
+                "cpapthematic" : 'http://localhost:8080/thematicheadSignOffcpap',
+                "rrfthematic" : 'http://localhost:8080/thematicheadSignOffrrf'
+            }
+            
             axios({
                 method: 'post',
-                url: 'http://localhost:8080/thematicsignoff',
+                url: urls[formtype],
                 // url: 'https://service.rbmgateway.org/thematicsignoff',
                 data: {
                     "username": user.username,
@@ -314,6 +323,10 @@ function Signoffthematic() {
         setquarter(event.target.value)
       }
 
+    const handleformchange = (event,value) =>{
+        setformtype(value)
+      }
+
     const handleClose = () => {
         setOpen(false);
         setOpen2(false)
@@ -328,9 +341,13 @@ function Signoffthematic() {
                     <TableContainer sx={{ maxHeight: "100vh" }} className="heatmaptableholder">
                     <Box sx={{ width: '100%' }}>
                     <Tabs
-                        
+                        value={formtype}
+                        onChange={handleformchange}
                         aria-label="label tabs example"
                     >
+                        <Tab value="thematichead" label="SIS" />
+                        <Tab value="cpapthematic" label="CPAP" />
+                        <Tab value="rrfthematic" label="RRF" />
                         <Grid container>
                                         <Grid item xs={3}></Grid>
                                         <Grid item xs={9}>
@@ -349,6 +366,7 @@ function Signoffthematic() {
                                         >
 
                                         <MenuItem value={"2023"} >2023</MenuItem>
+                                        <MenuItem value={"2024"} >2024</MenuItem>
                                         </Select>
 
                                     </FormControl>
@@ -361,6 +379,7 @@ function Signoffthematic() {
                                             className='select-user'
                                             label="sign off"
                                             value={quarter}  
+                                            // disabled={formtype!="thematichead"}
                                             defaultValue={quarter}
                                             onChange={handlequarterchange}
                                         >

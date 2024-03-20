@@ -78,8 +78,8 @@ function Signoffmne() {
     const [enablesignoff, setenablesignoff] = useState(true)
     const [value, setValue] = React.useState('mneheadsis');
     const [percarr,setpercarr] = React.useState({"% of AFHCs in UNFPA priority districts with trained provider to offer adolescent responsive health services":25,"% of health facilities in UNFPA priority districts which report no stock out of contraceptives in last  3 months":65,"Percentage of public health facilities in priority districts providing at least 5 reversible contraceptive methods":60,"Percentage of public health facilities in priority districts providing safe delivery services":60,"Percentage of public health facilities in priority districts doing HIV screening during ANC":55,"Percentage of public health facilities in priority districts providing safe abortion services":25})
-    const [quarter,setquarter] = useState('Q3')
-    const [year,setyear] = useState('2023')
+    const [quarter,setquarter] = useState("Q"+Math.floor((new Date().getMonth() + 3) / 3).toString())
+    const [year,setyear] = useState(new Date().getFullYear().toString())
 
     useEffect(() => {
             getFormData()
@@ -160,15 +160,16 @@ function Signoffmne() {
                             })
                             indi.forEach(i => {
                                 // console.log("data",Object.values(data))
+                                let actval = i.actual?i.actual:i.percent?i.percent:i.numerator
                                 if (data.findIndex((obj => obj.indic == i.questionname)) > -1) {
                                     let objIndex = data.findIndex((obj => (obj.indic == i.questionname && obj.theme == i.thematic)));
                                     data[objIndex][i.state + "id"] = i.unique_id
-                                    data[objIndex][i.state + "actual"] = i.actual
+                                    data[objIndex][i.state + "actual"] = actval
                                     data[objIndex][i.state + "target"] = i.target
                                     data[objIndex][i.state + "comment"] = i.comments
                                     data[objIndex]["respcomment"] = i.responsible_person_comment?.length && i.responsible_person_comment?.length > 0 ? i.responsible_person_comment : data[objIndex]["respcomment"]
-                                    data[objIndex]["actualtotal"] = i.actual ? isNumeric(i.actual) ? data[objIndex]["actualtotal"] + parseInt(i.actual) : data[objIndex]["actualtotal"] : ''
-                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : ''
+                                    data[objIndex]["actualtotal"] = actval ? isNumeric(actval) ? data[objIndex]["actualtotal"] + parseInt(actval) : data[objIndex]["actualtotal"] : 0
+                                    data[objIndex]["targettotal"] = i.target ? isNumeric(i.target) ? data[objIndex]["targettotal"] + parseInt(i.target) : data[objIndex]["targettotal"] : 0
                                     data[objIndex][i.state + "respsignedOff"] = i.responsible_person_approved
                                 } else {
                                     var rowobj3 = {}
@@ -176,12 +177,12 @@ function Signoffmne() {
                                     rowobj3["indic"] = i.questionname
                                     rowobj3["theme"] = i.thematic
                                     rowobj3["haschild"] = false
-                                    rowobj3[i.state + "actual"] = i.actual
+                                    rowobj3[i.state + "actual"] = i.actual?i.actual:i.percent?i.percent:i.numerator
                                     rowobj3[i.state + "target"] = i.target
                                     rowobj3[i.state + "comment"] = i.comments
                                     rowobj3["respcomment"] = i.responsible_person_comment
-                                    rowobj3["actualtotal"] = i.actual ? isNumeric(i.actual) ? parseInt(i.actual) : i.actual : ''
-                                    rowobj3["targettotal"] = i.target ? isNumeric(i.target) ? parseInt(i.target) : i.target : ''
+                                    rowobj3["actualtotal"] = actval ? isNumeric(actval) ? parseInt(actval) : actval : 0
+                                    rowobj3["targettotal"] = i.target ? isNumeric(i.target) ? parseInt(i.target) : i.target : 0
                                     rowobj3[i.state + "respsignedOff"] = i.responsible_person_approved
                                     data.push(rowobj3)
                                 }
@@ -233,9 +234,9 @@ function Signoffmne() {
             // url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
-                "actual": editdata.actual,
+                "actual": editdata.actual?editdata.actual:editdata.percent?editdata.percent:editdata.numerator,
                 "comment": editdata.comments,
-                "type": "mnehead",
+                "type": ["cpapmne","rrfmne"].includes(value)?value:"mnehead",
                 "id": editdata.unique_id,
             }
         })
@@ -261,10 +262,10 @@ function Signoffmne() {
             // url: 'https://service.rbmgateway.org/updatedata',
             data: {
                 "username": user.username,
-                "actual": editrespdata.actual,
+                "actual": editrespdata.actual?editrespdata.actual:editrespdata.percent?editrespdata.percent:editrespdata.numerator,
                 "comment": editrespdata.comments,
                 "respcomment": editrespdata.responsible_person_comment,
-                "type": "mnehead",
+                "type": ["cpapmne","rrfmne"].includes(value)?value:"mnehead",
                 "id": editrespdata.unique_id,
             }
         })
@@ -283,10 +284,18 @@ function Signoffmne() {
 
     function signoffData() {
         if (!enablesignoff) {
-            var query = value=="mneheadoi"?'http://localhost:8080/m&esignoffoi':'http://localhost:8080/m&esignoff'
+            let urls= {
+                "mneheadoi":'http://localhost:8080/m&esignoffoi',
+                "mneheadsis":'http://localhost:8080/m&esignoff',
+                "mneheadnr":'http://localhost:8080/m&esignoff',
+                "cpapmne":'http://localhost:8080/mneSignOffcpap',
+                "rrfmne":'http://localhost:8080/mneSignOffrrf'
+            }
+
+            // var query = value=="mneheadoi"?'http://localhost:8080/m&esignoffoi':'http://localhost:8080/m&esignoff'
             axios({
                 method: 'post',
-                url: query,
+                url: urls[value],
                 // url: 'https://service.rbmgateway.org/m&esignoff',
                 data: {
                     "username": user.username,
@@ -343,6 +352,8 @@ function Signoffmne() {
                         />
                         <Tab value="mneheadnr" label="Program Cycle Output" />
                         <Tab value="mneheadoi" label="Office Indicators" />
+                        <Tab value="cpapmne" label="CPAP" />
+                        <Tab value="rrfmne" label="RRF" />
 
                         <Grid container>
                                         <Grid item xs={3}></Grid>
@@ -362,6 +373,7 @@ function Signoffmne() {
                                         >
 
                                         <MenuItem value={"2023"} >2023</MenuItem>
+                                        <MenuItem value={"2024"} >2024</MenuItem>
                                         </Select>
 
                                     </FormControl>
