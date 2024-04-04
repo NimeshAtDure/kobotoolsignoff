@@ -31,6 +31,7 @@ export default function Formview(props) {
     const [usertoken, setusertoken] = React.useState(localStorage.getItem("token"))
     const [open, setopen] = React.useState(false)
     const [links, setlinks] = React.useState([])
+    const [linkobj,setlinkobj] = React.useState({})
     const [filtlinks, setfiltlinks] = React.useState([])
     const [oilinks, setoilinks] = React.useState([])
     const [dense, setDense] = React.useState(false);
@@ -41,6 +42,10 @@ export default function Formview(props) {
     const [formname, setformname] = React.useState([]);
 
     const navigate = useNavigate();
+
+    React.useEffect(()=>{
+        setlinks([...links,linkobj])
+    },[linkobj])
 
     React.useEffect(() => {
 
@@ -146,6 +151,7 @@ export default function Formview(props) {
                             formlink: response.data.deployment__links.offline_url
                         }
                         linkarr.push(linkobj)
+                        setlinkobj(linkobj)
                         // setlinks(linkarr)
                     })
                     .catch((error) => {
@@ -154,7 +160,7 @@ export default function Formview(props) {
             }
         })
         setTimeout(() => {
-            setlinks(linkarr)
+            // setlinks(linkarr)
             setloading(false)
         }, 3000);
     }
@@ -243,7 +249,9 @@ export default function Formview(props) {
 
     const handleStateChange = (event,value) =>{
         setValue(event.target.value)
-        getforms()
+        setlinks([])
+        setlinkobj({})
+        // getforms()
     }   
 
     return (

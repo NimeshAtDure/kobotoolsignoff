@@ -202,7 +202,7 @@ function Signoffprogress() {
                         // console.log(thematicarr, data, themearr)
                     })
                     var signoffstate = response.data.data.filter(function (th) {
-                        return th.thematichead_approved == null
+                        return th.statehead_approved == null
                     })
                     signoffstate.length == 0 ? setrowdata(data) : setrowdata([])
 
