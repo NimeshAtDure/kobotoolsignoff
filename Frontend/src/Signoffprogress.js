@@ -605,6 +605,24 @@ function Signoffprogress() {
                                             {column}
                                         </TableCell>
                                     ))}
+                                    {value == "progressovcpap" && states?.map((column, id) => (
+                                        <TableCell
+                                            key={column}
+                                            align="center"
+                                            colSpan={2}
+                                        >
+                                            {column}
+                                        </TableCell>
+                                    ))}
+                                    {value == "progressovrrf" && states?.map((column, id) => (
+                                        <TableCell
+                                            key={column}
+                                            align="center"
+                                            colSpan={2}
+                                        >
+                                            {column}
+                                        </TableCell>
+                                    ))}
 
                                 </TableRow>
                                 <TableRow>
@@ -623,6 +641,48 @@ function Signoffprogress() {
                                         Actual
                                     </TableCell>}
                                     {value == "progressovsis" && states?.map((column, id) => (
+                                        <>
+                                            <TableCell
+                                                key={column + "target"}
+                                            >
+                                                Target
+                                            </TableCell>
+                                            <TableCell
+                                                key={column + "actual"}
+
+                                            >
+                                                Actual
+                                            </TableCell>
+
+                                            {/* <TableCell
+                                            key={column + "comment"}
+                                        >
+                                            Comment
+                                        </TableCell> */}
+                                        </>
+                                    ))}
+                                    {value == "progressovcpap" && states?.map((column, id) => (
+                                        <>
+                                            <TableCell
+                                                key={column + "target"}
+                                            >
+                                                Target
+                                            </TableCell>
+                                            <TableCell
+                                                key={column + "actual"}
+
+                                            >
+                                                Actual
+                                            </TableCell>
+
+                                            {/* <TableCell
+                                            key={column + "comment"}
+                                        >
+                                            Comment
+                                        </TableCell> */}
+                                        </>
+                                    ))}
+                                    {value == "progressovrrf" && states?.map((column, id) => (
                                         <>
                                             <TableCell
                                                 key={column + "target"}
@@ -754,6 +814,122 @@ function Signoffprogress() {
                                                                         )
                                                                     })}
 
+                                                                    {value == "progressovcpap" && states?.map(s => {
+                                                                        return (
+                                                                            <>
+                                                                                <TableCell
+                                                                                    className="numberholder"
+
+
+                                                                                >{data[s + "target"]}</TableCell>
+                                                                                <TableCell
+                                                                                    className="numberholder"
+                                                                                    style={{
+                                                                                        backgroundColor: (data[s + "actual"] ? (parseInt(data[s + "actual"]) - parseInt(data[s + "target"]) >= 0 || data[s + "actual"].toLowerCase() == data[s + "target"].toLowerCase()) ? "#92d051" : "#ffc100" : '')
+                                                                                    }}>
+                                                                                    {data[s + "actual"]}
+                                                                                    {/* { !data[s + "respsignedOff"] && data[s + "actual"] &&
+                                                                                    <div className="editSection">
+                                                                                        <CustomWidthTooltip title={data[s + "comment"]}>
+                                                                                            <Button sx={{ m: 1 }}><CommentIcon /></Button>
+                                                                                        </CustomWidthTooltip>
+                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
+                                                                                    </div>
+                                                                                } */}
+                                                                                    {/* { String(data[s + "actual"])!='undefined' &&
+                                                                                    <div className="editSection">
+                                                                                        <HtmlTooltip
+                                                                                            className="Commenttooltip"
+                                                                                            title={
+                                                                                                data[s + "comment"] ? <React.Fragment>
+                                                                                                    {data[s + "comment"] && <TextField
+
+                                                                                                        autoFocus
+                                                                                                        margin="dense"
+                                                                                                        label="Statehead Comment"
+                                                                                                        type="text"
+                                                                                                        fullWidth
+                                                                                                        multiline
+                                                                                                        disabled
+                                                                                                        value={data[s + "comment"]}
+                                                                                                        variant="standard"
+                                                                                                    />}
+
+                                                                                                </React.Fragment> : ""
+                                                                                            }
+                                                                                        >
+                                                                                            <Button sx={{ m: 1 }}>
+                                                                                                <CommentIcon />
+                                                                                            </Button>
+                                                                                        </HtmlTooltip>
+                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
+                                                                                    </div>
+                                                                                } */}
+                                                                                </TableCell>
+
+                                                                                {/* <TableCell>{data[s+"comment"]}</TableCell> */}
+                                                                            </>
+                                                                        )
+                                                                    })}
+
+                                                                    {value == "progressovrrf" && states?.map(s => {
+                                                                        return (
+                                                                            <>
+                                                                                <TableCell
+                                                                                    className="numberholder"
+
+
+                                                                                >{data[s + "target"]}</TableCell>
+                                                                                <TableCell
+                                                                                    className="numberholder"
+                                                                                    style={{
+                                                                                        backgroundColor: (data[s + "actual"] ? (parseInt(data[s + "actual"]) - parseInt(data[s + "target"]) >= 0 || data[s + "actual"].toLowerCase() == data[s + "target"].toLowerCase()) ? "#92d051" : "#ffc100" : '')
+                                                                                    }}>
+                                                                                    {data[s + "actual"]}
+                                                                                    {/* { !data[s + "respsignedOff"] && data[s + "actual"] &&
+                                                                                    <div className="editSection">
+                                                                                        <CustomWidthTooltip title={data[s + "comment"]}>
+                                                                                            <Button sx={{ m: 1 }}><CommentIcon /></Button>
+                                                                                        </CustomWidthTooltip>
+                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
+                                                                                    </div>
+                                                                                } */}
+                                                                                    {/* { String(data[s + "actual"])!='undefined' &&
+                                                                                    <div className="editSection">
+                                                                                        <HtmlTooltip
+                                                                                            className="Commenttooltip"
+                                                                                            title={
+                                                                                                data[s + "comment"] ? <React.Fragment>
+                                                                                                    {data[s + "comment"] && <TextField
+
+                                                                                                        autoFocus
+                                                                                                        margin="dense"
+                                                                                                        label="Statehead Comment"
+                                                                                                        type="text"
+                                                                                                        fullWidth
+                                                                                                        multiline
+                                                                                                        disabled
+                                                                                                        value={data[s + "comment"]}
+                                                                                                        variant="standard"
+                                                                                                    />}
+
+                                                                                                </React.Fragment> : ""
+                                                                                            }
+                                                                                        >
+                                                                                            <Button sx={{ m: 1 }}>
+                                                                                                <CommentIcon />
+                                                                                            </Button>
+                                                                                        </HtmlTooltip>
+                                                                                        <Button sx={{ m: 1 }} onClick={() => openModal(data[s + "id"])}><EditIcon /></Button>
+                                                                                    </div>
+                                                                                } */}
+                                                                                </TableCell>
+
+                                                                                {/* <TableCell>{data[s+"comment"]}</TableCell> */}
+                                                                            </>
+                                                                        )
+                                                                    })}
+
 
                                                                 </>
                                                         }
@@ -767,6 +943,20 @@ function Signoffprogress() {
                                                                     </div>
                                                                 </TableCell>}
                                                                 {value == "progressovsis" && states?.map(s => {
+                                                                    return (<TableCell colSpan={2} className="">
+                                                                        <div className="progress-table">
+                                                                            {data[s + "comment"]}
+                                                                        </div>
+                                                                    </TableCell>)
+                                                                })}
+                                                                {value == "progressovcpap" && states?.map(s => {
+                                                                    return (<TableCell colSpan={2} className="">
+                                                                        <div className="progress-table">
+                                                                            {data[s + "comment"]}
+                                                                        </div>
+                                                                    </TableCell>)
+                                                                })}
+                                                                {value == "progressovrrf" && states?.map(s => {
                                                                     return (<TableCell colSpan={2} className="">
                                                                         <div className="progress-table">
                                                                             {data[s + "comment"]}
