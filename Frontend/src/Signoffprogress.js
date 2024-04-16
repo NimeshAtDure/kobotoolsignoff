@@ -484,7 +484,7 @@ function Signoffprogress() {
 
                                      <MenuItem className='filtermenu' disableRipple>
                                      <div className="signoffselect">
-                                     <FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
+                                     {(value === "progressovsis" || value ==="progressovoi" || value === "progressovnr") && (<FormControl sx={{ m: 1, minWidth: 120 }} size="small" className='menubutton'>
                                         <InputLabel id="demo-simple-select-helper-label">Quarter</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-helper-label"
@@ -502,7 +502,7 @@ function Signoffprogress() {
                                             <MenuItem value={"Q4"} >Q4</MenuItem>
                                         </Select>
 
-                                    </FormControl>
+                                    </FormControl>)}
                                         </div>
                                     </MenuItem>    
                 </StyledMenu>

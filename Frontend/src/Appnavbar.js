@@ -187,7 +187,7 @@ export default function Appnavbar(props) {
             {/* {props.navItems.dashboard && <Button variant="outlined" className={window.location.pathname == "/dashboard"?'viewbtn mt-0 dbbutton active': 'viewbtn mt-0 dbbutton'} onClick={()=>window.open("http://dashboard.rbmgateway.org:8088/superset/dashboard/11/?native_filters_key=Sn0k7O0XzuJ6IEkSzzbdggNIEah2YccuBHtPw6uleOWIyfojOlxyqsOxoOW2RLiF","_blank")}><span>Dashboard</span></Button>} */}
             {props.navItems.forms && <Button variant="outlined" className={window.location.pathname == "/forms" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={() => navigate("/forms")}><span>Reporting</span></Button>}
             {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/progressoverview" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/progressoverview" ><span>Progress Report</span></Link></Button>}
-            {/* {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/techresource" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/techresource" ><span>Technical Resources</span></Link></Button>} */}
+            {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/techresource" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/techresource" ><span>Resources</span></Link></Button>}
             {/* {props.navItems.progoverview && <Button variant="outlined" className={window.location.pathname == "/helpsection" ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'}><Link to="/helpsection" ><span>Help Section</span></Link></Button>} */}
             {SVC && formlink.length > 0 && <Button variant="outlined" className='viewbtn mt-0 dbbutton'><Link to={"/formsview/" + formlink} target='_blank'><span>Supervision Checklist</span></Link></Button>}
             {/* {statesignoff && <Button variant="outlined" className={window.location.pathname.includes("sign") ? 'viewbtn mt-0 dbbutton active' : 'viewbtn mt-0 dbbutton'} onClick={openSgnoffmenu}><span>Sign off</span></Button>}
@@ -284,7 +284,7 @@ export default function Appnavbar(props) {
                     {/* {btnvisible && <MenuItem className='profmenubtn' onClick={()=>window.open("https://forms.rbmgateway.org/","_blank")}>Admin Panel</MenuItem>} */}
                     {/* <MenuItem className='profmenubtn' onClick={() => navigate("/signoff")}>Data Sign Off</MenuItem> */}
                     {/* <MenuItem className='profmenubtn' onClick={() => navigate("/passreset")}>Reset password</MenuItem> */}
-                    <Link to="/techresource" ><MenuItem className='profmenubtn'>Resources</MenuItem></Link>
+                    {/* <Link to="/techresource" ><MenuItem className='profmenubtn'>Resources</MenuItem></Link> */}
                     <Link to="/helpsection" ><MenuItem className='profmenubtn' >Help</MenuItem></Link>
                     <MenuItem className='profmenubtn' onClick={Logout}>Logout</MenuItem>
                 </Menu>
