@@ -26,7 +26,7 @@ function Dashboardview() {
 
   useEffect(() => {
     authToken && embedDashboard({
-      id: value=='sis'?"29dd17cf-0317-42bc-a242-d78d7150d7a1":value=='cpap'?"80a70b83-3c5c-4e69-9eb3-7df1d0e93b84":"3f042b6f-39e9-42ca-9608-370aff8ea110",  // given by the Superset embedding UI
+      id: value=='sis'?"29dd17cf-0317-42bc-a242-d78d7150d7a1":value=='cpap'?"80a70b83-3c5c-4e69-9eb3-7df1d0e93b84":value=='rrf'?"3f042b6f-39e9-42ca-9608-370aff8ea110":"7d18b981-8dcf-4f9d-a1f0-bb342ce54add",  // given by the Superset embedding UI
       supersetDomain: "https://data.rbmgateway.org",
       mountPoint: document.getElementById("superset-container"), // html element in which iframe render
       fetchGuestToken: () => authToken,
@@ -86,7 +86,7 @@ function Dashboardview() {
         "resources": [
           {
             "type": "dashboard",
-            "id": value=='sis'?"38":value=='cpap'?"40":"42"
+            "id": value=='sis'?"38":value=='cpap'?"40":value=='rrf'?"42":"44"
           }
         ],
         "rls": []
@@ -141,6 +141,7 @@ function Dashboardview() {
           />
           <Tab value="cpap" label="CPAP" />
           <Tab value="rrf" label="RRF" />
+          <Tab value="ssc" label="Supportive supervision checklist" />
         </Tabs>
       </Box>
       <div id="superset-container"></div>
